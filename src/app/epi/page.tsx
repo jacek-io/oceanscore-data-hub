@@ -154,9 +154,9 @@ export default function EpiPortCallsPage() {
       </div>
 
       {/* Stats Cards Row */}
-      <div className="flex gap-4">
+      <div className="grid grid-cols-[1fr_2fr_1.5fr] gap-5">
         {/* Port Calls YTD */}
-        <div className="bg-white rounded-[16px] w-[225px] py-4 flex flex-col justify-between">
+        <div className="bg-white rounded-[16px] py-4 flex flex-col justify-between">
           <div className="flex items-center justify-between px-4">
             <span className="text-sm text-muted-foreground">Port Calls YTD</span>
             <div className="w-8 h-8 rounded-full bg-[#98A1AE]/15 flex items-center justify-center">
@@ -219,7 +219,7 @@ export default function EpiPortCallsPage() {
         </div>
 
         {/* Actions */}
-        <div className="bg-white rounded-[16px] w-[409px] p-4 flex flex-col">
+        <div className="bg-white rounded-[16px] p-4 flex flex-col">
           <div className="flex items-center gap-3">
             <span className="text-sm text-muted-foreground">Actions</span>
             <span className="inline-flex items-center px-2 py-1 rounded-[36px] text-[11px] font-medium leading-[1.45] border bg-status-revoked-bg text-status-revoked border-status-revoked-border">
