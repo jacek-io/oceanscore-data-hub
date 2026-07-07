@@ -1,0 +1,129 @@
+@import "tailwindcss";
+@import "tw-animate-css";
+@import "shadcn/tailwind.css";
+
+@custom-variant dark (&:is(.dark *));
+
+@theme inline {
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+  --font-sans: var(--font-poppins), ui-sans-serif, system-ui, sans-serif;
+  --font-mono: ui-monospace, monospace;
+  --font-heading: var(--font-sans);
+  --color-sidebar-ring: var(--sidebar-ring);
+  --color-sidebar-border: var(--sidebar-border);
+  --color-sidebar-accent-foreground: var(--sidebar-accent-foreground);
+  --color-sidebar-accent: var(--sidebar-accent);
+  --color-sidebar-primary-foreground: var(--sidebar-primary-foreground);
+  --color-sidebar-primary: var(--sidebar-primary);
+  --color-sidebar-foreground: var(--sidebar-foreground);
+  --color-sidebar-bg: var(--sidebar-bg);
+  --color-sidebar-muted: var(--sidebar-muted);
+  --color-chart-5: var(--chart-5);
+  --color-chart-4: var(--chart-4);
+  --color-chart-3: var(--chart-3);
+  --color-chart-2: var(--chart-2);
+  --color-chart-1: var(--chart-1);
+  --color-ring: var(--ring);
+  --color-input: var(--input);
+  --color-border: var(--border);
+  --color-destructive: var(--destructive);
+  --color-accent-foreground: var(--accent-foreground);
+  --color-accent: var(--accent);
+  --color-muted-foreground: var(--muted-foreground);
+  --color-muted: var(--muted);
+  --color-secondary-foreground: var(--secondary-foreground);
+  --color-secondary: var(--secondary);
+  --color-primary-foreground: var(--primary-foreground);
+  --color-primary: var(--primary);
+  --color-popover-foreground: var(--popover-foreground);
+  --color-popover: var(--popover);
+  --color-card-foreground: var(--card-foreground);
+  --color-card: var(--card);
+  --radius-sm: calc(var(--radius) * 0.6);
+  --radius-md: calc(var(--radius) * 0.8);
+  --radius-lg: var(--radius);
+  --radius-xl: calc(var(--radius) * 1.4);
+  --radius-2xl: calc(var(--radius) * 1.8);
+  --radius-3xl: calc(var(--radius) * 2.2);
+  --radius-4xl: calc(var(--radius) * 2.6);
+  --color-esi-green: var(--esi-green);
+  --color-esi-green-light: var(--esi-green-light);
+  --color-epi-blue: var(--epi-blue);
+  --color-epi-blue-light: var(--epi-blue-light);
+  --color-epi-blue-border: var(--epi-blue-border);
+  --color-status-active: var(--status-active);
+  --color-status-active-bg: var(--status-active-bg);
+  --color-status-active-border: var(--status-active-border);
+  --color-status-inactive: var(--status-inactive);
+  --color-status-inactive-bg: var(--status-inactive-bg);
+  --color-status-inactive-border: var(--status-inactive-border);
+  --color-status-revoked: var(--status-revoked);
+  --color-status-revoked-bg: var(--status-revoked-bg);
+  --color-status-revoked-border: var(--status-revoked-border);
+  --color-primary-icon: var(--primary-icon);
+}
+
+:root {
+  --background: #F3F4F6;
+  --foreground: #1a1a2e;
+  --card: #ffffff;
+  --card-foreground: #1a1a2e;
+  --popover: #ffffff;
+  --popover-foreground: #1a1a2e;
+  --primary: #061E3A;
+  --primary-foreground: #ffffff;
+  --secondary: #F3F4F6;
+  --secondary-foreground: #1b2b4b;
+  --muted: #F3F4F6;
+  --muted-foreground: #697282;
+  --accent: #F3F4F6;
+  --accent-foreground: #1b2b4b;
+  --destructive: #ef4444;
+  --border: #D1D5DC;
+  --input: #D1D5DC;
+  --ring: #1b2b4b;
+  --chart-1: #1b2b4b;
+  --chart-2: #3b82f6;
+  --chart-3: #22c55e;
+  --chart-4: #f59e0b;
+  --chart-5: #ef4444;
+  --radius: 0.5rem; /* 8px */
+  --sidebar-bg: #061E3A;
+  --sidebar-foreground: #ffffff;
+  --sidebar-primary: #ffffff;
+  --sidebar-primary-foreground: #1b2b4b;
+  --sidebar-accent: #092C54;
+  --sidebar-accent-foreground: #ffffff;
+  --sidebar-border: rgba(255, 255, 255, 0.1);
+  --sidebar-ring: rgba(255, 255, 255, 0.2);
+  --sidebar-muted: rgba(255, 255, 255, 0.6);
+  --esi-green: #4a7c59;
+  --esi-green-light: #e8f5e9;
+  --epi-blue: #1157B2;
+  --epi-blue-light: #ebf3ff;
+  --epi-blue-border: #cce1ff;
+  --primary-icon: #8CBCFF;
+  --status-active: #294215;
+  --status-active-bg: #e3f0db;
+  --status-active-border: #d0e5c3;
+  --status-inactive: #4a5565;
+  --status-inactive-bg: #f3f4f6;
+  --status-inactive-border: #e5e7eb;
+  --status-revoked: #82181a;
+  --status-revoked-bg: #ffe2e1;
+  --status-revoked-border: #ffcaca;
+}
+
+
+@layer base {
+  * {
+    @apply border-border outline-ring/50;
+  }
+  body {
+    @apply bg-background text-foreground;
+  }
+  html {
+    @apply font-sans;
+  }
+}
