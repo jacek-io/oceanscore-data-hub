@@ -218,13 +218,27 @@ export function Sidebar() {
                 href="/epi"
                 className={cn(
                   "flex items-center gap-2 pl-5 pr-3 py-2 rounded-lg text-sm transition-colors",
-                  pathname === "/epi" || (pathname.startsWith("/epi/") && !pathname.startsWith("/epi/knowledge"))
+                  pathname === "/epi"
                     ? "text-white font-normal"
                     : "text-sidebar-muted hover:text-white"
                 )}
               >
-                Fleet
-                {(pathname === "/epi" || (pathname.startsWith("/epi/") && !pathname.startsWith("/epi/knowledge"))) && (
+                Port Calls
+                {pathname === "/epi" && (
+                  <div className="w-2 h-2 rounded-full bg-primary-icon ml-auto" />
+                )}
+              </Link>
+              <Link
+                href="/epi/ships"
+                className={cn(
+                  "flex items-center gap-2 pl-5 pr-3 py-2 rounded-lg text-sm transition-colors",
+                  isActive("/epi/ships")
+                    ? "text-white font-normal"
+                    : "text-sidebar-muted hover:text-white"
+                )}
+              >
+                Ships
+                {isActive("/epi/ships") && (
                   <div className="w-2 h-2 rounded-full bg-primary-icon ml-auto" />
                 )}
               </Link>
