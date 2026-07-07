@@ -220,7 +220,8 @@ export default function EpiShipsPage() {
               return (
                 <tr
                   key={ship.id}
-                  className="border-b border-[#f0f1f3] last:border-b-0 hover:bg-[#fafbfc] transition-colors"
+                  className="border-b border-[#f0f1f3] last:border-b-0 hover:bg-[#fafbfc] transition-colors cursor-pointer"
+                  onClick={() => window.location.href = `/epi/ships/${ship.id}`}
                 >
                   <td className="px-4 py-3.5">
                     <p className="text-sm font-normal text-foreground">{ship.name}</p>
