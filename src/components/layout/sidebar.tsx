@@ -46,7 +46,7 @@ export function Sidebar() {
   const isActive = (href: string) => pathname.startsWith(href);
 
   return (
-    <aside className="flex flex-col w-[267px] min-h-screen bg-sidebar-bg text-sidebar-foreground">
+    <aside className="flex flex-col w-[267px] h-screen sticky top-0 bg-sidebar-bg text-sidebar-foreground">
       {/* Logo */}
       <div className="px-6 py-5">
         <Link href="/">
@@ -61,7 +61,7 @@ export function Sidebar() {
       </div>
 
       {/* Navigation */}
-      <nav className="flex-1 px-3 space-y-1">
+      <nav className="flex-1 overflow-y-auto px-3 space-y-1">
         {/* Data Hub Section */}
         <button
           onClick={() => setDataHubOpen(!dataHubOpen)}
