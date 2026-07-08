@@ -11,9 +11,6 @@ import {
   MessageCircle,
   ChevronDown,
   ChevronUp,
-  User,
-  Building2,
-  Users,
 } from "lucide-react";
 import { useState } from "react";
 import { cn } from "@/lib/utils";
@@ -45,7 +42,6 @@ export function Sidebar() {
   const [dataHubOpen, setDataHubOpen] = useState(true);
   const [esiOpen, setEsiOpen] = useState(false);
   const [epiOpen, setEpiOpen] = useState(false);
-  const [settingsOpen, setSettingsOpen] = useState(false);
 
   const isActive = (href: string) => pathname.startsWith(href);
 
@@ -267,87 +263,18 @@ export function Sidebar() {
 
       {/* Bottom Links */}
       <div className="px-3 pb-4 space-y-0.5">
-        <button
-          onClick={() => setSettingsOpen(!settingsOpen)}
+        <Link
+          href="/account-settings"
           className={cn(
-            "flex items-center justify-between w-full px-3 py-2.5 rounded-lg text-sm font-normal transition-colors",
+            "flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm font-normal transition-colors",
             isActive("/account-settings")
               ? "bg-sidebar-accent text-white"
               : "text-sidebar-muted hover:bg-sidebar-accent hover:text-white"
           )}
         >
-          <span className="flex items-center gap-3">
-            <Settings className="w-5 h-5" />
-            Settings
-          </span>
-          {settingsOpen ? (
-            <ChevronUp className="w-4 h-4" />
-          ) : (
-            <ChevronDown className="w-4 h-4" />
-          )}
-        </button>
-
-        {settingsOpen && (
-          <div className="ml-[22px] border-l border-white/15 space-y-0.5 py-1 mt-2 mb-3">
-            <Link
-              href="/account-settings"
-              className={cn(
-                "flex items-center gap-2 pl-5 pr-3 py-2 rounded-lg text-sm transition-colors",
-                pathname === "/account-settings" || pathname === "/account-settings/password"
-                  ? "text-white font-normal"
-                  : "text-sidebar-muted hover:text-white"
-              )}
-            >
-              My Account
-              {(pathname === "/account-settings" || pathname === "/account-settings/password") && (
-                <div className="w-2 h-2 rounded-full bg-primary-icon ml-auto" />
-              )}
-            </Link>
-            <Link
-              href="/account-settings/organization"
-              className={cn(
-                "flex items-center gap-2 pl-5 pr-3 py-2 rounded-lg text-sm transition-colors",
-                pathname.startsWith("/account-settings/organization")
-                  ? "text-white font-normal"
-                  : "text-sidebar-muted hover:text-white"
-              )}
-            >
-              Organization
-              {pathname.startsWith("/account-settings/organization") && (
-                <div className="w-2 h-2 rounded-full bg-primary-icon ml-auto" />
-              )}
-            </Link>
-            <Link
-              href="/account-settings/users"
-              className={cn(
-                "flex items-center gap-2 pl-5 pr-3 py-2 rounded-lg text-sm transition-colors",
-                pathname.startsWith("/account-settings/users")
-                  ? "text-white font-normal"
-                  : "text-sidebar-muted hover:text-white"
-              )}
-            >
-              Users
-              {pathname.startsWith("/account-settings/users") && (
-                <div className="w-2 h-2 rounded-full bg-primary-icon ml-auto" />
-              )}
-            </Link>
-            <Link
-              href="/account-settings/vessels"
-              className={cn(
-                "flex items-center gap-2 pl-5 pr-3 py-2 rounded-lg text-sm transition-colors",
-                pathname.startsWith("/account-settings/vessels")
-                  ? "text-white font-normal"
-                  : "text-sidebar-muted hover:text-white"
-              )}
-            >
-              Vessels
-              {pathname.startsWith("/account-settings/vessels") && (
-                <div className="w-2 h-2 rounded-full bg-primary-icon ml-auto" />
-              )}
-            </Link>
-          </div>
-        )}
-
+          <Settings className="w-5 h-5" />
+          Settings
+        </Link>
         <Link
           href="/support"
           className={cn(

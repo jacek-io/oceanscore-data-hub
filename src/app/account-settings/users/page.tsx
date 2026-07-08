@@ -7,8 +7,8 @@ import {
   X,
   UserMinus,
   ChevronDown,
-  ArrowUpDown,
-  ChevronUp,
+  Shield,
+  Pen,
 } from "lucide-react";
 import { cn } from "@/lib/utils";
 
@@ -35,7 +35,43 @@ const mockUsers: OrgUser[] = [
 
 const allRoles: UserRole[] = ["Admin", "Data Manager", "Accountant", "Analyst"];
 
-type Dialog = null | "invite" | "deactivate";
+const permissions = [
+  { key: "fleet_view", label: "View Fleet", description: "View vessel list and details" },
+  { key: "fleet_edit", label: "Edit Fleet", description: "Add, edit, and remove vessels" },
+  { key: "upload", label: "Upload Data", description: "Upload ESI/EPI data via Data Hub" },
+  { key: "esi_view", label: "View ESI", description: "View ESI scores and certificates" },
+  { key: "epi_view", label: "View EPI", description: "View EPI port calls and scores" },
+  { key: "epi_submit", label: "Submit EPI Data", description: "Submit port call utility data" },
+  { key: "billing_view", label: "View Billing", description: "View invoices and billing info" },
+  { key: "billing_edit", label: "Edit Billing", description: "Modify billing preferences" },
+  { key: "users_manage", label: "Manage Users", description: "Invite, edit, and deactivate users" },
+  { key: "org_manage", label: "Manage Organization", description: "Edit org details and sub-orgs" },
+];
+
+const roles = [
+  {
+    name: "Admin",
+    color: "bg-primary/5 text-primary border-primary/20",
+    permissions: permissions.map((p) => p.key),
+  },
+  {
+    name: "Data Manager",
+    color: "bg-[#d0e5c3] text-[#294215] border-[#b5d49e]",
+    permissions: ["fleet_view", "fleet_edit", "upload", "esi_view", "epi_view", "epi_submit"],
+  },
+  {
+    name: "Accountant",
+    color: "bg-[#ffedd4] text-[#9f2d00] border-[#ffd6a7]",
+    permissions: ["fleet_view", "esi_view", "epi_view", "billing_view", "billing_edit"],
+  },
+  {
+    name: "Analyst",
+    color: "bg-[#cce1ff] text-[#1a4a8a] border-[#99c3ff]",
+    permissions: ["fleet_view", "esi_view", "epi_view"],
+  },
+];
+
+type Dialog = null | "invite" | "deactivate" | "editRoles";
 
 export default function UsersPage() {
   const [search, setSearch] = useState("");
@@ -47,6 +83,9 @@ export default function UsersPage() {
   // Invite form
   const [inviteEmail, setInviteEmail] = useState("");
   const [inviteRoles, setInviteRoles] = useState<UserRole[]>([]);
+
+  // Edit roles form
+  const [editRoles, setEditRoles] = useState<UserRole[]>([]);
 
   const toggleInviteRole = (role: UserRole) => {
     setInviteRoles((prev) =>
@@ -194,23 +233,87 @@ export default function UsersPage() {
                   </span>
                 </td>
                 <td className="px-4 py-3.5 text-right">
-                  {user.status === "Active" && (
+                  <div className="inline-flex items-center gap-1">
                     <button
                       onClick={() => {
                         setSelectedUser(user);
-                        setDialog("deactivate");
+                        setEditRoles([...user.roles]);
+                        setDialog("editRoles");
                       }}
-                      className="w-7 h-7 rounded-md inline-flex items-center justify-center hover:bg-[#fef2f2] transition-colors"
-                      title="Deactivate user"
+                      className="w-7 h-7 rounded-md inline-flex items-center justify-center hover:bg-[#f3f4f6] transition-colors"
+                      title="Edit roles"
                     >
-                      <UserMinus className="w-3.5 h-3.5 text-[#9e2028]" />
+                      <Pen className="w-3.5 h-3.5 text-muted-foreground" />
                     </button>
-                  )}
+                    {user.status === "Active" && (
+                      <button
+                        onClick={() => {
+                          setSelectedUser(user);
+                          setDialog("deactivate");
+                        }}
+                        className="w-7 h-7 rounded-md inline-flex items-center justify-center hover:bg-[#fef2f2] transition-colors"
+                        title="Deactivate user"
+                      >
+                        <UserMinus className="w-3.5 h-3.5 text-[#9e2028]" />
+                      </button>
+                    )}
+                  </div>
                 </td>
               </tr>
             ))}
           </tbody>
         </table>
+      </div>
+
+      {/* Roles & Permissions Reference */}
+      <div className="bg-white rounded-[16px] p-5 flex flex-col gap-4">
+        <div className="flex items-center gap-2">
+          <Shield className="w-4 h-4 text-muted-foreground" />
+          <h3 className="text-base font-medium text-foreground tracking-[-0.48px]">
+            Roles & Permissions
+          </h3>
+        </div>
+        <p className="text-sm text-muted-foreground tracking-[-0.14px]">
+          Each role grants a fixed set of permissions. Assign roles to users above — permissions cannot be customized per user.
+        </p>
+        <div className="border border-[#e5e7eb] rounded-lg overflow-hidden">
+          <table className="w-full">
+            <thead>
+              <tr className="bg-[#F3F4F6]">
+                <th className="text-left text-xs font-normal text-muted-foreground px-4 h-9 first:rounded-tl-lg">
+                  Permission
+                </th>
+                {roles.map((role) => (
+                  <th key={role.name} className="text-center text-xs font-normal text-muted-foreground px-3 h-9 last:rounded-tr-lg">
+                    <span className={cn("inline-flex items-center px-2 py-0.5 rounded-[36px] text-[10px] font-medium border", role.color)}>
+                      {role.name}
+                    </span>
+                  </th>
+                ))}
+              </tr>
+            </thead>
+            <tbody>
+              {permissions.map((perm) => (
+                <tr key={perm.key} className="border-t border-[#f0f1f3]">
+                  <td className="px-4 py-2">
+                    <p className="text-sm text-foreground">{perm.label}</p>
+                    <p className="text-xs text-muted-foreground">{perm.description}</p>
+                  </td>
+                  {roles.map((role) => (
+                    <td key={role.name} className="px-3 py-2 text-center">
+                      <span className={cn(
+                        "text-xs",
+                        role.permissions.includes(perm.key) ? "text-[#294215]" : "text-[#d1d5dc]"
+                      )}>
+                        {role.permissions.includes(perm.key) ? "✓" : "—"}
+                      </span>
+                    </td>
+                  ))}
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
       </div>
 
       {/* Invite Dialog */}
@@ -268,6 +371,77 @@ export default function UsersPage() {
                 className="h-9 px-4 rounded-lg bg-primary text-sm text-white hover:bg-primary/90 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
               >
                 Send Invitation
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* Edit Roles Dialog */}
+      {dialog === "editRoles" && selectedUser && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center">
+          <div className="absolute inset-0 bg-black/40" onClick={() => setDialog(null)} />
+          <div className="relative bg-white rounded-[16px] w-[400px] flex flex-col shadow-xl">
+            <div className="flex items-center justify-between p-5 pb-0">
+              <h3 className="text-lg font-medium text-foreground tracking-[-0.54px]">Edit Roles</h3>
+              <button onClick={() => setDialog(null)} className="w-8 h-8 rounded-lg flex items-center justify-center hover:bg-[#f3f4f6]">
+                <X className="w-4 h-4 text-muted-foreground" />
+              </button>
+            </div>
+            <div className="p-5 flex flex-col gap-4">
+              <p className="text-sm text-muted-foreground">
+                Update roles for <strong>{selectedUser.name}</strong>
+              </p>
+              <div className="flex flex-col gap-2">
+                {allRoles.map((role) => {
+                  const roleDef = roles.find((r) => r.name === role);
+                  const isSelected = editRoles.includes(role);
+                  return (
+                    <button
+                      key={role}
+                      onClick={() =>
+                        setEditRoles((prev) =>
+                          prev.includes(role)
+                            ? prev.filter((r) => r !== role)
+                            : [...prev, role]
+                        )
+                      }
+                      className={cn(
+                        "flex items-center gap-3 p-3 rounded-lg border text-left transition-colors",
+                        isSelected
+                          ? "border-primary bg-primary/5"
+                          : "border-[#e5e7eb] hover:border-[#d1d5dc]"
+                      )}
+                    >
+                      <div className={cn(
+                        "w-4 h-4 rounded border flex items-center justify-center text-[10px]",
+                        isSelected
+                          ? "bg-primary border-primary text-white"
+                          : "border-[#d1d5dc]"
+                      )}>
+                        {isSelected && "✓"}
+                      </div>
+                      <span className={cn("inline-flex items-center px-2 py-0.5 rounded-[36px] text-[11px] font-medium border", roleDef?.color)}>
+                        {role}
+                      </span>
+                    </button>
+                  );
+                })}
+              </div>
+            </div>
+            <div className="flex items-center justify-end gap-2 p-5 pt-2">
+              <button
+                onClick={() => setDialog(null)}
+                className="h-9 px-4 rounded-lg border border-border text-sm text-foreground hover:bg-[#f8f9fa] transition-colors"
+              >
+                Cancel
+              </button>
+              <button
+                disabled={editRoles.length === 0}
+                onClick={() => setDialog(null)}
+                className="h-9 px-4 rounded-lg bg-primary text-sm text-white hover:bg-primary/90 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+              >
+                Save
               </button>
             </div>
           </div>

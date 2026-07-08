@@ -125,15 +125,6 @@ export default function ProfilePage() {
         )}
       </div>
 
-      {/* Session Info */}
-      <div className="bg-white rounded-[16px] p-5">
-        <h3 className="text-base font-medium text-foreground tracking-[-0.48px]">
-          Session
-        </h3>
-        <p className="text-sm text-muted-foreground mt-2 tracking-[-0.14px]">
-          Last login: {mockProfile.lastLogin}
-        </p>
-      </div>
     </div>
   );
 }

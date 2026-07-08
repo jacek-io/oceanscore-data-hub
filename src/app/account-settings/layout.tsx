@@ -3,50 +3,20 @@
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import {
-  User,
+  UserRound,
+  KeyRound,
+  Building,
   Building2,
-  Users,
+  DollarSign,
+  UsersRound,
   Ship,
-  ChevronDown,
-  ChevronUp,
 } from "lucide-react";
-import { useState } from "react";
 import { cn } from "@/lib/utils";
+import { useOrgContext } from "@/lib/org-context";
+import type { LucideIcon } from "lucide-react";
 
-const settingsNav = [
-  {
-    label: "My Account",
-    icon: User,
-    items: [
-      { label: "Profile", href: "/account-settings" },
-      { label: "Change Password", href: "/account-settings/password" },
-    ],
-  },
-  {
-    label: "My Organization",
-    icon: Building2,
-    items: [
-      { label: "General", href: "/account-settings/organization" },
-      { label: "Sub-organizations", href: "/account-settings/organization/sub-orgs" },
-      { label: "Billing Preferences", href: "/account-settings/organization/billing" },
-    ],
-  },
-  {
-    label: "Users",
-    icon: Users,
-    items: [
-      { label: "Users", href: "/account-settings/users" },
-      { label: "Roles & Permissions", href: "/account-settings/users/roles" },
-    ],
-  },
-  {
-    label: "Vessels",
-    icon: Ship,
-    items: [
-      { label: "Vessel List", href: "/account-settings/vessels" },
-    ],
-  },
-];
+type NavItem = { label: string; href: string; icon: LucideIcon };
+type NavSection = { label: string; items: NavItem[] };
 
 export default function AccountSettingsLayout({
   children,
@@ -54,28 +24,39 @@ export default function AccountSettingsLayout({
   children: React.ReactNode;
 }) {
   const pathname = usePathname();
+  const { orgType } = useOrgContext();
 
-  const [openSections, setOpenSections] = useState<Record<string, boolean>>(() => {
-    const initial: Record<string, boolean> = {};
-    settingsNav.forEach((section) => {
-      const isActive = section.items.some((item) => {
-        if (item.href === "/account-settings") {
-          return pathname === "/account-settings";
-        }
-        return pathname.startsWith(item.href);
-      });
-      initial[section.label] = isActive;
-    });
-    // Default: open My Account if nothing matches
-    if (!Object.values(initial).some(Boolean)) {
-      initial["My Account"] = true;
-    }
-    return initial;
-  });
-
-  const toggleSection = (label: string) => {
-    setOpenSections((prev) => ({ ...prev, [label]: !prev[label] }));
-  };
+  const sections: NavSection[] = [
+    {
+      label: "Account",
+      items: [
+        { label: "Profile", href: "/account-settings", icon: UserRound },
+        { label: "Change Password", href: "/account-settings/password", icon: KeyRound },
+      ],
+    },
+    {
+      label: "Organization",
+      items: [
+        { label: "My Organization", href: "/account-settings/organization", icon: Building },
+        ...(orgType === "corporate"
+          ? [{ label: "Sub-organizations", href: "/account-settings/organization/sub-orgs", icon: Building2 }]
+          : []),
+        { label: "Billing preferences", href: "/account-settings/organization/billing", icon: DollarSign },
+      ],
+    },
+    {
+      label: "Users",
+      items: [
+        { label: "Users", href: "/account-settings/users", icon: UsersRound },
+      ],
+    },
+    {
+      label: "Ships",
+      items: [
+        { label: "Ships list", href: "/account-settings/vessels", icon: Ship },
+      ],
+    },
+  ];
 
   const isItemActive = (href: string) => {
     if (href === "/account-settings") {
@@ -85,66 +66,64 @@ export default function AccountSettingsLayout({
   };
 
   return (
-    <div className="px-6 py-5 space-y-5">
+    <div className="px-6 py-5 flex flex-col h-full">
       {/* Header */}
-      <div>
+      <div className="mb-5">
         <h1 className="text-[32px] font-medium text-foreground leading-tight tracking-[-0.96px]">
           Account Settings
         </h1>
         <p className="text-sm text-muted-foreground mt-1 tracking-[-0.14px]">
-          Manage your account, organization, users, and vessels
+          Manage your account, organization, users, and ships
         </p>
       </div>
 
       {/* Content with sidebar */}
-      <div className="flex gap-5">
+      <div className="flex gap-5 flex-1 min-h-0">
         {/* Settings sidebar */}
-        <div className="w-[240px] shrink-0 space-y-1">
-          {settingsNav.map((section) => (
-            <div key={section.label}>
-              <button
-                onClick={() => toggleSection(section.label)}
-                className={cn(
-                  "flex items-center justify-between w-full px-3 py-2.5 rounded-lg text-sm transition-colors",
-                  section.items.some((item) => isItemActive(item.href))
-                    ? "bg-primary/5 text-foreground font-medium"
-                    : "text-muted-foreground hover:bg-[#f3f4f6] hover:text-foreground"
-                )}
-              >
-                <span className="flex items-center gap-2.5">
-                  <section.icon className="w-4 h-4" />
-                  {section.label}
-                </span>
-                {openSections[section.label] ? (
-                  <ChevronUp className="w-3.5 h-3.5" />
-                ) : (
-                  <ChevronDown className="w-3.5 h-3.5" />
-                )}
-              </button>
-              {openSections[section.label] && (
-                <div className="ml-[18px] border-l border-[#e5e7eb] space-y-0.5 py-1 mt-1 mb-2">
-                  {section.items.map((item) => (
+        <div className="w-[260px] shrink-0 bg-white rounded-[16px] flex flex-col">
+          {sections.map((section, sIdx) => (
+            <div
+              key={section.label}
+              className={cn(
+                "flex flex-col gap-2 px-4 py-2",
+                sIdx === 0 && "pt-4",
+                sIdx === sections.length - 1 && "pb-4"
+              )}
+            >
+              <p className="text-[11px] font-medium text-[#697282] uppercase tracking-[1.1px]">
+                {section.label}
+              </p>
+              <div className="flex flex-col gap-0.5">
+                {section.items.map((item) => {
+                  const active = isItemActive(item.href);
+                  return (
                     <Link
                       key={item.href}
                       href={item.href}
                       className={cn(
-                        "flex items-center pl-4 pr-3 py-1.5 rounded-r-lg text-sm transition-colors",
-                        isItemActive(item.href)
-                          ? "text-primary font-medium bg-primary/5 border-l-2 border-primary -ml-px"
-                          : "text-muted-foreground hover:text-foreground"
+                        "flex items-center justify-between h-[44px] px-4 py-3 rounded-lg text-sm opacity-80 transition-colors",
+                        active
+                          ? "bg-[#ebf3ff] text-foreground"
+                          : "text-[#1e2938] hover:bg-[#f3f4f6]"
                       )}
                     >
-                      {item.label}
+                      <span className="flex items-center gap-2">
+                        <item.icon className="w-5 h-5 text-[#697282]" />
+                        {item.label}
+                      </span>
+                      {active && (
+                        <div className="w-2 h-2 rounded-full bg-primary" />
+                      )}
                     </Link>
-                  ))}
-                </div>
-              )}
+                  );
+                })}
+              </div>
             </div>
           ))}
         </div>
 
         {/* Main content */}
-        <div className="flex-1 min-w-0">{children}</div>
+        <div className="flex-1 min-w-0 overflow-y-auto">{children}</div>
       </div>
     </div>
   );

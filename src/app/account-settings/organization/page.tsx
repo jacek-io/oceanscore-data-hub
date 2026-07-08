@@ -1,14 +1,13 @@
 "use client";
 
 import { useState } from "react";
-import { Pen, Building2, ArrowRight } from "lucide-react";
+import { Pen, Building2, ArrowRight, Info } from "lucide-react";
 import Link from "next/link";
+import { useOrgContext, OrgType } from "@/lib/org-context";
 import { cn } from "@/lib/utils";
 
-const mockOrg = {
+const mockCorporateOrg = {
   name: "OceanScore GmbH",
-  type: "Corporate" as const,
-  parentOrg: null as string | null,
   vatNumber: "DE123456789",
   registrationNumber: "HRB 12345",
   billingAddress: {
@@ -25,45 +24,130 @@ const mockOrg = {
   ],
 };
 
+const mockSubOrg = {
+  name: "OceanScore Nordic AB",
+  vatNumber: "SE556677889901",
+  registrationNumber: "559012-3456",
+  billingAddress: {
+    street: "Strandvägen 12",
+    city: "Stockholm",
+    postalCode: "114 56",
+    country: "Sweden",
+  },
+  contactEmail: "nordic@oceanscore.com",
+  contactPhone: "+46 8 123 4567",
+  parentOrg: "OceanScore GmbH",
+};
+
 export default function OrganizationGeneralPage() {
+  const { orgType, setOrgType, parentOrg } = useOrgContext();
+
+  const orgData = orgType === "sub-org" ? mockSubOrg : mockCorporateOrg;
+
   const [editing, setEditing] = useState(false);
-  const [orgName, setOrgName] = useState(mockOrg.name);
-  const [vatNumber, setVatNumber] = useState(mockOrg.vatNumber);
-  const [regNumber, setRegNumber] = useState(mockOrg.registrationNumber);
-  const [street, setStreet] = useState(mockOrg.billingAddress.street);
-  const [city, setCity] = useState(mockOrg.billingAddress.city);
-  const [postalCode, setPostalCode] = useState(mockOrg.billingAddress.postalCode);
-  const [country, setCountry] = useState(mockOrg.billingAddress.country);
-  const [contactEmail, setContactEmail] = useState(mockOrg.contactEmail);
-  const [contactPhone, setContactPhone] = useState(mockOrg.contactPhone);
+  const [orgName, setOrgName] = useState(orgData.name);
+  const [vatNumber, setVatNumber] = useState(orgData.vatNumber);
+  const [regNumber, setRegNumber] = useState(orgData.registrationNumber);
+  const [street, setStreet] = useState(orgData.billingAddress.street);
+  const [city, setCity] = useState(orgData.billingAddress.city);
+  const [postalCode, setPostalCode] = useState(orgData.billingAddress.postalCode);
+  const [country, setCountry] = useState(orgData.billingAddress.country);
+  const [contactEmail, setContactEmail] = useState(orgData.contactEmail);
+  const [contactPhone, setContactPhone] = useState(orgData.contactPhone);
+
+  const orgTypes: { value: OrgType; label: string }[] = [
+    { value: "standalone", label: "Independent" },
+    { value: "sub-org", label: "Sub-organisation" },
+    { value: "corporate", label: "Parent organisation" },
+  ];
 
   return (
     <div className="space-y-5">
-      {/* Org Hierarchy Badge */}
-      <div className="bg-white rounded-[16px] p-5 flex items-center gap-4">
-        <div className="w-10 h-10 rounded-full bg-primary/10 flex items-center justify-center">
-          <Building2 className="w-5 h-5 text-primary" />
+      {/* DEV: Org type toggle */}
+      <div className="bg-[#fef9c3] rounded-[16px] p-3 flex items-center gap-3 border border-[#fde047]">
+        <span className="text-xs font-medium text-[#854d0e]">DEV toggle:</span>
+        <div className="flex gap-1">
+          {orgTypes.map((t) => (
+            <button
+              key={t.value}
+              onClick={() => setOrgType(t.value)}
+              className={cn(
+                "px-2.5 py-1 rounded-md text-xs transition-colors",
+                orgType === t.value
+                  ? "bg-[#854d0e] text-white"
+                  : "bg-white text-[#854d0e] border border-[#fde047] hover:bg-[#fef3c7]"
+              )}
+            >
+              {t.label}
+            </button>
+          ))}
         </div>
-        <div className="flex-1">
-          <div className="flex items-center gap-2">
-            <h3 className="text-base font-medium text-foreground tracking-[-0.48px]">
-              {mockOrg.name}
-            </h3>
-            <span className="inline-flex items-center px-2 py-0.5 rounded-[36px] text-[11px] font-medium border bg-primary/5 text-primary border-primary/20">
-              {mockOrg.type}
-            </span>
+      </div>
+
+      {/* Org Identity Card */}
+      {orgType === "corporate" && (
+        <div className="bg-white rounded-[16px] p-5 flex items-center gap-4">
+          <div className="w-10 h-10 rounded-full bg-primary/10 flex items-center justify-center">
+            <Building2 className="w-5 h-5 text-primary" />
           </div>
-          <p className="text-sm text-muted-foreground mt-0.5">
-            {mockOrg.subOrgs.length} sub-organizations &middot; {mockOrg.subOrgs.reduce((a, s) => a + s.vessels, 0)} vessels total
+          <div className="flex-1">
+            <div className="flex items-center gap-2">
+              <h3 className="text-base font-medium text-foreground tracking-[-0.48px]">
+                {orgData.name}
+              </h3>
+              <span className="inline-flex items-center px-2 py-0.5 rounded-[36px] text-[11px] font-medium border bg-primary/5 text-primary border-primary/20">
+                Corporate
+              </span>
+            </div>
+            <p className="text-sm text-muted-foreground mt-0.5">
+              {"subOrgs" in orgData
+                ? `${orgData.subOrgs.length} sub-organizations · ${orgData.subOrgs.reduce((a, s) => a + s.vessels, 0)} vessels total`
+                : ""}
+            </p>
+          </div>
+          <Link
+            href="/account-settings/organization/sub-orgs"
+            className="inline-flex items-center gap-1.5 text-sm text-primary hover:underline"
+          >
+            View hierarchy
+            <ArrowRight className="w-3.5 h-3.5" />
+          </Link>
+        </div>
+      )}
+
+      {orgType === "sub-org" && (
+        <div className="bg-white rounded-[16px] p-5 flex flex-col gap-4">
+          <div className="flex items-center gap-4">
+            <div className="w-10 h-10 rounded-full bg-[#f3f4f6] flex items-center justify-center">
+              <Building2 className="w-5 h-5 text-muted-foreground" />
+            </div>
+            <div className="flex-1">
+              <div className="flex items-center gap-2">
+                <h3 className="text-base font-medium text-foreground tracking-[-0.48px]">
+                  {orgData.name}
+                </h3>
+                <span className="inline-flex items-center px-2 py-0.5 rounded-[36px] text-[11px] font-medium border bg-[#f3f4f6] text-[#4a5565] border-[#e5e7eb]">
+                  Sub-organization
+                </span>
+              </div>
+              <p className="text-sm text-muted-foreground mt-0.5">
+                Part of <span className="font-medium text-foreground">{parentOrg}</span>
+              </p>
+            </div>
+          </div>
+
+        </div>
+      )}
+
+      {/* Hierarchy notice — always visible */}
+      <div className="bg-white rounded-[16px] p-5 flex items-start gap-3">
+        <Info className="w-4 h-4 text-primary shrink-0 mt-0.5" />
+        <div className="text-sm text-muted-foreground">
+          <p className="font-medium text-foreground">Set your organisation structure</p>
+          <p className="mt-0.5">
+            You can be: Independent (no links), Sub-organisation (linked to a parent), or Parent organisation (with sub-orgs beneath you). Only one level of hierarchy is allowed — to change your type, remove existing links first.
           </p>
         </div>
-        <Link
-          href="/account-settings/organization/sub-orgs"
-          className="inline-flex items-center gap-1.5 text-sm text-primary hover:underline"
-        >
-          View hierarchy
-          <ArrowRight className="w-3.5 h-3.5" />
-        </Link>
       </div>
 
       {/* General Details Card */}
@@ -128,15 +212,15 @@ export default function OrganizationGeneralPage() {
               </button>
               <button
                 onClick={() => {
-                  setOrgName(mockOrg.name);
-                  setVatNumber(mockOrg.vatNumber);
-                  setRegNumber(mockOrg.registrationNumber);
-                  setStreet(mockOrg.billingAddress.street);
-                  setCity(mockOrg.billingAddress.city);
-                  setPostalCode(mockOrg.billingAddress.postalCode);
-                  setCountry(mockOrg.billingAddress.country);
-                  setContactEmail(mockOrg.contactEmail);
-                  setContactPhone(mockOrg.contactPhone);
+                  setOrgName(orgData.name);
+                  setVatNumber(orgData.vatNumber);
+                  setRegNumber(orgData.registrationNumber);
+                  setStreet(orgData.billingAddress.street);
+                  setCity(orgData.billingAddress.city);
+                  setPostalCode(orgData.billingAddress.postalCode);
+                  setCountry(orgData.billingAddress.country);
+                  setContactEmail(orgData.contactEmail);
+                  setContactPhone(orgData.contactPhone);
                   setEditing(false);
                 }}
                 className="h-9 px-4 rounded-lg border border-border text-sm text-foreground hover:bg-[#f8f9fa] transition-colors"
