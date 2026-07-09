@@ -11,8 +11,9 @@ import {
   MessageCircle,
   ChevronDown,
   ChevronUp,
+  LogOut,
 } from "lucide-react";
-import { useState } from "react";
+import { useState, useRef, useEffect } from "react";
 import { cn } from "@/lib/utils";
 
 const dataHubItems = [
@@ -43,6 +44,20 @@ export function Sidebar() {
   const [dataHubOpen, setDataHubOpen] = useState(true);
   const [esiOpen, setEsiOpen] = useState(false);
   const [epiOpen, setEpiOpen] = useState(false);
+  const [accountOpen, setAccountOpen] = useState(false);
+  const accountRef = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    function handleClickOutside(e: MouseEvent) {
+      if (accountRef.current && !accountRef.current.contains(e.target as Node)) {
+        setAccountOpen(false);
+      }
+    }
+    if (accountOpen) {
+      document.addEventListener("mousedown", handleClickOutside);
+      return () => document.removeEventListener("mousedown", handleClickOutside);
+    }
+  }, [accountOpen]);
 
   const isActive = (href: string) => {
     if (href === "/fleet") {
@@ -270,18 +285,6 @@ export function Sidebar() {
       {/* Bottom Links */}
       <div className="px-3 pb-4 space-y-0.5">
         <Link
-          href="/account-settings"
-          className={cn(
-            "flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm font-normal transition-colors",
-            isActive("/account-settings")
-              ? "bg-sidebar-accent text-white"
-              : "text-sidebar-muted hover:bg-sidebar-accent hover:text-white"
-          )}
-        >
-          <Settings className="w-5 h-5" />
-          Settings
-        </Link>
-        <Link
           href="/support"
           className={cn(
             "flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm transition-colors",
@@ -293,6 +296,57 @@ export function Sidebar() {
           <MessageCircle className="w-5 h-5" />
           Support
         </Link>
+
+        {/* User account */}
+        <div ref={accountRef} className="relative mt-3">
+          <button
+            onClick={() => setAccountOpen(!accountOpen)}
+            className="flex items-center gap-2 w-full px-3.5 py-3 rounded-lg border border-white/10 text-white hover:bg-sidebar-accent transition-colors"
+          >
+            <div className="w-8 h-8 rounded-full bg-[#5c96e5] flex items-center justify-center text-xs text-white shrink-0">
+              JZ
+            </div>
+            <div className="flex-1 text-left min-w-0">
+              <p className="text-sm leading-tight truncate">Jacek Zabicki</p>
+              <p className="text-[11px] opacity-50 leading-tight truncate">jacek.z@oceanscore.com</p>
+            </div>
+          </button>
+
+          {/* Popover — positioned to the right of sidebar */}
+          {accountOpen && (
+            <div className="absolute bottom-0 left-full ml-3 w-[260px] bg-white rounded-2xl shadow-xl border border-[#e5e7eb] overflow-hidden z-50">
+              {/* User info — light blue header */}
+              <div className="p-2">
+              <div className="flex flex-col items-center bg-[#ebf3ff] rounded-xl px-5 pt-6 pb-5">
+                <div className="w-[72px] h-[72px] rounded-full bg-[#5c96e5] flex items-center justify-center text-2xl font-medium text-white mb-3">
+                  JZ
+                </div>
+                <p className="text-lg font-medium text-[#1e2938]">Jacek Zabicki</p>
+                <p className="text-sm text-[#697282] mt-0.5">jacek.z@oceanscore.com</p>
+              </div>
+              </div>
+
+              {/* Settings */}
+              <Link
+                href="/account-settings"
+                onClick={() => setAccountOpen(false)}
+                className="flex items-center gap-3 px-5 py-3.5 text-sm text-[#1e2938] hover:bg-[#f3f4f6] transition-colors border-b border-[#e5e7eb]"
+              >
+                <Settings className="w-5 h-5 text-[#697282]" />
+                Settings
+              </Link>
+
+              {/* Logout */}
+              <Link
+                href="/login"
+                className="flex items-center gap-3 px-5 py-3.5 text-sm text-[#1e2938] hover:bg-[#f3f4f6] transition-colors"
+              >
+                <LogOut className="w-5 h-5 text-[#697282]" />
+                Logout
+              </Link>
+            </div>
+          )}
+        </div>
       </div>
     </aside>
   );
