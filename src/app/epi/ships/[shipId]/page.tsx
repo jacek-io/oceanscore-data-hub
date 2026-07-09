@@ -9,7 +9,7 @@ import {
   BarChart3,
   Pen,
 } from "lucide-react";
-import { CircleFlag } from "react-circle-flags";
+
 
 /* ── Mock port call detail data ── */
 const portCallDetails: Record<string, {
@@ -167,8 +167,7 @@ export default function EpiShipDetailPage({ params }: { params: Promise<{ shipId
             </div>
           </div>
           <div className="flex items-center gap-4 pl-12">
-            <span className="flex items-center gap-2 text-sm text-muted-foreground">
-              <CircleFlag countryCode={data.countryCode} width={20} height={20} />
+            <span className="text-sm text-muted-foreground">
               {data.country}
             </span>
             <span className="w-px h-3 bg-border" />

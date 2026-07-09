@@ -14,7 +14,7 @@ import {
   Anchor,
   X,
 } from "lucide-react";
-import { CircleFlag } from "react-circle-flags";
+
 import { cn } from "@/lib/utils";
 
 /* ── Mock EPI port call data ── */
@@ -374,7 +374,6 @@ export default function EpiPortCallsPage() {
                 </td>
                 <td className="px-4 py-3.5">
                   <div className="flex items-center gap-2">
-                    <CircleFlag countryCode={pc.countryCode} width={20} height={20} />
                     <div>
                       <p className="text-sm text-foreground">{pc.port}</p>
                       <p className="text-xs text-muted-foreground font-mono">{pc.country}</p>

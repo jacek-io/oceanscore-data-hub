@@ -275,27 +275,27 @@ export default function VesselsPage() {
         Move vessel between sub-organizations — coming soon
       </p>
 
-      {/* Add New Vessel Dialog */}
+      {/* Add New Ship Dialog */}
       {showAddDialog && (
         <div className="fixed inset-0 z-50 flex items-center justify-center">
           <div className="absolute inset-0 bg-black/40" onClick={() => setShowAddDialog(false)} />
-          <div className="relative bg-white rounded-lg w-[520px] flex flex-col shadow-xl border border-[#e5e7eb]">
+          <div className="relative bg-white rounded-2xl w-[520px] flex flex-col shadow-xl">
             {/* Header */}
-            <div className="flex items-center justify-between px-4 pb-4 pt-4 border-b border-[#e5e7eb]">
-              <h3 className="text-2xl font-medium text-[#1e2938] leading-[1.5]">
-                Add New Vessel
+            <div className="flex items-center justify-between px-6 pt-6 pb-4">
+              <h3 className="text-2xl font-medium text-[#1e2938]">
+                Add New Ship
               </h3>
               <button
                 onClick={() => setShowAddDialog(false)}
-                className="w-5 h-5 flex items-center justify-center text-muted-foreground hover:text-foreground"
+                className="w-8 h-8 flex items-center justify-center rounded-lg text-muted-foreground hover:bg-[#f3f4f6] hover:text-foreground transition-colors"
               >
                 <X className="w-5 h-5" />
               </button>
             </div>
 
             {/* IMO Input */}
-            <div className="px-4 pt-4">
-              <div className="flex flex-col gap-1">
+            <div className="px-6">
+              <div className="flex flex-col gap-1.5">
                 <label className="text-sm text-[#4a5565]">IMO Number</label>
                 <input
                   type="text"
@@ -303,14 +303,14 @@ export default function VesselsPage() {
                   onChange={(e) => handleImoLookup(e.target.value.replace(/\D/g, ""))}
                   placeholder="Enter IMO number"
                   maxLength={9}
-                  className="h-10 px-4 rounded-lg border border-[#d1d5dc] bg-white text-sm text-[#1e2938] placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-primary"
+                  className="h-10 px-4 rounded-lg border border-[#d1d5dc] bg-white text-sm text-[#1e2938] placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-primary font-mono"
                 />
               </div>
             </div>
 
             {/* Lookup Result */}
             {lookupResult && (
-              <div className="px-4 pt-4">
+              <div className="px-6 pt-4">
                 <div className="bg-[#f3f4f6] rounded-[16px] px-4 py-4">
                   <div className="flex items-center gap-2">
                     <span className="text-xl font-medium text-[#1e2938] tracking-[-0.6px]">
@@ -321,12 +321,12 @@ export default function VesselsPage() {
                       Found
                     </span>
                   </div>
-                  <div className="flex items-center gap-4 mt-2">
-                    <span className="text-sm text-[#697282] tracking-[-0.14px]">
+                  <div className="flex items-center gap-4 mt-1.5">
+                    <span className="text-sm text-[#697282]">
                       IMO: {lookupResult.imo}
                     </span>
                     <span className="w-px h-3 bg-[#d1d5dc]" />
-                    <span className="text-sm text-[#697282] tracking-[-0.14px]">
+                    <span className="text-sm text-[#697282]">
                       {lookupResult.type}
                     </span>
                   </div>
@@ -336,10 +336,10 @@ export default function VesselsPage() {
 
             {/* Already registered warning */}
             {lookupResult?.alreadyRegistered && (
-              <div className="px-4 pt-4">
-                <div className="flex items-start gap-2 bg-[#ffedd4] rounded-[16px] px-4 py-2">
+              <div className="px-6 pt-3">
+                <div className="flex items-start gap-2 bg-[#ffedd4] rounded-[16px] px-4 py-3">
                   <Info className="w-5 h-5 text-[#9f2d00] shrink-0 mt-0.5" />
-                  <p className="text-sm font-medium text-[#9f2d00] leading-[24px]">
+                  <p className="text-sm text-[#9f2d00] leading-[1.6]">
                     This ship is already registered in ESI. Would you want to request a transfer?
                   </p>
                 </div>
@@ -348,7 +348,7 @@ export default function VesselsPage() {
 
             {/* Not found */}
             {lookupNotFound && (
-              <div className="px-4 pt-4">
+              <div className="px-6 pt-4">
                 <div className="flex items-start gap-2 bg-[#f3f4f6] rounded-[16px] px-4 py-4">
                   <Info className="w-5 h-5 text-muted-foreground shrink-0 mt-0.5" />
                   <p className="text-sm text-muted-foreground">
@@ -359,29 +359,30 @@ export default function VesselsPage() {
             )}
 
             {/* Footer */}
-            <div className="flex items-center justify-between px-4 pt-4 pb-4 mt-4 border-t border-[#e5e7eb]">
+            <div className="flex items-center justify-between px-6 pt-6 pb-6">
               <button
                 onClick={() => setShowAddDialog(false)}
-                className="h-10 px-3 rounded-lg border border-[#d1d5dc] bg-white text-sm text-[#1e2938] hover:bg-[#f8f9fa] transition-colors"
+                className="h-10 px-4 rounded-lg border border-[#d1d5dc] bg-white text-sm text-[#1e2938] hover:bg-[#f8f9fa] transition-colors"
               >
                 Cancel
               </button>
-              {lookupResult?.alreadyRegistered ? (
+              <div className="flex items-center gap-2">
+                {lookupResult?.alreadyRegistered && (
+                  <button
+                    onClick={() => setShowAddDialog(false)}
+                    className="h-10 px-4 rounded-lg bg-primary text-sm text-white hover:bg-primary/90 transition-colors"
+                  >
+                    Request Transfer
+                  </button>
+                )}
                 <button
                   onClick={() => setShowAddDialog(false)}
-                  className="h-10 px-3 rounded-lg bg-primary text-sm text-white hover:bg-primary/90 transition-colors"
+                  disabled={!lookupResult || lookupResult.alreadyRegistered}
+                  className="h-10 px-4 rounded-lg bg-primary text-sm text-white hover:bg-primary/90 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
                 >
-                  Request Transfer
+                  Save Ship Record
                 </button>
-              ) : (
-                <button
-                  onClick={() => setShowAddDialog(false)}
-                  disabled={!lookupResult}
-                  className="h-10 px-3 rounded-lg bg-primary text-sm text-white hover:bg-primary/90 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
-                >
-                  Add Vessel
-                </button>
-              )}
+              </div>
             </div>
           </div>
         </div>

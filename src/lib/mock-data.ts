@@ -39,7 +39,7 @@ export const ports: Port[] = [
   { id: "1", name: "Aarhus", country: "Denmark", countryCode: "dk", schemes: ["ESI", "EPI"], startingFrom: 80, tier: "Single-TIER", type: "Relative" },
   { id: "2", name: "Acu", country: "Brazil", countryCode: "br", schemes: ["ESI"], startingFrom: 60, tier: "Multi-TIER", type: "Absolute" },
   { id: "3", name: "Amsterdam", country: "Netherlands", countryCode: "nl", schemes: ["ESI"], startingFrom: 50, tier: "Single-TIER", type: "Relative" },
-  { id: "4", name: "Anping", country: "Taiwan", countryCode: "tw", schemes: ["ESI", "EPI"], startingFrom: 60, tier: "Multi-TIER", type: "Absolute" },
+  { id: "4", name: "Anping", country: "China", countryCode: "cn", schemes: ["ESI", "EPI"], startingFrom: 60, tier: "Multi-TIER", type: "Absolute" },
   { id: "5", name: "Antwerp-Bruges", country: "Belgium", countryCode: "be", schemes: ["EPI"], startingFrom: 60, tier: "Single-TIER", type: "Relative" },
   { id: "6", name: "Barcelona", country: "Spain", countryCode: "es", schemes: ["ESI"], startingFrom: 60, tier: "Multi-TIER", type: "Absolute" },
   { id: "7", name: "Bergen", country: "Norway", countryCode: "no", schemes: ["ESI", "EPI"], startingFrom: 70, tier: "Single-TIER", type: "Absolute" },

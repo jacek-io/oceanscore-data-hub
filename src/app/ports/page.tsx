@@ -15,7 +15,7 @@ import {
   ChartColumnStacked,
   CalendarCheck2,
 } from "lucide-react";
-import { CircleFlag } from "react-circle-flags";
+
 import { ports, type Port, type Scheme } from "@/lib/mock-data";
 import { cn } from "@/lib/utils";
 
@@ -83,7 +83,6 @@ export default function PortsPage() {
             <div className="flex flex-col gap-2">
               <div className="flex items-center justify-between">
                 <div className="flex items-center gap-2">
-                  <CircleFlag countryCode={selectedPort.countryCode} width={20} height={20} />
                   <h3 className="text-2xl font-medium text-foreground leading-[1.5]">{selectedPort.name}</h3>
                   <span className="inline-flex items-center px-2 py-1 rounded-[36px] text-[11px] font-medium leading-[1.45] bg-status-active-bg text-status-active border border-status-active-border">
                     Active Hub
@@ -228,8 +227,7 @@ export default function PortsPage() {
                   </div>
                 </td>
                 <td className="px-4 py-3.5">
-                  <span className="flex items-center gap-2 text-sm">
-                    <CircleFlag countryCode={port.countryCode} width={20} height={20} />
+                  <span className="text-sm text-foreground">
                     {port.country}
                   </span>
                 </td>
