@@ -17,6 +17,7 @@ import { cn } from "@/lib/utils";
 
 const dataHubItems = [
   { label: "Fleet", href: "/fleet", icon: null },
+  { label: "Ship Transfers", href: "/fleet/transfers", icon: null },
   { label: "Upload Center", href: "/upload-center", icon: null },
 ];
 
@@ -43,7 +44,12 @@ export function Sidebar() {
   const [esiOpen, setEsiOpen] = useState(false);
   const [epiOpen, setEpiOpen] = useState(false);
 
-  const isActive = (href: string) => pathname.startsWith(href);
+  const isActive = (href: string) => {
+    if (href === "/fleet") {
+      return pathname === "/fleet" || (pathname.startsWith("/fleet/") && !pathname.startsWith("/fleet/transfers"));
+    }
+    return pathname.startsWith(href);
+  };
 
   return (
     <aside className="flex flex-col w-[267px] h-screen sticky top-0 bg-sidebar-bg text-sidebar-foreground">

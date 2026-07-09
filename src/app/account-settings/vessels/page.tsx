@@ -7,6 +7,10 @@ import {
   ArrowUpDown,
   ChevronUp,
   ArrowRightLeft,
+  Plus,
+  X,
+  Check,
+  Info,
 } from "lucide-react";
 import { cn } from "@/lib/utils";
 
@@ -33,11 +37,51 @@ const mockVessels: OrgVessel[] = [
 
 const subOrgs = ["OceanScore GmbH", "OceanScore Nordic AB", "OceanScore Iberia Lda"];
 
+/* Mock IMO lookup results */
+type LookupResult = {
+  name: string;
+  imo: string;
+  type: string;
+  alreadyRegistered: boolean;
+};
+
+const mockLookup: Record<string, LookupResult> = {
+  "912345202": { name: "MV Odyssey", imo: "912345202", type: "Container Ship", alreadyRegistered: false },
+  "912345678": { name: "Arctic Navigator", imo: "912345678", type: "Container Ship", alreadyRegistered: true },
+  "912345999": { name: "Nordic Spirit", imo: "912345999", type: "Bulk Carrier", alreadyRegistered: false },
+};
+
 export default function VesselsPage() {
   const [search, setSearch] = useState("");
   const [orgFilter, setOrgFilter] = useState("all");
   const [sortKey, setSortKey] = useState<"name" | "subOrg">("name");
   const [sortAsc, setSortAsc] = useState(true);
+  const [showAddDialog, setShowAddDialog] = useState(false);
+  const [imoInput, setImoInput] = useState("");
+  const [lookupResult, setLookupResult] = useState<LookupResult | null>(null);
+  const [lookupNotFound, setLookupNotFound] = useState(false);
+
+  const handleImoLookup = (value: string) => {
+    setImoInput(value);
+    setLookupNotFound(false);
+    setLookupResult(null);
+    // Simulate lookup when 9 digits entered
+    if (value.length >= 7) {
+      const result = mockLookup[value];
+      if (result) {
+        setLookupResult(result);
+      } else if (value.length >= 9) {
+        setLookupNotFound(true);
+      }
+    }
+  };
+
+  const openAddDialog = () => {
+    setImoInput("");
+    setLookupResult(null);
+    setLookupNotFound(false);
+    setShowAddDialog(true);
+  };
 
   const handleSort = (key: "name" | "subOrg") => {
     if (sortKey === key) {
@@ -132,6 +176,13 @@ export default function VesselsPage() {
                 className="h-10 pl-10 pr-4 w-[200px] rounded-lg border border-border bg-white text-sm placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-primary"
               />
             </div>
+            <button
+              onClick={openAddDialog}
+              className="inline-flex items-center gap-2 h-10 px-3 rounded-lg bg-primary text-sm text-white hover:bg-primary/90 transition-colors"
+            >
+              <Plus className="w-4 h-4" />
+              Add Vessel
+            </button>
           </div>
         </div>
 
@@ -223,6 +274,118 @@ export default function VesselsPage() {
       <p className="text-xs text-muted-foreground text-center">
         Move vessel between sub-organizations — coming soon
       </p>
+
+      {/* Add New Vessel Dialog */}
+      {showAddDialog && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center">
+          <div className="absolute inset-0 bg-black/40" onClick={() => setShowAddDialog(false)} />
+          <div className="relative bg-white rounded-lg w-[520px] flex flex-col shadow-xl border border-[#e5e7eb]">
+            {/* Header */}
+            <div className="flex items-center justify-between px-4 pb-4 pt-4 border-b border-[#e5e7eb]">
+              <h3 className="text-2xl font-medium text-[#1e2938] leading-[1.5]">
+                Add New Vessel
+              </h3>
+              <button
+                onClick={() => setShowAddDialog(false)}
+                className="w-5 h-5 flex items-center justify-center text-muted-foreground hover:text-foreground"
+              >
+                <X className="w-5 h-5" />
+              </button>
+            </div>
+
+            {/* IMO Input */}
+            <div className="px-4 pt-4">
+              <div className="flex flex-col gap-1">
+                <label className="text-sm text-[#4a5565]">IMO Number</label>
+                <input
+                  type="text"
+                  value={imoInput}
+                  onChange={(e) => handleImoLookup(e.target.value.replace(/\D/g, ""))}
+                  placeholder="Enter IMO number"
+                  maxLength={9}
+                  className="h-10 px-4 rounded-lg border border-[#d1d5dc] bg-white text-sm text-[#1e2938] placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-primary"
+                />
+              </div>
+            </div>
+
+            {/* Lookup Result */}
+            {lookupResult && (
+              <div className="px-4 pt-4">
+                <div className="bg-[#f3f4f6] rounded-[16px] px-4 py-4">
+                  <div className="flex items-center gap-2">
+                    <span className="text-xl font-medium text-[#1e2938] tracking-[-0.6px]">
+                      {lookupResult.name}
+                    </span>
+                    <span className="inline-flex items-center gap-1.5 px-2 py-1 rounded-[36px] text-[11px] font-medium bg-[#e3f0db] text-[#294215] border border-[#d0e5c3]">
+                      <Check className="w-3.5 h-3.5" />
+                      Found
+                    </span>
+                  </div>
+                  <div className="flex items-center gap-4 mt-2">
+                    <span className="text-sm text-[#697282] tracking-[-0.14px]">
+                      IMO: {lookupResult.imo}
+                    </span>
+                    <span className="w-px h-3 bg-[#d1d5dc]" />
+                    <span className="text-sm text-[#697282] tracking-[-0.14px]">
+                      {lookupResult.type}
+                    </span>
+                  </div>
+                </div>
+              </div>
+            )}
+
+            {/* Already registered warning */}
+            {lookupResult?.alreadyRegistered && (
+              <div className="px-4 pt-4">
+                <div className="flex items-start gap-2 bg-[#ffedd4] rounded-[16px] px-4 py-2">
+                  <Info className="w-5 h-5 text-[#9f2d00] shrink-0 mt-0.5" />
+                  <p className="text-sm font-medium text-[#9f2d00] leading-[24px]">
+                    This ship is already registered in ESI. Would you want to request a transfer?
+                  </p>
+                </div>
+              </div>
+            )}
+
+            {/* Not found */}
+            {lookupNotFound && (
+              <div className="px-4 pt-4">
+                <div className="flex items-start gap-2 bg-[#f3f4f6] rounded-[16px] px-4 py-4">
+                  <Info className="w-5 h-5 text-muted-foreground shrink-0 mt-0.5" />
+                  <p className="text-sm text-muted-foreground">
+                    No vessel found with this IMO number. Please check and try again.
+                  </p>
+                </div>
+              </div>
+            )}
+
+            {/* Footer */}
+            <div className="flex items-center justify-between px-4 pt-4 pb-4 mt-4 border-t border-[#e5e7eb]">
+              <button
+                onClick={() => setShowAddDialog(false)}
+                className="h-10 px-3 rounded-lg border border-[#d1d5dc] bg-white text-sm text-[#1e2938] hover:bg-[#f8f9fa] transition-colors"
+              >
+                Cancel
+              </button>
+              {lookupResult?.alreadyRegistered ? (
+                <button
+                  onClick={() => setShowAddDialog(false)}
+                  className="h-10 px-3 rounded-lg bg-primary text-sm text-white hover:bg-primary/90 transition-colors"
+                >
+                  Request Transfer
+                </button>
+              ) : (
+                <button
+                  onClick={() => setShowAddDialog(false)}
+                  disabled={!lookupResult}
+                  className="h-10 px-3 rounded-lg bg-primary text-sm text-white hover:bg-primary/90 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+                >
+                  Add Vessel
+                </button>
+              )}
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 }

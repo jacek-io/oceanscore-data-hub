@@ -155,7 +155,9 @@ export default function ShipDetailPage({
                   </div>
                 )}
               </div>
-              <ChevronRight className="w-5 h-5 text-muted-foreground" />
+              <Link href={`/esi/${shipId}`} className="w-8 h-8 flex items-center justify-center rounded-lg text-muted-foreground hover:bg-[#f8f9fa] transition-colors">
+                <ChevronRight className="w-5 h-5" />
+              </Link>
             </div>
           )
         )}
@@ -207,7 +209,9 @@ export default function ShipDetailPage({
                   </div>
                 )}
               </div>
-              <ChevronRight className="w-5 h-5 text-muted-foreground" />
+              <Link href={`/epi/ships/${shipId}`} className="w-8 h-8 flex items-center justify-center rounded-lg text-muted-foreground hover:bg-[#f8f9fa] transition-colors">
+                <ChevronRight className="w-5 h-5" />
+              </Link>
             </div>
           )
         )}
