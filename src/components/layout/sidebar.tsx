@@ -153,8 +153,8 @@ export function Sidebar() {
           className={cn(
             "flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm font-normal transition-colors",
             pathname.startsWith("/ports")
-              ? "bg-sidebar-accent text-white"
-              : "text-sidebar-muted hover:bg-sidebar-accent hover:text-white"
+              ? "bg-white/5 text-white"
+              : "text-sidebar-muted hover:bg-white/5 hover:text-white"
           )}
         >
           <MapPin className="w-5 h-5" />
@@ -201,8 +201,8 @@ export function Sidebar() {
           className={cn(
             "flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm transition-colors",
             pathname.startsWith("/support")
-              ? "bg-sidebar-accent text-white"
-              : "text-sidebar-muted hover:bg-sidebar-accent hover:text-white"
+              ? "bg-white/5 text-white"
+              : "text-sidebar-muted hover:bg-white/5 hover:text-white"
           )}
         >
           <MessageCircle className="w-5 h-5" />
@@ -213,7 +213,7 @@ export function Sidebar() {
         <div ref={accountRef} className="relative mt-3">
           <button
             onClick={() => setAccountOpen(!accountOpen)}
-            className="flex items-center gap-2 w-full px-3.5 py-3 rounded-lg border border-white/10 text-white hover:bg-sidebar-accent transition-colors"
+            className="flex items-center gap-2 w-full px-3.5 py-3 rounded-lg border border-white/10 text-white hover:bg-white/5 transition-colors"
           >
             <div className="w-8 h-8 rounded-full bg-[#5c96e5] flex items-center justify-center text-xs text-white shrink-0">
               JZ
@@ -287,8 +287,8 @@ function NavSection({
         className={cn(
           "flex items-center justify-between rounded-lg text-sm transition-colors",
           isActive
-            ? "bg-sidebar-accent text-white"
-            : "text-sidebar-muted hover:bg-sidebar-accent hover:text-white"
+            ? "bg-white/5 text-white"
+            : "text-sidebar-muted hover:bg-white/5 hover:text-white"
         )}
       >
         {/* Label area — navigates to first child */}
