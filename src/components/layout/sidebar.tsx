@@ -5,7 +5,6 @@ import Image from "next/image";
 import { usePathname } from "next/navigation";
 import {
   Ship,
-  Upload,
   MapPin,
   Settings,
   MessageCircle,
@@ -13,58 +12,111 @@ import {
   ChevronUp,
   LogOut,
 } from "lucide-react";
-import { useState, useRef, useEffect } from "react";
+import { useState, useRef, useEffect, useCallback } from "react";
 import { cn } from "@/lib/utils";
 
-const dataHubItems = [
-  { label: "Fleet", href: "/fleet", icon: null },
-  { label: "Ship Transfers", href: "/fleet/transfers", icon: null },
-  { label: "Upload Center", href: "/upload-center", icon: null },
+/* ── Navigation config ── */
+
+type SectionId = "dataHub" | "esi" | "epi";
+
+const dataHubChildren = [
+  { label: "Fleet", href: "/fleet" },
+  { label: "Ship Transfers", href: "/fleet/transfers" },
+  { label: "Upload Center", href: "/upload-center" },
 ];
 
-const schemeItems = [
-  {
-    label: "Environmental Ship Index",
-    shortLabel: "ESI",
-    href: "/esi",
-    badge: "ESI",
-    badgeColor: "bg-esi-green",
-  },
-  {
-    label: "Environmental Port Index",
-    shortLabel: "EPI",
-    href: "/epi",
-    badge: "EPI",
-    badgeColor: "bg-epi-blue",
-  },
+const esiChildren = [
+  { label: "Fleet", href: "/esi" },
+  { label: "Knowledge", href: "/esi/knowledge" },
 ];
+
+const epiChildren = [
+  { label: "Port Calls", href: "/epi" },
+  { label: "Ships", href: "/epi/ships" },
+  { label: "Knowledge", href: "/epi/knowledge" },
+];
+
+/* ── Route matching helpers ── */
+
+function isChildActive(href: string, pathname: string) {
+  if (href === "/fleet") {
+    return pathname === "/fleet" || (pathname.startsWith("/fleet/") && !pathname.startsWith("/fleet/transfers"));
+  }
+  if (href === "/esi") {
+    return pathname === "/esi" || (pathname.startsWith("/esi/") && !pathname.startsWith("/esi/knowledge"));
+  }
+  if (href === "/epi") {
+    return pathname === "/epi" && !pathname.startsWith("/epi/ships") && !pathname.startsWith("/epi/knowledge");
+  }
+  return pathname.startsWith(href);
+}
+
+function isSectionActive(prefixes: string[], pathname: string) {
+  return prefixes.some((p) => pathname === p || pathname.startsWith(p + "/") || pathname.startsWith(p));
+}
+
+/* ── Sidebar ── */
 
 export function Sidebar() {
   const pathname = usePathname();
-  const [dataHubOpen, setDataHubOpen] = useState(true);
-  const [esiOpen, setEsiOpen] = useState(false);
-  const [epiOpen, setEpiOpen] = useState(false);
+
+  // Single expanded section — accordion behavior
+  const [expandedSection, setExpandedSection] = useState<SectionId | null>("dataHub");
   const [accountOpen, setAccountOpen] = useState(false);
   const accountRef = useRef<HTMLDivElement>(null);
 
+  // Derive which section owns the current route
+  const dataHubActive = isSectionActive(["/fleet", "/upload-center"], pathname);
+  const esiActive = isSectionActive(["/esi"], pathname);
+  const epiActive = isSectionActive(["/epi"], pathname);
+
+  // Auto-expand the section that owns the current route (single winner)
   useEffect(() => {
+    if (dataHubActive) setExpandedSection("dataHub");
+    else if (esiActive) setExpandedSection("esi");
+    else if (epiActive) setExpandedSection("epi");
+    else setExpandedSection(null);
+  }, [dataHubActive, esiActive, epiActive]);
+
+  // Close account popover on outside click
+  useEffect(() => {
+    if (!accountOpen) return;
     function handleClickOutside(e: MouseEvent) {
       if (accountRef.current && !accountRef.current.contains(e.target as Node)) {
         setAccountOpen(false);
       }
     }
-    if (accountOpen) {
-      document.addEventListener("mousedown", handleClickOutside);
-      return () => document.removeEventListener("mousedown", handleClickOutside);
-    }
+    document.addEventListener("mousedown", handleClickOutside);
+    return () => document.removeEventListener("mousedown", handleClickOutside);
   }, [accountOpen]);
 
-  const isActive = (href: string) => {
-    if (href === "/fleet") {
-      return pathname === "/fleet" || (pathname.startsWith("/fleet/") && !pathname.startsWith("/fleet/transfers"));
-    }
-    return pathname.startsWith(href);
-  };
+  // Is a given section currently active (contains the current route)?
+  const isSectionRouteActive = useCallback(
+    (section: SectionId) => {
+      if (section === "dataHub") return dataHubActive;
+      if (section === "esi") return esiActive;
+      return epiActive;
+    },
+    [dataHubActive, esiActive, epiActive]
+  );
+
+  // Toggle: expand this section (collapsing others), or collapse if already open
+  // Block collapsing if section is currently active
+  const toggleSection = useCallback(
+    (section: SectionId) => {
+      if (expandedSection === section) {
+        if (isSectionRouteActive(section)) return; // can't collapse active
+        setExpandedSection(null);
+      } else {
+        setExpandedSection(section);
+      }
+    },
+    [expandedSection, isSectionRouteActive]
+  );
+
+  // Hide sidebar on auth pages (after all hooks)
+  const authRoutes = ["/login", "/signup", "/reset-password"];
+  if (authRoutes.some((r) => pathname.startsWith(r))) return null;
 
   return (
     <aside className="flex flex-col w-[267px] h-screen sticky top-0 bg-sidebar-bg text-sidebar-foreground">
@@ -83,55 +135,24 @@ export function Sidebar() {
 
       {/* Navigation */}
       <nav className="flex-1 overflow-y-auto px-3 space-y-1">
-        {/* Data Hub Section */}
-        <button
-          onClick={() => setDataHubOpen(!dataHubOpen)}
-          className={cn(
-            "flex items-center justify-between w-full px-3 py-2.5 rounded-lg text-sm font-normal transition-colors",
-            isActive("/fleet") || isActive("/upload-center")
-              ? "bg-sidebar-accent text-white"
-              : "text-sidebar-muted hover:bg-sidebar-accent hover:text-white"
-          )}
-        >
-          <span className="flex items-center gap-3">
-            <Ship className="w-5 h-5" />
-            Data Hub
-          </span>
-          {dataHubOpen ? (
-            <ChevronUp className="w-4 h-4" />
-          ) : (
-            <ChevronDown className="w-4 h-4" />
-          )}
-        </button>
+        {/* Data Hub */}
+        <NavSection
+          icon={<Ship className="w-5 h-5" />}
+          label="Data Hub"
+          href="/fleet"
+          isOpen={expandedSection === "dataHub"}
+          isActive={dataHubActive}
+          onToggle={() => toggleSection("dataHub")}
+          children={dataHubChildren}
+          pathname={pathname}
+        />
 
-        {dataHubOpen && (
-          <div className="ml-[22px] border-l border-white/15 space-y-0.5 py-1 mt-2 mb-3">
-            {dataHubItems.map((item) => (
-              <Link
-                key={item.href}
-                href={item.href}
-                className={cn(
-                  "flex items-center gap-2 pl-5 pr-3 py-2 rounded-lg text-sm transition-colors",
-                  isActive(item.href)
-                    ? "text-white font-normal"
-                    : "text-sidebar-muted hover:text-white"
-                )}
-              >
-                {item.label}
-                {isActive(item.href) && (
-                  <div className="w-2 h-2 rounded-full bg-primary-icon ml-auto" />
-                )}
-              </Link>
-            ))}
-          </div>
-        )}
-
-        {/* Ports */}
+        {/* Ports — standalone link, no dot */}
         <Link
           href="/ports"
           className={cn(
             "flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm font-normal transition-colors",
-            isActive("/ports")
+            pathname.startsWith("/ports")
               ? "bg-sidebar-accent text-white"
               : "text-sidebar-muted hover:bg-sidebar-accent hover:text-white"
           )}
@@ -140,155 +161,46 @@ export function Sidebar() {
           Ports
         </Link>
 
-        {/* Schemes Section */}
+        {/* Schemes */}
         <div className="pt-4">
           <p className="px-3 text-[12px] font-normal uppercase tracking-wider text-sidebar-muted mb-2">
             Schemes
           </p>
 
           {/* ESI */}
-          <button
-            onClick={() => setEsiOpen(!esiOpen)}
-            className={cn(
-              "flex items-center justify-between w-full px-3 py-2.5 rounded-lg text-sm transition-colors",
-              isActive("/esi")
-                ? "bg-sidebar-accent text-white"
-                : "text-sidebar-muted hover:bg-sidebar-accent hover:text-white"
-            )}
-          >
-            <span className="flex items-center gap-3">
-              <span className="w-7 h-7 rounded-md bg-esi-green flex items-center justify-center text-[10px] font-medium text-white">
-                ESI
-              </span>
-              <span className="text-left leading-tight">
-                Environmental
-                <br />
-                Ship Index
-              </span>
-            </span>
-            {esiOpen ? (
-              <ChevronUp className="w-4 h-4" />
-            ) : (
-              <ChevronDown className="w-4 h-4" />
-            )}
-          </button>
-
-          {esiOpen && (
-            <div className="ml-[22px] border-l border-white/15 space-y-0.5 py-1 mt-2 mb-3">
-              <Link
-                href="/esi"
-                className={cn(
-                  "flex items-center gap-2 pl-5 pr-3 py-2 rounded-lg text-sm transition-colors",
-                  pathname === "/esi" || (pathname.startsWith("/esi/") && !pathname.startsWith("/esi/knowledge"))
-                    ? "text-white font-normal"
-                    : "text-sidebar-muted hover:text-white"
-                )}
-              >
-                Fleet
-                {(pathname === "/esi" || (pathname.startsWith("/esi/") && !pathname.startsWith("/esi/knowledge"))) && (
-                  <div className="w-2 h-2 rounded-full bg-primary-icon ml-auto" />
-                )}
-              </Link>
-              <Link
-                href="/esi/knowledge"
-                className={cn(
-                  "flex items-center gap-2 pl-5 pr-3 py-2 rounded-lg text-sm transition-colors",
-                  isActive("/esi/knowledge")
-                    ? "text-white font-normal"
-                    : "text-sidebar-muted hover:text-white"
-                )}
-              >
-                Knowledge
-                {isActive("/esi/knowledge") && (
-                  <div className="w-2 h-2 rounded-full bg-primary-icon ml-auto" />
-                )}
-              </Link>
-            </div>
-          )}
+          <NavSection
+            badge={{ text: "ESI", color: "bg-esi-green" }}
+            label={<>Environmental<br />Ship Index</>}
+            href="/esi"
+            isOpen={expandedSection === "esi"}
+            isActive={esiActive}
+            onToggle={() => toggleSection("esi")}
+            children={esiChildren}
+            pathname={pathname}
+          />
 
           {/* EPI */}
-          <button
-            onClick={() => setEpiOpen(!epiOpen)}
-            className={cn(
-              "flex items-center justify-between w-full px-3 py-2.5 rounded-lg text-sm transition-colors",
-              isActive("/epi")
-                ? "bg-sidebar-accent text-white"
-                : "text-sidebar-muted hover:bg-sidebar-accent hover:text-white"
-            )}
-          >
-            <span className="flex items-center gap-3">
-              <span className="w-7 h-7 rounded-md bg-epi-blue flex items-center justify-center text-[10px] font-medium text-white">
-                EPI
-              </span>
-              <span className="text-left leading-tight">
-                Environmental
-                <br />
-                Port Index
-              </span>
-            </span>
-            {epiOpen ? (
-              <ChevronUp className="w-4 h-4" />
-            ) : (
-              <ChevronDown className="w-4 h-4" />
-            )}
-          </button>
-
-          {epiOpen && (
-            <div className="ml-[22px] border-l border-white/15 space-y-0.5 py-1 mt-2 mb-3">
-              <Link
-                href="/epi"
-                className={cn(
-                  "flex items-center gap-2 pl-5 pr-3 py-2 rounded-lg text-sm transition-colors",
-                  pathname === "/epi"
-                    ? "text-white font-normal"
-                    : "text-sidebar-muted hover:text-white"
-                )}
-              >
-                Port Calls
-                {pathname === "/epi" && (
-                  <div className="w-2 h-2 rounded-full bg-primary-icon ml-auto" />
-                )}
-              </Link>
-              <Link
-                href="/epi/ships"
-                className={cn(
-                  "flex items-center gap-2 pl-5 pr-3 py-2 rounded-lg text-sm transition-colors",
-                  isActive("/epi/ships")
-                    ? "text-white font-normal"
-                    : "text-sidebar-muted hover:text-white"
-                )}
-              >
-                Ships
-                {isActive("/epi/ships") && (
-                  <div className="w-2 h-2 rounded-full bg-primary-icon ml-auto" />
-                )}
-              </Link>
-              <Link
-                href="/epi/knowledge"
-                className={cn(
-                  "flex items-center gap-2 pl-5 pr-3 py-2 rounded-lg text-sm transition-colors",
-                  isActive("/epi/knowledge")
-                    ? "text-white font-normal"
-                    : "text-sidebar-muted hover:text-white"
-                )}
-              >
-                Knowledge
-                {isActive("/epi/knowledge") && (
-                  <div className="w-2 h-2 rounded-full bg-primary-icon ml-auto" />
-                )}
-              </Link>
-            </div>
-          )}
+          <NavSection
+            badge={{ text: "EPI", color: "bg-epi-blue" }}
+            label={<>Environmental<br />Port Index</>}
+            href="/epi"
+            isOpen={expandedSection === "epi"}
+            isActive={epiActive}
+            onToggle={() => toggleSection("epi")}
+            children={epiChildren}
+            pathname={pathname}
+          />
         </div>
       </nav>
 
-      {/* Bottom Links */}
+      {/* Bottom */}
       <div className="px-3 pb-4 space-y-0.5">
+        {/* Support — standalone link, no dot */}
         <Link
           href="/support"
           className={cn(
             "flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm transition-colors",
-            isActive("/support")
+            pathname.startsWith("/support")
               ? "bg-sidebar-accent text-white"
               : "text-sidebar-muted hover:bg-sidebar-accent hover:text-white"
           )}
@@ -312,21 +224,17 @@ export function Sidebar() {
             </div>
           </button>
 
-          {/* Popover — positioned to the right of sidebar */}
           {accountOpen && (
             <div className="absolute bottom-0 left-full ml-3 w-[260px] bg-white rounded-2xl shadow-xl border border-[#e5e7eb] overflow-hidden z-50">
-              {/* User info — light blue header */}
               <div className="p-2">
-              <div className="flex flex-col items-center bg-[#ebf3ff] rounded-xl px-5 pt-6 pb-5">
-                <div className="w-[72px] h-[72px] rounded-full bg-[#5c96e5] flex items-center justify-center text-2xl font-medium text-white mb-3">
-                  JZ
+                <div className="flex flex-col items-center bg-[#ebf3ff] rounded-xl px-5 pt-6 pb-5">
+                  <div className="w-[72px] h-[72px] rounded-full bg-[#5c96e5] flex items-center justify-center text-2xl font-medium text-white mb-3">
+                    JZ
+                  </div>
+                  <p className="text-lg font-medium text-[#1e2938]">Jacek Zabicki</p>
+                  <p className="text-sm text-[#697282] mt-0.5">jacek.z@oceanscore.com</p>
                 </div>
-                <p className="text-lg font-medium text-[#1e2938]">Jacek Zabicki</p>
-                <p className="text-sm text-[#697282] mt-0.5">jacek.z@oceanscore.com</p>
               </div>
-              </div>
-
-              {/* Settings */}
               <Link
                 href="/account-settings"
                 onClick={() => setAccountOpen(false)}
@@ -335,8 +243,6 @@ export function Sidebar() {
                 <Settings className="w-5 h-5 text-[#697282]" />
                 Settings
               </Link>
-
-              {/* Logout */}
               <Link
                 href="/login"
                 className="flex items-center gap-3 px-5 py-3.5 text-sm text-[#1e2938] hover:bg-[#f3f4f6] transition-colors"
@@ -349,5 +255,105 @@ export function Sidebar() {
         </div>
       </div>
     </aside>
+  );
+}
+
+/* ── NavSection: accordion with hybrid label-navigates + chevron-toggles ── */
+
+function NavSection({
+  icon,
+  badge,
+  label,
+  href,
+  isOpen,
+  isActive,
+  onToggle,
+  children,
+  pathname,
+}: {
+  icon?: React.ReactNode;
+  badge?: { text: string; color: string };
+  label: React.ReactNode;
+  href: string;
+  isOpen: boolean;
+  isActive: boolean;
+  onToggle: () => void;
+  children: { label: string; href: string }[];
+  pathname: string;
+}) {
+  return (
+    <>
+      <div
+        className={cn(
+          "flex items-center justify-between rounded-lg text-sm transition-colors",
+          isActive
+            ? "bg-sidebar-accent text-white"
+            : "text-sidebar-muted hover:bg-sidebar-accent hover:text-white"
+        )}
+      >
+        {/* Label area — navigates to first child */}
+        <Link
+          href={href}
+          className="flex items-center gap-3 flex-1 min-w-0 px-3 py-2.5"
+        >
+          {icon}
+          {badge && (
+            <span className={cn("w-7 h-7 rounded-md flex items-center justify-center text-[10px] font-medium text-white shrink-0", badge.color)}>
+              {badge.text}
+            </span>
+          )}
+          <span className="text-left leading-tight">{label}</span>
+        </Link>
+
+        {/* Chevron — only toggles expand/collapse */}
+        <button
+          onClick={(e) => {
+            e.stopPropagation();
+            onToggle();
+          }}
+          className={cn(
+            "w-8 h-8 flex items-center justify-center rounded-md shrink-0 mr-1 transition-colors",
+            isActive && isOpen
+              ? "opacity-30 cursor-default"
+              : isActive
+              ? "hover:bg-white/10"
+              : "hover:bg-white/5"
+          )}
+          aria-label={isOpen ? "Collapse" : "Expand"}
+        >
+          {isOpen ? (
+            <ChevronUp className="w-4 h-4" />
+          ) : (
+            <ChevronDown className="w-4 h-4" />
+          )}
+        </button>
+      </div>
+
+      {/* Children — blue dot + font-medium on active sub-item */}
+      {isOpen && (
+        <div className="ml-[22px] border-l border-white/15 space-y-0.5 py-1 mt-2 mb-3">
+          {children.map((child) => {
+            const active = isChildActive(child.href, pathname);
+            return (
+              <Link
+                key={child.href}
+                href={child.href}
+                className={cn(
+                  "flex items-center gap-2 pl-5 pr-3 py-2 rounded-lg text-sm transition-colors",
+                  active
+                    ? "text-white font-medium"
+                    : "text-sidebar-muted hover:text-white"
+                )}
+              >
+                {child.label}
+                {active && (
+                  <div className="w-2 h-2 rounded-full bg-primary-icon ml-auto" />
+                )}
+              </Link>
+            );
+          })}
+        </div>
+      )}
+    </>
   );
 }

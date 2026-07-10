@@ -6,6 +6,8 @@ export default function proxy(request: NextRequest) {
   // Allow login page, static assets, and API routes
   if (
     pathname === "/login" ||
+    pathname === "/signup" ||
+    pathname === "/reset-password" ||
     pathname.startsWith("/_next") ||
     pathname.startsWith("/api") ||
     pathname.match(/\.(svg|png|jpg|jpeg|ico|css|js)$/)
