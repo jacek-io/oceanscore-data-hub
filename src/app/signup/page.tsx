@@ -17,6 +17,7 @@ import {
   Phone,
 } from "lucide-react";
 import { cn } from "@/lib/utils";
+import { BrandingPanel } from "@/components/auth/branding-panel";
 
 const roles = [
   "Ship Owner",
@@ -130,47 +131,17 @@ export default function SignUpPage() {
   };
 
   return (
-    <div className="min-h-screen flex">
-      {/* Left — Branding panel */}
-      <div className="hidden lg:flex w-[480px] bg-[#061e3a] flex-col justify-between p-10 relative overflow-hidden">
-        <div className="absolute -top-20 -left-20 w-[300px] h-[300px] rounded-full bg-[#0a2e57]/60" />
-        <div className="absolute bottom-10 -right-16 w-[200px] h-[200px] rounded-full bg-[#1157b2]/20" />
-        <div className="absolute top-1/2 left-1/3 w-[120px] h-[120px] rounded-full bg-[#5c96e5]/10" />
-
-        <div className="relative z-10">
-          <Image
-            src="/oceanscore-logo.svg"
-            alt="OceanScore"
-            width={180}
-            height={28}
-            className="brightness-0 invert"
-          />
-        </div>
-
-        <div className="relative z-10 flex flex-col gap-4">
-          <h2 className="text-3xl font-medium text-white leading-[1.3] tracking-[-0.96px]">
-            Centralized maritime
-            <br />
-            environmental data
-          </h2>
-          <p className="text-[15px] text-white/60 leading-[1.6] max-w-[340px]">
-            Manage your fleet&apos;s ESI &amp; EPI scores, BDNs, EDNs, and Tier III hours — all in one place.
-          </p>
-        </div>
-
-        <p className="relative z-10 text-xs text-white/30">
-          &copy; 2026 OceanScore GmbH. All rights reserved.
-        </p>
-      </div>
+    <div className="min-h-screen flex bg-[#f3f4f6] p-4">
+      <BrandingPanel />
 
       {/* Right — Sign-up form */}
-      <div className="flex-1 flex items-center justify-center bg-[#f3f4f6] px-6 py-10">
-        <div className="w-full max-w-[480px]">
+      <div className="flex-1 lg:w-1/2 flex items-center justify-center py-10">
+        <div className="w-[480px]">
           <div className="lg:hidden flex justify-center mb-8">
             <Image src="/oceanscore-logo.svg" alt="OceanScore" width={160} height={24} />
           </div>
 
-          <div className="bg-white rounded-2xl p-8 shadow-sm">
+          <div className="bg-white rounded-2xl p-8 shadow-[0_1px_1px_rgba(10,13,18,0.05)]">
             {submitted ? (
               /* Success state */
               <div className="flex flex-col items-center text-center gap-4 py-6">
@@ -197,11 +168,11 @@ export default function SignUpPage() {
             ) : (
               <>
                 {/* Header */}
-                <div className="flex flex-col gap-1 mb-6">
-                  <h1 className="text-2xl font-medium text-[#1e2938] tracking-[-0.6px]">
+                <div className="flex flex-col gap-2 mb-6">
+                  <h1 className="text-2xl font-medium text-[#1e2938] leading-[1.2] tracking-[-0.72px]">
                     Create your account
                   </h1>
-                  <p className="text-sm text-[#697282]">
+                  <p className="text-sm text-[#697282] leading-[1.4] tracking-[-0.42px]">
                     Set up your Data Hub account in a few steps
                   </p>
                 </div>
@@ -251,7 +222,7 @@ export default function SignUpPage() {
                       <InputField
                         label="Full Name"
                         required
-                        icon={<User className="w-[18px] h-[18px]" />}
+                        icon={<User className="w-5 h-5" />}
                         type="text"
                         value={fullName}
                         onChange={setFullName}
@@ -261,54 +232,54 @@ export default function SignUpPage() {
                       <InputField
                         label="Email"
                         required
-                        icon={<Mail className="w-[18px] h-[18px]" />}
+                        icon={<Mail className="w-5 h-5" />}
                         type="email"
                         value={email}
                         onChange={setEmail}
                         placeholder="you@company.com"
                         onClearError={() => setError("")}
                       />
-                      <div className="flex flex-col gap-1.5">
-                        <label className="text-xs font-medium text-[#4a5565]">
+                      <div className="flex flex-col gap-1">
+                        <label className="text-sm text-[#4a5565] leading-[1.45]">
                           Password <span className="text-[#dc2626]">*</span>
                         </label>
                         <div className="relative">
-                          <Lock className="absolute left-3.5 top-1/2 -translate-y-1/2 w-[18px] h-[18px] text-[#98a1ae]" />
+                          <Lock className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-[#98a1ae]" />
                           <input
                             type={showPassword ? "text" : "password"}
                             value={password}
                             onChange={(e) => { setPassword(e.target.value); setError(""); }}
                             placeholder="Min. 8 characters"
-                            className="w-full h-11 pl-10 pr-11 rounded-lg border border-[#d1d5dc] bg-white text-sm text-[#1e2938] placeholder:text-[#98a1ae] focus:outline-none focus:ring-2 focus:ring-[#5c96e5] focus:border-transparent transition-shadow"
+                            className="w-full h-10 pl-11 pr-11 rounded-lg border border-[#d1d5dc] bg-white text-sm text-[#1e2938] placeholder:text-[#98a1ae] focus:outline-none focus:ring-2 focus:ring-[#5c96e5] focus:border-transparent transition-shadow"
                           />
                           <button
                             type="button"
                             onClick={() => setShowPassword(!showPassword)}
-                            className="absolute right-3.5 top-1/2 -translate-y-1/2 text-[#98a1ae] hover:text-[#697282] transition-colors"
+                            className="absolute right-4 top-1/2 -translate-y-1/2 text-[#98a1ae] hover:text-[#697282] transition-colors"
                           >
-                            {showPassword ? <EyeOff className="w-[18px] h-[18px]" /> : <Eye className="w-[18px] h-[18px]" />}
+                            {showPassword ? <EyeOff className="w-5 h-5" /> : <Eye className="w-5 h-5" />}
                           </button>
                         </div>
                       </div>
-                      <div className="flex flex-col gap-1.5">
-                        <label className="text-xs font-medium text-[#4a5565]">
+                      <div className="flex flex-col gap-1">
+                        <label className="text-sm text-[#4a5565] leading-[1.45]">
                           Confirm Password <span className="text-[#dc2626]">*</span>
                         </label>
                         <div className="relative">
-                          <Lock className="absolute left-3.5 top-1/2 -translate-y-1/2 w-[18px] h-[18px] text-[#98a1ae]" />
+                          <Lock className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-[#98a1ae]" />
                           <input
                             type={showConfirm ? "text" : "password"}
                             value={confirmPassword}
                             onChange={(e) => { setConfirmPassword(e.target.value); setError(""); }}
                             placeholder="Re-enter your password"
-                            className="w-full h-11 pl-10 pr-11 rounded-lg border border-[#d1d5dc] bg-white text-sm text-[#1e2938] placeholder:text-[#98a1ae] focus:outline-none focus:ring-2 focus:ring-[#5c96e5] focus:border-transparent transition-shadow"
+                            className="w-full h-10 pl-11 pr-11 rounded-lg border border-[#d1d5dc] bg-white text-sm text-[#1e2938] placeholder:text-[#98a1ae] focus:outline-none focus:ring-2 focus:ring-[#5c96e5] focus:border-transparent transition-shadow"
                           />
                           <button
                             type="button"
                             onClick={() => setShowConfirm(!showConfirm)}
-                            className="absolute right-3.5 top-1/2 -translate-y-1/2 text-[#98a1ae] hover:text-[#697282] transition-colors"
+                            className="absolute right-4 top-1/2 -translate-y-1/2 text-[#98a1ae] hover:text-[#697282] transition-colors"
                           >
-                            {showConfirm ? <EyeOff className="w-[18px] h-[18px]" /> : <Eye className="w-[18px] h-[18px]" />}
+                            {showConfirm ? <EyeOff className="w-5 h-5" /> : <Eye className="w-5 h-5" />}
                           </button>
                         </div>
                       </div>
@@ -321,7 +292,7 @@ export default function SignUpPage() {
                       <InputField
                         label="Organization Name"
                         required
-                        icon={<Building className="w-[18px] h-[18px]" />}
+                        icon={<Building className="w-5 h-5" />}
                         type="text"
                         value={orgName}
                         onChange={setOrgName}
@@ -331,7 +302,7 @@ export default function SignUpPage() {
                       <InputField
                         label="Phone Number"
                         required
-                        icon={<Phone className="w-[18px] h-[18px]" />}
+                        icon={<Phone className="w-5 h-5" />}
                         type="tel"
                         value={phoneNumber}
                         onChange={setPhoneNumber}
@@ -481,12 +452,12 @@ export default function SignUpPage() {
                   )}
 
                   {/* Navigation buttons */}
-                  <div className="flex items-center gap-3 mt-2">
+                  <div className="flex items-center gap-3 mt-4">
                     {step > 1 && (
                       <button
                         type="button"
                         onClick={() => { setStep(step - 1); setError(""); }}
-                        className="h-11 px-5 rounded-lg border border-[#d1d5dc] text-sm font-medium text-[#1e2938] hover:bg-[#f8f9fa] transition-colors flex items-center gap-2"
+                        className="h-10 px-5 rounded-lg border border-[#d1d5dc] text-sm text-[#1e2938] hover:bg-[#f8f9fa] transition-colors flex items-center gap-2"
                       >
                         <ArrowLeft className="w-4 h-4" />
                         Back
@@ -496,7 +467,7 @@ export default function SignUpPage() {
                       <button
                         type="button"
                         onClick={handleNext}
-                        className="flex-1 h-11 rounded-lg bg-[#061e3a] text-white text-sm font-medium hover:bg-[#0a2e57] transition-colors flex items-center justify-center gap-2"
+                        className="flex-1 h-10 rounded-lg bg-[#061e3a] text-white text-sm hover:bg-[#0a2e57] transition-colors flex items-center justify-center gap-2"
                       >
                         Continue
                         <ArrowRight className="w-4 h-4" />
@@ -504,7 +475,7 @@ export default function SignUpPage() {
                     ) : (
                       <button
                         type="submit"
-                        className="flex-1 h-11 rounded-lg bg-[#061e3a] text-white text-sm font-medium hover:bg-[#0a2e57] transition-colors"
+                        className="flex-1 h-10 rounded-lg bg-[#061e3a] text-white text-sm hover:bg-[#0a2e57] transition-colors"
                       >
                         Create Account
                       </button>
@@ -513,9 +484,9 @@ export default function SignUpPage() {
                 </form>
 
                 {/* Sign in link */}
-                <p className="text-sm text-[#697282] text-center mt-6">
+                <p className="text-sm text-[#697282] text-center mt-8 leading-[1.2] tracking-[-0.42px]">
                   Already have an account?{" "}
-                  <Link href="/login" className="text-[#1157b2] font-medium hover:text-[#0a2e57] transition-colors">
+                  <Link href="/login" className="text-[#0c3c7a] hover:text-[#061e3a] transition-colors">
                     Sign in
                   </Link>
                 </p>
@@ -550,13 +521,13 @@ function InputField({
   onClearError: () => void;
 }) {
   return (
-    <div className="flex flex-col gap-1.5">
-      <label className="text-xs font-medium text-[#4a5565]">
+    <div className="flex flex-col gap-1">
+      <label className="text-sm text-[#4a5565] leading-[1.45]">
         {label} {required && <span className="text-[#dc2626]">*</span>}
       </label>
       <div className="relative">
         {icon && (
-          <div className="absolute left-3.5 top-1/2 -translate-y-1/2 text-[#98a1ae]">
+          <div className="absolute left-4 top-1/2 -translate-y-1/2 text-[#98a1ae]">
             {icon}
           </div>
         )}
@@ -566,8 +537,8 @@ function InputField({
           onChange={(e) => { onChange(e.target.value); onClearError(); }}
           placeholder={placeholder}
           className={cn(
-            "w-full h-11 pr-4 rounded-lg border border-[#d1d5dc] bg-white text-sm text-[#1e2938] placeholder:text-[#98a1ae] focus:outline-none focus:ring-2 focus:ring-[#5c96e5] focus:border-transparent transition-shadow",
-            icon ? "pl-10" : "pl-4"
+            "w-full h-10 pr-4 rounded-lg border border-[#d1d5dc] bg-white text-sm text-[#1e2938] placeholder:text-[#98a1ae] focus:outline-none focus:ring-2 focus:ring-[#5c96e5] focus:border-transparent transition-shadow",
+            icon ? "pl-11" : "pl-4"
           )}
         />
       </div>
@@ -591,8 +562,8 @@ function SelectField({
   placeholder: string;
 }) {
   return (
-    <div className="flex flex-col gap-1.5">
-      <label className="text-xs font-medium text-[#4a5565]">
+    <div className="flex flex-col gap-1">
+      <label className="text-sm text-[#4a5565] leading-[1.45]">
         {label} {required && <span className="text-[#dc2626]">*</span>}
       </label>
       <div className="relative">
@@ -600,7 +571,7 @@ function SelectField({
           value={value}
           onChange={(e) => onChange(e.target.value)}
           className={cn(
-            "w-full h-11 pl-4 pr-10 rounded-lg border border-[#d1d5dc] bg-white text-sm appearance-none focus:outline-none focus:ring-2 focus:ring-[#5c96e5] focus:border-transparent transition-shadow",
+            "w-full h-10 pl-4 pr-10 rounded-lg border border-[#d1d5dc] bg-white text-sm appearance-none focus:outline-none focus:ring-2 focus:ring-[#5c96e5] focus:border-transparent transition-shadow",
             value ? "text-[#1e2938]" : "text-[#98a1ae]"
           )}
         >
@@ -609,7 +580,7 @@ function SelectField({
             <option key={opt} value={opt}>{opt}</option>
           ))}
         </select>
-        <ChevronDown className="absolute right-3.5 top-1/2 -translate-y-1/2 w-4 h-4 text-[#98a1ae] pointer-events-none" />
+        <ChevronDown className="absolute right-4 top-1/2 -translate-y-1/2 w-4 h-4 text-[#98a1ae] pointer-events-none" />
       </div>
     </div>
   );
