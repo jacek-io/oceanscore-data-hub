@@ -485,8 +485,9 @@ export default function ShipDetailPage({
             <table className="w-full text-sm">
               <thead>
                 <tr>
-                  <th className="text-left text-xs font-normal text-muted-foreground pl-4 pr-2 h-10 bg-[#F3F4F6]">Type</th>
+                  <th className="text-left text-xs font-normal text-muted-foreground pl-4 pr-2 h-10 bg-[#F3F4F6] w-[100px]">Engine ID</th>
                   <th className="text-left text-xs font-normal text-muted-foreground px-2 h-10 bg-[#F3F4F6]">Main/Auxiliary</th>
+                  <th className="text-left text-xs font-normal text-muted-foreground px-2 h-10 bg-[#F3F4F6]">Type</th>
                   <th className="text-right text-xs font-normal text-muted-foreground px-2 h-10 bg-[#F3F4F6] w-[124px]">Rated Power <span className="text-[10px]">(kW)</span></th>
                   <th className="text-right text-xs font-normal text-muted-foreground px-2 h-10 bg-[#F3F4F6] w-[124px]">RPM</th>
                   <th className="text-right text-xs font-normal text-muted-foreground px-2 h-10 bg-[#F3F4F6] w-[124px]">NOx (g/kWh)</th>
@@ -498,11 +499,14 @@ export default function ShipDetailPage({
               </thead>
               <tbody>
                 <tr className="border-b border-[#e5e7eb]">
-                  <td className="py-4 pl-4 pr-2">
+                  <td className="py-4 pl-4 pr-2 w-[100px]">
+                    <Input defaultValue="M-1" className="h-10 rounded-lg" />
+                  </td>
+                  <td className="py-4 px-2">
                     <div className="relative">
                       <select className="h-10 pl-4 pr-10 w-full rounded-lg border border-border bg-white text-sm appearance-none">
-                        <option>Diesel</option>
-                        <option>Gas</option>
+                        <option>Main</option>
+                        <option>Auxiliary</option>
                       </select>
                       <ChevronDown className="absolute right-3 top-1/2 -translate-y-1/2 w-5 h-5 text-muted-foreground pointer-events-none" />
                     </div>
@@ -510,8 +514,8 @@ export default function ShipDetailPage({
                   <td className="py-4 px-2">
                     <div className="relative">
                       <select className="h-10 pl-4 pr-10 w-full rounded-lg border border-border bg-white text-sm appearance-none">
-                        <option>Main</option>
-                        <option>Auxiliary</option>
+                        <option>Diesel</option>
+                        <option>Gas</option>
                       </select>
                       <ChevronDown className="absolute right-3 top-1/2 -translate-y-1/2 w-5 h-5 text-muted-foreground pointer-events-none" />
                     </div>
@@ -541,11 +545,14 @@ export default function ShipDetailPage({
                   </td>
                 </tr>
                 <tr>
-                  <td className="py-4 pl-4 pr-2">
+                  <td className="py-4 pl-4 pr-2 w-[100px]">
+                    <Input defaultValue="AE-1" className="h-10 rounded-lg" />
+                  </td>
+                  <td className="py-4 px-2">
                     <div className="relative">
                       <select className="h-10 pl-4 pr-10 w-full rounded-lg border border-border bg-white text-sm appearance-none">
-                        <option>Diesel</option>
-                        <option>Gas</option>
+                        <option>Auxiliary</option>
+                        <option>Main</option>
                       </select>
                       <ChevronDown className="absolute right-3 top-1/2 -translate-y-1/2 w-5 h-5 text-muted-foreground pointer-events-none" />
                     </div>
@@ -553,8 +560,8 @@ export default function ShipDetailPage({
                   <td className="py-4 px-2">
                     <div className="relative">
                       <select className="h-10 pl-4 pr-10 w-full rounded-lg border border-border bg-white text-sm appearance-none">
-                        <option>Auxiliary</option>
-                        <option>Main</option>
+                        <option>Diesel</option>
+                        <option>Gas</option>
                       </select>
                       <ChevronDown className="absolute right-3 top-1/2 -translate-y-1/2 w-5 h-5 text-muted-foreground pointer-events-none" />
                     </div>

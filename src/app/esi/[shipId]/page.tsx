@@ -47,8 +47,8 @@ const technologies = [
 ];
 
 const powerSources = [
-  { type: "Diesel", mainAux: "Main", ratedPower: "4 320", rpm: "600", nox: "9,28", tierIII: true, eiapp: "GTB0/NTL/20160903I...", certDate: "01/01/2028" },
-  { type: "Diesel", mainAux: "Auxiliary", ratedPower: "620", rpm: "1 800", nox: "8,9", tierIII: false, eiapp: "GTB0/NTL/20160903I...", certDate: "01/01/2028" },
+  { engineId: "M-1", type: "Diesel", mainAux: "Main", ratedPower: "4 320", rpm: "600", nox: "9,28", tierIII: true, eiapp: "GTB0/NTL/20160903I...", certDate: "01/01/2028" },
+  { engineId: "AE-1", type: "Diesel", mainAux: "Auxiliary", ratedPower: "620", rpm: "1 800", nox: "8,9", tierIII: false, eiapp: "GTB0/NTL/20160903I...", certDate: "01/01/2028" },
 ];
 
 /* Mock ESI score data per ship */
@@ -455,9 +455,10 @@ export default function EsiShipDetailPage({
                 <table className="w-full">
                   <thead>
                     <tr>
-                      <th className="text-left text-xs font-normal text-muted-foreground px-4 h-10 bg-[#F3F4F6] first:rounded-tl-lg">Type</th>
+                      <th className="text-left text-xs font-normal text-muted-foreground px-4 h-10 bg-[#F3F4F6] first:rounded-tl-lg">Engine ID</th>
                       <th className="text-left text-xs font-normal text-muted-foreground px-4 h-10 bg-[#F3F4F6]">Main/Auxiliary</th>
-                      <th className="text-left text-xs font-normal text-muted-foreground px-4 h-10 bg-[#F3F4F6]">Rated Power (kw)</th>
+                      <th className="text-left text-xs font-normal text-muted-foreground px-4 h-10 bg-[#F3F4F6]">Type</th>
+                      <th className="text-left text-xs font-normal text-muted-foreground px-4 h-10 bg-[#F3F4F6]">Rated Power (kW)</th>
                       <th className="text-left text-xs font-normal text-muted-foreground px-4 h-10 bg-[#F3F4F6]">RPM</th>
                       <th className="text-left text-xs font-normal text-muted-foreground px-4 h-10 bg-[#F3F4F6]">NOx (g/kWh)</th>
                       <th className="text-center text-xs font-normal text-muted-foreground px-4 h-10 bg-[#F3F4F6]">TIER III</th>
@@ -468,8 +469,9 @@ export default function EsiShipDetailPage({
                   <tbody>
                     {powerSources.map((ps, i) => (
                       <tr key={i} className="border-t border-[#e5e7eb]">
-                        <td className="px-4 py-3 text-sm text-foreground">{ps.type}</td>
+                        <td className="px-4 py-3 text-sm text-foreground">{ps.engineId}</td>
                         <td className="px-4 py-3 text-sm text-foreground">{ps.mainAux}</td>
+                        <td className="px-4 py-3 text-sm text-foreground">{ps.type}</td>
                         <td className="px-4 py-3 text-sm text-foreground">{ps.ratedPower}</td>
                         <td className="px-4 py-3 text-sm text-foreground">{ps.rpm}</td>
                         <td className="px-4 py-3 text-sm text-foreground">{ps.nox}</td>
