@@ -619,10 +619,9 @@ export default function ShipDetailPage({
               <table className="w-full text-sm">
                 <thead>
                   <tr>
-                    <th className="text-left text-xs font-normal text-muted-foreground pl-4 pr-2 h-10 bg-[#F3F4F6] w-[197px]">Type</th>
+                    <th className="text-left text-xs font-normal text-muted-foreground pl-4 pr-2 h-10 bg-[#F3F4F6] w-[120px]">Engine ID</th>
+                    <th className="text-left text-xs font-normal text-muted-foreground px-2 h-10 bg-[#F3F4F6] w-[197px]">Type</th>
                     <th className="text-left text-xs font-normal text-muted-foreground px-2 h-10 bg-[#F3F4F6] w-[117px]">Main/Auxiliary</th>
-                    <th className="text-right text-xs font-normal text-muted-foreground px-2 h-10 bg-[#F3F4F6]">Rated Power <span className="text-[10px]">(kW)</span></th>
-                    <th className="text-right text-xs font-normal text-muted-foreground px-2 h-10 bg-[#F3F4F6] w-[110px]">RPM</th>
                     <th className="text-right text-xs font-normal text-muted-foreground px-2 h-10 bg-[#F3F4F6] w-[160px]">NOx - TIER III <span className="text-[10px]">(g/kWh)</span></th>
                     <th className="text-right text-xs font-normal text-muted-foreground px-2 h-10 bg-[#F3F4F6] w-[160px]">Hours in TIER III</th>
                     <th className="text-right text-xs font-normal text-muted-foreground px-2 h-10 bg-[#F3F4F6] w-[160px]">Total Hours</th>
@@ -630,34 +629,11 @@ export default function ShipDetailPage({
                   </tr>
                 </thead>
                 <tbody>
-                  <tr className="border-b border-[#e5e7eb]">
-                    <td className="py-4 pl-4 pr-2 text-sm text-foreground">Diesel engine, 2-stroke</td>
-                    <td className="py-4 px-2 text-sm text-foreground">Main</td>
-                    <td className="py-4 px-2 text-sm text-foreground text-right">4 320</td>
-                    <td className="py-4 px-2 text-sm text-foreground text-right">600</td>
-                    <td className="py-4 px-2">
-                      <Input defaultValue="3.1" className="h-10 rounded-lg text-right" />
-                    </td>
-                    <td className="py-4 px-2">
-                      <Input defaultValue="820" className="h-10 rounded-lg text-right" />
-                    </td>
-                    <td className="py-4 px-2">
-                      <Input defaultValue="2 400" className="h-10 rounded-lg text-right" />
-                    </td>
-                    <td className="py-4 pl-2 pr-4">
-                      <button className="text-muted-foreground hover:text-destructive transition-colors">
-                        <Trash className="w-5 h-5" />
-                      </button>
-                    </td>
-                  </tr>
                   <tr>
-                    <td className="py-4 pl-4 pr-2 text-sm text-foreground">Diesel engine, 2-stroke</td>
+                    <td className="py-4 pl-4 pr-2 text-sm text-foreground">AE-1</td>
+                    <td className="py-4 px-2 text-sm text-foreground">Diesel engine 2-stroke</td>
                     <td className="py-4 px-2 text-sm text-foreground">Auxiliary</td>
-                    <td className="py-4 px-2 text-sm text-foreground text-right">620</td>
-                    <td className="py-4 px-2 text-sm text-foreground text-right">1 800</td>
-                    <td className="py-4 px-2">
-                      <Input defaultValue="2.4" className="h-10 rounded-lg text-right" />
-                    </td>
+                    <td className="py-4 px-2 text-sm text-foreground text-right">2.4</td>
                     <td className="py-4 px-2">
                       <Input defaultValue="450" className="h-10 rounded-lg text-right" />
                     </td>
