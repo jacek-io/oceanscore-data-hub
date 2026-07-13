@@ -19,7 +19,7 @@ export function AddVesselDialog() {
     <Dialog open={open} onOpenChange={setOpen}>
       <DialogTrigger
         render={
-          <button className="inline-flex items-center gap-2 px-3 py-2.5 rounded-lg bg-primary text-primary-foreground text-sm font-normal hover:bg-primary/90 transition-colors">
+          <button className="inline-flex items-center gap-2 px-3 py-2.5 rounded-lg bg-[#061e3a] text-white text-sm font-normal hover:bg-[#0c3c7a] active:bg-[#1157b2] transition-colors">
             <Plus className="w-4 h-4 text-primary-icon" />
             Add Ship
           </button>
@@ -52,7 +52,7 @@ export function AddVesselDialog() {
             >
               Cancel
             </button>
-            <button className="px-3 py-2.5 rounded-lg bg-primary text-primary-foreground text-sm font-normal hover:bg-primary/90 transition-colors">
+            <button className="px-3 py-2.5 rounded-lg bg-[#061e3a] text-white text-sm font-normal hover:bg-[#0c3c7a] active:bg-[#1157b2] transition-colors">
               Save Ship Record
             </button>
           </div>

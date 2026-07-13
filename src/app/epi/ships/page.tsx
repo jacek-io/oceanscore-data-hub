@@ -134,7 +134,7 @@ export default function EpiShipsPage() {
         </div>
         <Link
           href="/fleet"
-          className="inline-flex items-center gap-2 h-10 px-3 py-2.5 rounded-lg bg-primary text-sm font-normal text-white hover:bg-primary/90 transition-colors"
+          className="inline-flex items-center gap-2 h-10 px-3 py-2.5 rounded-lg bg-[#061e3a] text-sm font-normal text-white hover:bg-[#0c3c7a] active:bg-[#1157b2] transition-colors"
         >
           <Database className="w-4 h-4 text-[#5b9aff]" />
           Open Data Hub
@@ -268,13 +268,13 @@ export default function EpiShipsPage() {
           </div>
         </div>
         <div className="flex items-center gap-2">
-          <button className="w-8 h-8 flex items-center justify-center rounded-lg border border-border bg-white text-muted-foreground hover:bg-[#f8f9fa] transition-colors">
+          <button className="w-8 h-8 flex items-center justify-center rounded-lg border border-border bg-white text-muted-foreground hover:bg-[#ebf3ff] hover:border-[#cce1ff] active:bg-[#cce1ff] active:border-[#afd0ff] transition-colors">
             <ChevronLeft className="w-4 h-4" />
           </button>
           <button className="w-8 h-8 flex items-center justify-center rounded-lg border border-border bg-white text-sm font-medium text-foreground">
             1
           </button>
-          <button className="w-8 h-8 flex items-center justify-center rounded-lg border border-border bg-white text-muted-foreground hover:bg-[#f8f9fa] transition-colors">
+          <button className="w-8 h-8 flex items-center justify-center rounded-lg border border-border bg-white text-muted-foreground hover:bg-[#ebf3ff] hover:border-[#cce1ff] active:bg-[#cce1ff] active:border-[#afd0ff] transition-colors">
             <ChevronRight className="w-4 h-4" />
           </button>
         </div>

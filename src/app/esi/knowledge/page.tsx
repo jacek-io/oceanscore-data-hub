@@ -263,7 +263,7 @@ export default function KnowledgePage() {
         </div>
         <button
           onClick={() => setTcExpanded(!tcExpanded)}
-          className="mt-4 inline-flex items-center gap-2 h-8 px-3 py-1.5 rounded-lg border border-border bg-white text-[12px] font-normal text-foreground hover:bg-[#f8f9fa] transition-colors"
+          className="mt-4 inline-flex items-center gap-2 h-8 px-3 py-1.5 rounded-lg border border-border bg-white text-[12px] font-normal text-foreground hover:bg-[#ebf3ff] hover:border-[#cce1ff] active:bg-[#cce1ff] active:border-[#afd0ff] transition-colors"
         >
           <ChevronDown
             className={cn(

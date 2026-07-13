@@ -63,7 +63,7 @@ export default function ResetPasswordPage() {
                 </p>
                 <Link
                   href="/login"
-                  className="w-full h-10 rounded-lg bg-[#061e3a] text-white text-sm hover:bg-[#0a2e57] transition-colors flex items-center justify-center mt-2"
+                  className="w-full h-10 rounded-lg bg-[#061e3a] text-white text-sm hover:bg-[#0c3c7a] active:bg-[#1157b2] transition-colors flex items-center justify-center mt-2"
                 >
                   Back to Sign In
                 </Link>
@@ -112,7 +112,7 @@ export default function ResetPasswordPage() {
 
                   <button
                     type="submit"
-                    className="w-full h-10 rounded-lg bg-[#061e3a] text-white text-sm hover:bg-[#0a2e57] transition-colors mt-4"
+                    className="w-full h-10 rounded-lg bg-[#061e3a] text-white text-sm hover:bg-[#0c3c7a] active:bg-[#1157b2] transition-colors mt-4"
                   >
                     Send Reset Link
                   </button>

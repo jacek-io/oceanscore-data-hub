@@ -104,7 +104,7 @@ export default function AccountSettingsLayout({
                         "flex items-center justify-between h-[44px] px-4 py-3 rounded-lg text-sm opacity-80 transition-colors",
                         active
                           ? "bg-[#ebf3ff] text-foreground"
-                          : "text-[#1e2938] hover:bg-[#f3f4f6]"
+                          : "text-[#1e2938] hover:bg-[#ebf3ff] active:bg-[#cce1ff]"
                       )}
                     >
                       <span className="flex items-center gap-2">

@@ -79,7 +79,7 @@ function FileUploadItem({
       </div>
       <button
         onClick={status === "failed" ? onRetry : onRemove}
-        className="w-8 h-8 flex items-center justify-center shrink-0 hover:bg-[#f3f4f6] rounded transition-colors"
+        className="w-8 h-8 flex items-center justify-center shrink-0 hover:bg-[#ebf3ff] active:bg-[#cce1ff] rounded transition-colors"
       >
         {status === "failed" ? (
           <RefreshCcw className="w-4 h-4 text-muted-foreground" />
@@ -179,7 +179,7 @@ export function FileDropZone({
             </>
           )}
         </p>
-        <label className="inline-flex items-center gap-2 h-10 px-3 py-2.5 rounded-lg border border-border bg-white text-sm font-normal text-foreground hover:bg-[#f8f9fa] transition-colors cursor-pointer">
+        <label className="inline-flex items-center gap-2 h-10 px-3 py-2.5 rounded-lg border border-border bg-white text-sm font-normal text-foreground hover:bg-[#ebf3ff] hover:border-[#cce1ff] active:bg-[#cce1ff] active:border-[#afd0ff] transition-colors cursor-pointer">
           Browse Files
           <input
             ref={inputRef}

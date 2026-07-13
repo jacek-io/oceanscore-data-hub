@@ -109,7 +109,7 @@ export default function LoginPage() {
               <button
                 type="button"
                 onClick={handleSubmit}
-                className="w-full h-10 rounded-lg bg-[#061e3a] text-white text-sm hover:bg-[#0a2e57] transition-colors"
+                className="w-full h-10 rounded-lg bg-[#061e3a] text-white text-sm hover:bg-[#0c3c7a] active:bg-[#1157b2] transition-colors"
               >
                 Sign In
               </button>

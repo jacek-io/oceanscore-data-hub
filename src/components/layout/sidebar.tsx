@@ -233,14 +233,14 @@ export function Sidebar() {
               <Link
                 href="/account-settings"
                 onClick={() => setAccountOpen(false)}
-                className="flex items-center gap-3 px-5 py-3.5 text-sm text-[#1e2938] hover:bg-[#f3f4f6] transition-colors border-b border-[#e5e7eb]"
+                className="flex items-center gap-3 px-5 py-3.5 text-sm text-[#1e2938] hover:bg-[#ebf3ff] active:bg-[#cce1ff] transition-colors border-b border-[#e5e7eb]"
               >
                 <Settings className="w-5 h-5 text-[#697282]" />
                 Settings
               </Link>
               <Link
                 href="/login"
-                className="flex items-center gap-3 px-5 py-3.5 text-sm text-[#1e2938] hover:bg-[#f3f4f6] transition-colors"
+                className="flex items-center gap-3 px-5 py-3.5 text-sm text-[#1e2938] hover:bg-[#ebf3ff] active:bg-[#cce1ff] transition-colors"
               >
                 <LogOut className="w-5 h-5 text-[#697282]" />
                 Logout

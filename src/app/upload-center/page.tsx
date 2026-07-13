@@ -104,7 +104,7 @@ export default function UploadCenterPage() {
             </div>
             <Link
               href="/upload-center/custom-import"
-              className="relative z-10 inline-flex items-center gap-2 px-3 py-1.5 rounded-lg bg-white text-[12px] font-normal text-primary shrink-0 hover:bg-[#f8f9fa] transition-colors"
+              className="relative z-10 inline-flex items-center gap-2 px-3 py-1.5 rounded-lg bg-white text-[12px] font-normal text-primary shrink-0 hover:bg-[#ebf3ff] active:bg-[#cce1ff] transition-colors"
             >
               Upload Custom File
               <ArrowRight className="w-5 h-5" />
@@ -135,7 +135,7 @@ export default function UploadCenterPage() {
                       </div>
                     </div>
                     <div className="px-4">
-                      <button className="inline-flex items-center gap-2 px-3 py-1.5 rounded-lg border border-border bg-white text-[12px] font-normal text-foreground hover:bg-[#f8f9fa] transition-colors">
+                      <button className="inline-flex items-center gap-2 px-3 py-1.5 rounded-lg border border-border bg-white text-[12px] font-normal text-foreground hover:bg-[#ebf3ff] hover:border-[#cce1ff] active:bg-[#cce1ff] active:border-[#afd0ff] transition-colors">
                         Download Template
                       </button>
                     </div>
@@ -165,7 +165,7 @@ export default function UploadCenterPage() {
                       </div>
                     </div>
                     <div className="px-4">
-                      <button className="inline-flex items-center gap-2 px-3 py-1.5 rounded-lg border border-border bg-white text-[12px] font-normal text-foreground hover:bg-[#f8f9fa] transition-colors">
+                      <button className="inline-flex items-center gap-2 px-3 py-1.5 rounded-lg border border-border bg-white text-[12px] font-normal text-foreground hover:bg-[#ebf3ff] hover:border-[#cce1ff] active:bg-[#cce1ff] active:border-[#afd0ff] transition-colors">
                         Download Template
                       </button>
                     </div>

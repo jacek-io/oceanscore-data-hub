@@ -95,7 +95,7 @@ export function StatsCards() {
           <span className="inline-flex items-center px-2 py-1 rounded-[36px] text-[11px] font-medium leading-[1.45] bg-epi-blue-light text-epi-blue border border-epi-blue-border">
             +1
           </span>
-          <button className="ml-auto inline-flex items-center gap-1 px-2 py-1.5 rounded-lg border border-border bg-white text-xs font-normal text-foreground hover:bg-[#f8f9fa] transition-colors">
+          <button className="ml-auto inline-flex items-center gap-1 px-2 py-1.5 rounded-lg border border-border bg-white text-xs font-normal text-foreground hover:bg-[#ebf3ff] hover:border-[#cce1ff] active:bg-[#cce1ff] active:border-[#afd0ff] transition-colors">
             Manage
             <ChevronRight className="w-3.5 h-3.5" />
           </button>

@@ -137,14 +137,14 @@ export default function SubOrgsPage() {
                   <div className="flex items-center gap-1 opacity-0 group-hover:opacity-100 transition-opacity">
                     <button
                       onClick={() => openDialog("merge", org)}
-                      className="w-7 h-7 rounded-md flex items-center justify-center hover:bg-[#f3f4f6] transition-colors"
+                      className="w-7 h-7 rounded-md flex items-center justify-center hover:bg-[#ebf3ff] active:bg-[#cce1ff] transition-colors"
                       title="Merge"
                     >
                       <Merge className="w-3.5 h-3.5 text-muted-foreground" />
                     </button>
                     <button
                       onClick={() => openDialog("delink", org)}
-                      className="w-7 h-7 rounded-md flex items-center justify-center hover:bg-[#f3f4f6] transition-colors"
+                      className="w-7 h-7 rounded-md flex items-center justify-center hover:bg-[#ebf3ff] active:bg-[#cce1ff] transition-colors"
                       title="De-link from parent"
                     >
                       <Unlink className="w-3.5 h-3.5 text-muted-foreground" />
@@ -317,7 +317,7 @@ function DialogHeader({ title, onClose }: { title: string; onClose: () => void }
   return (
     <div className="flex items-center justify-between p-5 pb-0">
       <h3 className="text-lg font-medium text-foreground tracking-[-0.54px]">{title}</h3>
-      <button onClick={onClose} className="w-8 h-8 rounded-lg flex items-center justify-center hover:bg-[#f3f4f6] transition-colors">
+      <button onClick={onClose} className="w-8 h-8 rounded-lg flex items-center justify-center hover:bg-[#ebf3ff] active:bg-[#cce1ff] transition-colors">
         <X className="w-4 h-4 text-muted-foreground" />
       </button>
     </div>
@@ -341,7 +341,7 @@ function DialogFooter({
     <div className="flex items-center justify-end gap-2 p-5 pt-2">
       <button
         onClick={onCancel}
-        className="h-9 px-4 rounded-lg border border-border text-sm text-foreground hover:bg-[#f8f9fa] transition-colors"
+        className="h-9 px-4 rounded-lg border border-border text-sm text-foreground hover:bg-[#ebf3ff] hover:border-[#cce1ff] active:bg-[#cce1ff] active:border-[#afd0ff] transition-colors"
       >
         Cancel
       </button>
@@ -351,8 +351,8 @@ function DialogFooter({
         className={cn(
           "h-9 px-4 rounded-lg text-sm text-white transition-colors disabled:opacity-50 disabled:cursor-not-allowed",
           destructive
-            ? "bg-[#dc2626] hover:bg-[#b91c1c]"
-            : "bg-primary hover:bg-primary/90"
+            ? "bg-[#c1272d] hover:bg-[#9e2028] active:bg-[#82181a]"
+            : "bg-[#061e3a] hover:bg-[#0c3c7a] active:bg-[#1157b2]"
         )}
       >
         {confirmLabel}

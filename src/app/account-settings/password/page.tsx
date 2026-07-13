@@ -100,7 +100,7 @@ export default function ChangePasswordPage() {
 
         <button
           disabled={!canSubmit}
-          className="h-9 px-4 rounded-lg bg-primary text-sm text-white hover:bg-primary/90 transition-colors disabled:opacity-50 disabled:cursor-not-allowed self-start mt-2"
+          className="h-9 px-4 rounded-lg bg-[#061e3a] text-sm text-white hover:bg-[#0c3c7a] active:bg-[#1157b2] transition-colors disabled:opacity-50 disabled:cursor-not-allowed self-start mt-2"
         >
           Update Password
         </button>

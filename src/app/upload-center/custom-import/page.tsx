@@ -355,7 +355,7 @@ function StepUploadFile({
             </div>
             <button
               onClick={handleRemove}
-              className="w-8 h-8 flex items-center justify-center shrink-0 hover:bg-[#e5e7eb] rounded transition-colors"
+              className="w-8 h-8 flex items-center justify-center shrink-0 hover:bg-[#ebf3ff] active:bg-[#cce1ff] rounded transition-colors"
             >
               <Trash2 className="w-4 h-4 text-muted-foreground" />
             </button>
@@ -391,7 +391,7 @@ function StepUploadFile({
       <div className="flex items-center justify-between">
         <button
           onClick={onBack}
-          className="inline-flex items-center justify-center h-10 px-3 py-2.5 rounded-lg border border-border bg-white text-sm font-normal text-foreground hover:bg-[#f8f9fa] transition-colors"
+          className="inline-flex items-center justify-center h-10 px-3 py-2.5 rounded-lg border border-border bg-white text-sm font-normal text-foreground hover:bg-[#ebf3ff] hover:border-[#cce1ff] active:bg-[#cce1ff] active:border-[#afd0ff] transition-colors"
         >
           Back
         </button>
@@ -407,7 +407,7 @@ function StepUploadFile({
             className={cn(
               "inline-flex items-center justify-center h-10 px-3 py-2.5 rounded-lg text-sm font-normal transition-colors",
               uploaded
-                ? "bg-[#061e3a] text-white hover:bg-[#0a2e57]"
+                ? "bg-[#061e3a] text-white hover:bg-[#0c3c7a] active:bg-[#1157b2]"
                 : "bg-[#e5e7eb] text-[#98a1ae] cursor-not-allowed"
             )}
           >
@@ -641,7 +641,7 @@ function StepMapColumns({
       <div className="flex items-center justify-between">
         <button
           onClick={onBack}
-          className="inline-flex items-center justify-center h-10 px-3 py-2.5 rounded-lg border border-border bg-white text-sm font-normal text-foreground hover:bg-[#f8f9fa] transition-colors"
+          className="inline-flex items-center justify-center h-10 px-3 py-2.5 rounded-lg border border-border bg-white text-sm font-normal text-foreground hover:bg-[#ebf3ff] hover:border-[#cce1ff] active:bg-[#cce1ff] active:border-[#afd0ff] transition-colors"
         >
           Back
         </button>
@@ -657,7 +657,7 @@ function StepMapColumns({
             className={cn(
               "inline-flex items-center justify-center h-10 px-3 py-2.5 rounded-lg text-sm font-normal transition-colors",
               allRequiredMapped
-                ? "bg-[#061e3a] text-white hover:bg-[#0a2e57]"
+                ? "bg-[#061e3a] text-white hover:bg-[#0c3c7a] active:bg-[#1157b2]"
                 : "bg-[#e5e7eb] text-[#98a1ae] cursor-not-allowed"
             )}
           >
@@ -838,7 +838,7 @@ function StepMatchValues({
       <div className="flex items-center justify-between">
         <button
           onClick={onBack}
-          className="inline-flex items-center justify-center h-10 px-3 py-2.5 rounded-lg border border-border bg-white text-sm font-normal text-foreground hover:bg-[#f8f9fa] transition-colors"
+          className="inline-flex items-center justify-center h-10 px-3 py-2.5 rounded-lg border border-border bg-white text-sm font-normal text-foreground hover:bg-[#ebf3ff] hover:border-[#cce1ff] active:bg-[#cce1ff] active:border-[#afd0ff] transition-colors"
         >
           Back
         </button>
@@ -855,7 +855,7 @@ function StepMatchValues({
             className={cn(
               "inline-flex items-center justify-center h-10 px-3 py-2.5 rounded-lg text-sm font-normal transition-colors",
               allMatched
-                ? "bg-[#061e3a] text-white hover:bg-[#0a2e57]"
+                ? "bg-[#061e3a] text-white hover:bg-[#0c3c7a] active:bg-[#1157b2]"
                 : "bg-[#e5e7eb] text-[#98a1ae] cursor-not-allowed"
             )}
           >
@@ -980,18 +980,18 @@ function StepFormats({
       <div className="flex items-center justify-between">
         <button
           onClick={onBack}
-          className="inline-flex items-center justify-center h-10 px-3 py-2.5 rounded-lg border border-border bg-white text-sm font-normal text-foreground hover:bg-[#f8f9fa] transition-colors"
+          className="inline-flex items-center justify-center h-10 px-3 py-2.5 rounded-lg border border-border bg-white text-sm font-normal text-foreground hover:bg-[#ebf3ff] hover:border-[#cce1ff] active:bg-[#cce1ff] active:border-[#afd0ff] transition-colors"
         >
           Back
         </button>
         <div className="flex items-center gap-3">
-          <button className="inline-flex items-center gap-2 h-10 px-3 py-2.5 rounded-lg border border-border bg-white text-sm font-normal text-foreground hover:bg-[#f8f9fa] transition-colors">
+          <button className="inline-flex items-center gap-2 h-10 px-3 py-2.5 rounded-lg border border-border bg-white text-sm font-normal text-foreground hover:bg-[#ebf3ff] hover:border-[#cce1ff] active:bg-[#cce1ff] active:border-[#afd0ff] transition-colors">
             <ClipboardList className="w-4 h-4" />
             Save Mapping for Next Time
           </button>
           <button
             onClick={onContinue}
-            className="inline-flex items-center justify-center h-10 px-3 py-2.5 rounded-lg bg-[#061e3a] text-white text-sm font-normal hover:bg-[#0a2e57] transition-colors"
+            className="inline-flex items-center justify-center h-10 px-3 py-2.5 rounded-lg bg-[#061e3a] text-white text-sm font-normal hover:bg-[#0c3c7a] active:bg-[#1157b2] transition-colors"
           >
             Continue to Validation
           </button>
@@ -1133,13 +1133,13 @@ function StepValidation({
         <div className="flex items-center justify-between">
           <button
             onClick={onBack}
-            className="inline-flex items-center justify-center h-10 px-3 py-2.5 rounded-lg border border-border bg-white text-sm font-normal text-foreground hover:bg-[#f8f9fa] transition-colors"
+            className="inline-flex items-center justify-center h-10 px-3 py-2.5 rounded-lg border border-border bg-white text-sm font-normal text-foreground hover:bg-[#ebf3ff] hover:border-[#cce1ff] active:bg-[#cce1ff] active:border-[#afd0ff] transition-colors"
           >
             Back
           </button>
           <button
             onClick={() => setPhase("done")}
-            className="inline-flex items-center gap-2 h-10 px-4 py-2.5 rounded-lg bg-[#061e3a] text-white text-sm font-normal hover:bg-[#0a2e57] transition-colors"
+            className="inline-flex items-center gap-2 h-10 px-4 py-2.5 rounded-lg bg-[#061e3a] text-white text-sm font-normal hover:bg-[#0c3c7a] active:bg-[#1157b2] transition-colors"
           >
             Import 1,240 Rows
             <ArrowRight className="w-4 h-4 text-[#5b9aff]" />
@@ -1172,7 +1172,7 @@ function StepValidation({
         <div className="flex items-center justify-center">
           <Link
             href="/upload-center"
-            className="inline-flex items-center gap-2 h-10 px-4 py-2.5 rounded-lg bg-[#061e3a] text-white text-sm font-normal hover:bg-[#0a2e57] transition-colors"
+            className="inline-flex items-center gap-2 h-10 px-4 py-2.5 rounded-lg bg-[#061e3a] text-white text-sm font-normal hover:bg-[#0c3c7a] active:bg-[#1157b2] transition-colors"
           >
             Back to Upload Center
             <ArrowRight className="w-4 h-4 text-[#5b9aff]" />
@@ -1319,18 +1319,18 @@ function StepValidation({
         <div className="flex items-center justify-between">
           <button
             onClick={onBack}
-            className="inline-flex items-center justify-center h-10 px-3 py-2.5 rounded-lg border border-border bg-white text-sm font-normal text-foreground hover:bg-[#f8f9fa] transition-colors"
+            className="inline-flex items-center justify-center h-10 px-3 py-2.5 rounded-lg border border-border bg-white text-sm font-normal text-foreground hover:bg-[#ebf3ff] hover:border-[#cce1ff] active:bg-[#cce1ff] active:border-[#afd0ff] transition-colors"
           >
             Back
           </button>
           <div className="flex items-center gap-3">
-            <button className="inline-flex items-center gap-2 h-10 px-3 py-2.5 rounded-lg border border-border bg-white text-sm font-normal text-foreground hover:bg-[#f8f9fa] transition-colors">
+            <button className="inline-flex items-center gap-2 h-10 px-3 py-2.5 rounded-lg border border-border bg-white text-sm font-normal text-foreground hover:bg-[#ebf3ff] hover:border-[#cce1ff] active:bg-[#cce1ff] active:border-[#afd0ff] transition-colors">
               <Download className="w-4 h-4" />
               Download Error Report
             </button>
             <button
               onClick={() => setPhase("reloading")}
-              className="inline-flex items-center gap-2 h-10 px-3 py-2.5 rounded-lg border border-border bg-white text-sm font-normal text-foreground hover:bg-[#f8f9fa] transition-colors"
+              className="inline-flex items-center gap-2 h-10 px-3 py-2.5 rounded-lg border border-border bg-white text-sm font-normal text-foreground hover:bg-[#ebf3ff] hover:border-[#cce1ff] active:bg-[#cce1ff] active:border-[#afd0ff] transition-colors"
             >
               <Upload className="w-4 h-4" />
               Upload Fixed File
@@ -1381,7 +1381,7 @@ export default function CustomImportPage() {
           <div className="flex items-start gap-4 pt-4 pb-2">
             <Link
               href="/upload-center"
-              className="w-8 h-8 rounded-lg border border-border bg-white flex items-center justify-center shrink-0 hover:bg-[#f8f9fa] transition-colors mt-1"
+              className="w-8 h-8 rounded-lg border border-border bg-white flex items-center justify-center shrink-0 hover:bg-[#ebf3ff] hover:border-[#cce1ff] active:bg-[#cce1ff] active:border-[#afd0ff] transition-colors mt-1"
             >
               <ArrowLeft className="w-5 h-5 text-foreground" />
             </Link>

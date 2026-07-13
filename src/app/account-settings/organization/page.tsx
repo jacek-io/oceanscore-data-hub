@@ -164,7 +164,7 @@ export default function OrganizationGeneralPage() {
           {!editing && (
             <button
               onClick={() => setEditing(true)}
-              className="inline-flex items-center gap-2 px-3 py-1.5 rounded-lg border border-border bg-white text-xs font-normal text-foreground hover:bg-[#f8f9fa] transition-colors"
+              className="inline-flex items-center gap-2 px-3 py-1.5 rounded-lg border border-border bg-white text-xs font-normal text-foreground hover:bg-[#ebf3ff] hover:border-[#cce1ff] active:bg-[#cce1ff] active:border-[#afd0ff] transition-colors"
             >
               <Pen className="w-4 h-4" />
               Edit
@@ -206,7 +206,7 @@ export default function OrganizationGeneralPage() {
             <div className="flex items-center gap-2 pt-2">
               <button
                 onClick={() => setEditing(false)}
-                className="h-9 px-4 rounded-lg bg-primary text-sm text-white hover:bg-primary/90 transition-colors"
+                className="h-9 px-4 rounded-lg bg-[#061e3a] text-sm text-white hover:bg-[#0c3c7a] active:bg-[#1157b2] transition-colors"
               >
                 Save Changes
               </button>
@@ -223,7 +223,7 @@ export default function OrganizationGeneralPage() {
                   setContactPhone(orgData.contactPhone);
                   setEditing(false);
                 }}
-                className="h-9 px-4 rounded-lg border border-border text-sm text-foreground hover:bg-[#f8f9fa] transition-colors"
+                className="h-9 px-4 rounded-lg border border-border text-sm text-foreground hover:bg-[#ebf3ff] hover:border-[#cce1ff] active:bg-[#cce1ff] active:border-[#afd0ff] transition-colors"
               >
                 Cancel
               </button>

@@ -15,7 +15,7 @@ export default function FleetPage() {
           </p>
         </div>
         <div className="flex items-center gap-3">
-          <button className="inline-flex items-center gap-2 px-3 py-2.5 rounded-lg border border-border bg-white text-sm font-normal text-foreground hover:bg-[#f8f9fa] transition-colors">
+          <button className="inline-flex items-center gap-2 px-3 py-2.5 rounded-lg border border-border bg-white text-sm font-normal text-foreground hover:bg-[#ebf3ff] hover:border-[#cce1ff] active:bg-[#cce1ff] active:border-[#afd0ff] transition-colors">
             <CloudUpload className="w-4 h-4 text-muted-foreground" />
             Import Data
           </button>

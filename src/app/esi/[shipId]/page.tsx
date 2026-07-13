@@ -100,7 +100,7 @@ function EditInDataHubButton({ shipId, small }: { shipId: string; small?: boolea
     <Link
       href={`/fleet/${shipId}`}
       className={cn(
-        "inline-flex items-center gap-2 rounded-lg border border-border bg-white font-normal text-foreground hover:bg-[#f8f9fa] transition-colors",
+        "inline-flex items-center gap-2 rounded-lg border border-border bg-white font-normal text-foreground hover:bg-[#ebf3ff] hover:border-[#cce1ff] active:bg-[#cce1ff] active:border-[#afd0ff] transition-colors",
         small ? "h-8 px-3 py-1.5 text-[12px]" : "h-10 px-3 py-2.5 text-sm"
       )}
     >
@@ -174,7 +174,7 @@ export default function EsiShipDetailPage({
         <div className="flex items-center gap-3">
           <Link
             href="/esi"
-            className="w-10 h-10 flex items-center justify-center rounded-lg bg-white text-muted-foreground hover:bg-[#f8f9fa] transition-colors"
+            className="w-10 h-10 flex items-center justify-center rounded-lg bg-white text-muted-foreground hover:bg-[#ebf3ff] active:bg-[#cce1ff] transition-colors"
           >
             <ChevronLeft className="w-5 h-5" />
           </Link>
@@ -191,13 +191,13 @@ export default function EsiShipDetailPage({
           </div>
         </div>
         <div className="flex items-center gap-3">
-          <button className="inline-flex items-center gap-2 h-10 px-3 py-2.5 rounded-lg border border-border bg-white text-sm font-normal text-foreground hover:bg-[#f8f9fa] transition-colors">
+          <button className="inline-flex items-center gap-2 h-10 px-3 py-2.5 rounded-lg border border-border bg-white text-sm font-normal text-foreground hover:bg-[#ebf3ff] hover:border-[#cce1ff] active:bg-[#cce1ff] active:border-[#afd0ff] transition-colors">
             <Download className="w-4 h-4 text-muted-foreground" />
             ESI Certificate
           </button>
           <Link
             href={`/fleet/${ship.id}`}
-            className="inline-flex items-center gap-2 h-10 px-3 py-2.5 rounded-lg bg-primary text-sm font-normal text-white hover:bg-primary/90 transition-colors"
+            className="inline-flex items-center gap-2 h-10 px-3 py-2.5 rounded-lg bg-[#061e3a] text-sm font-normal text-white hover:bg-[#0c3c7a] active:bg-[#1157b2] transition-colors"
           >
             <Database className="w-4 h-4 text-[#5b9aff]" />
             Open Data Hub
@@ -367,7 +367,7 @@ export default function EsiShipDetailPage({
                 "flex items-center gap-2 h-10 px-4 text-sm font-normal rounded-lg transition-colors",
                 activeTab === tab.id
                   ? "bg-[#cce1ff] text-foreground"
-                  : "text-foreground hover:bg-[#f3f4f6]"
+                  : "text-foreground hover:bg-[#ebf3ff] active:bg-[#cce1ff]"
               )}
             >
               <Icon className={cn("w-5 h-5", activeTab !== tab.id && "text-[#98a1ae]")} />
@@ -495,6 +495,30 @@ export default function EsiShipDetailPage({
 
         {activeTab === "tier-iii" && (
           <>
+            {/* Header */}
+            <section className="bg-white rounded-[16px] p-4">
+              <div className="flex items-center justify-between">
+                <div className="flex flex-col gap-1">
+                  <h2 className="text-xl font-medium text-[#1e2938] tracking-[-0.6px]">Tier III Hours</h2>
+                  <p className="text-sm text-[#697282]">Track engine operating hours and NOx emissions in Tier III compliance mode across your fleet.</p>
+                </div>
+                <div className="flex items-center gap-2 shrink-0">
+                  <EditInDataHubButton shipId={ship.id} small />
+                  <button className="inline-flex items-center gap-2 h-8 px-3 py-1.5 rounded-lg border border-border bg-white text-[12px] font-normal text-foreground hover:bg-[#ebf3ff] hover:border-[#cce1ff] active:bg-[#cce1ff] active:border-[#afd0ff] transition-colors">
+                    <Download className="w-5 h-5 text-muted-foreground" />
+                    Export
+                  </button>
+                  <div className="relative">
+                    <select className="appearance-none h-8 pl-3 pr-8 rounded-lg border border-border bg-white text-[14px] text-[#1e2938]">
+                      <option>Ref. period: 2026</option>
+                      <option>Ref. period: 2025</option>
+                    </select>
+                    <ChevronDown className="absolute right-2 top-1/2 -translate-y-1/2 w-4 h-4 text-[#697282] pointer-events-none" />
+                  </div>
+                </div>
+              </div>
+            </section>
+
             {/* Top stat cards */}
             <div className="grid grid-cols-[auto_1fr] gap-4">
               {/* Fleet Tier III Utilization */}
@@ -563,10 +587,9 @@ export default function EsiShipDetailPage({
                 <table className="w-full">
                   <thead>
                     <tr>
-                      <th className="text-left text-xs font-normal text-[#697282] leading-[1.45] pl-4 pr-2 h-10 bg-[#F3F4F6] rounded-tl-lg">Type</th>
+                      <th className="text-left text-xs font-normal text-[#697282] leading-[1.45] pl-4 pr-2 h-10 bg-[#F3F4F6] rounded-tl-lg">Engine ID</th>
+                      <th className="text-left text-xs font-normal text-[#697282] leading-[1.45] px-2 h-10 bg-[#F3F4F6]">Type</th>
                       <th className="text-left text-xs font-normal text-[#697282] leading-[1.45] px-2 h-10 bg-[#F3F4F6]">Main/Auxiliary</th>
-                      <th className="text-right text-xs font-normal text-[#697282] leading-[1.45] px-2 h-10 bg-[#F3F4F6]">Rated Power <span className="text-[10px]">(kW)</span></th>
-                      <th className="text-right text-xs font-normal text-[#697282] leading-[1.45] px-2 h-10 bg-[#F3F4F6]">RPM</th>
                       <th className="text-right text-xs font-normal text-[#697282] leading-[1.45] px-2 h-10 bg-[#F3F4F6] w-[160px]">NOx - TIER III (g/kWh)</th>
                       <th className="text-right text-xs font-normal text-[#697282] leading-[1.45] px-2 h-10 bg-[#F3F4F6] w-[160px]">Hours in TIER III</th>
                       <th className="text-right text-xs font-normal text-[#697282] leading-[1.45] px-2 pr-4 h-10 bg-[#F3F4F6] rounded-tr-lg w-[160px]">Total Hours</th>
@@ -574,10 +597,9 @@ export default function EsiShipDetailPage({
                   </thead>
                   <tbody>
                     <tr>
-                      <td className="pl-4 pr-2 py-3 text-[14px] text-[#1e2938]">Diesel engine, 2-stroke</td>
+                      <td className="pl-4 pr-2 py-3 text-[14px] text-[#1e2938]">AE-1</td>
+                      <td className="px-2 py-3 text-[14px] text-[#1e2938]">Diesel engine, 2-stroke</td>
                       <td className="px-2 py-3 text-[14px] text-[#1e2938]">Auxiliary</td>
-                      <td className="px-2 py-3 text-[14px] text-[#1e2938] text-right">620</td>
-                      <td className="px-2 py-3 text-[14px] text-[#1e2938] text-right">1 800</td>
                       <td className="px-2 py-3 text-[14px] text-[#1e2938] text-right">2.4</td>
                       <td className="px-2 py-3 text-[14px] text-[#1e2938] text-right">450</td>
                       <td className="px-2 pr-4 py-3 text-[14px] text-[#1e2938] text-right">1 200</td>
@@ -598,7 +620,7 @@ export default function EsiShipDetailPage({
               </div>
               <div className="flex items-center gap-2 shrink-0">
                 <EditInDataHubButton shipId={ship.id} small />
-                <button className="inline-flex items-center gap-2 h-8 px-3 py-1.5 rounded-lg border border-border bg-white text-[12px] font-normal text-foreground hover:bg-[#f8f9fa] transition-colors">
+                <button className="inline-flex items-center gap-2 h-8 px-3 py-1.5 rounded-lg border border-border bg-white text-[12px] font-normal text-foreground hover:bg-[#ebf3ff] hover:border-[#cce1ff] active:bg-[#cce1ff] active:border-[#afd0ff] transition-colors">
                   <Download className="w-5 h-5 text-muted-foreground" />
                   Export
                 </button>
@@ -640,7 +662,7 @@ export default function EsiShipDetailPage({
               </div>
               <div className="flex items-center gap-2 shrink-0">
                 <EditInDataHubButton shipId={ship.id} small />
-                <button className="inline-flex items-center gap-2 h-8 px-3 py-1.5 rounded-lg border border-border bg-white text-[12px] font-normal text-foreground hover:bg-[#f8f9fa] transition-colors">
+                <button className="inline-flex items-center gap-2 h-8 px-3 py-1.5 rounded-lg border border-border bg-white text-[12px] font-normal text-foreground hover:bg-[#ebf3ff] hover:border-[#cce1ff] active:bg-[#cce1ff] active:border-[#afd0ff] transition-colors">
                   <Download className="w-5 h-5 text-muted-foreground" />
                   Export
                 </button>

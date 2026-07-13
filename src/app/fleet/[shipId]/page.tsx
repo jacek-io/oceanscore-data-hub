@@ -78,7 +78,7 @@ export default function ShipDetailPage({
         <div className="flex items-center gap-3">
           <Link
             href="/fleet"
-            className="w-10 h-10 flex items-center justify-center rounded-lg bg-white text-muted-foreground hover:bg-[#f8f9fa] transition-colors"
+            className="w-10 h-10 flex items-center justify-center rounded-lg bg-white text-muted-foreground hover:bg-[#ebf3ff] hover:border-[#cce1ff] active:bg-[#cce1ff] active:border-[#afd0ff] transition-colors"
           >
             <ChevronLeft className="w-5 h-5" />
           </Link>
@@ -98,7 +98,7 @@ export default function ShipDetailPage({
             </select>
             <ChevronDown className="absolute right-3 top-1/2 -translate-y-1/2 w-4 h-4 text-muted-foreground pointer-events-none" />
           </div>
-          <button className="inline-flex items-center gap-2 px-3 py-2.5 rounded-lg border border-border bg-white text-sm font-normal text-foreground hover:bg-[#f8f9fa] transition-colors">
+          <button className="inline-flex items-center gap-2 px-3 py-2.5 rounded-lg border border-border bg-white text-sm font-normal text-foreground hover:bg-[#ebf3ff] hover:border-[#cce1ff] active:bg-[#cce1ff] active:border-[#afd0ff] transition-colors">
             <CloudUpload className="w-4 h-4 text-muted-foreground" />
             Import Data
           </button>
@@ -117,7 +117,7 @@ export default function ShipDetailPage({
               </div>
               <button
                 onClick={() => { const next = new Set(optedOut); next.delete("ESI"); setOptedOut(next); }}
-                className="h-10 pl-1.5 pr-3 flex items-center gap-1 rounded-lg border border-[#1157b2] bg-white text-sm text-[#1157b2] hover:bg-[#f8f9fa] transition-colors"
+                className="h-10 pl-1.5 pr-3 flex items-center gap-1 rounded-lg border border-[#1157b2] bg-white text-sm text-[#1157b2] hover:bg-[#ebf3ff] hover:border-[#cce1ff] active:bg-[#cce1ff] active:border-[#afd0ff] transition-colors"
               >
                 <Plus className="w-5 h-5" />
                 Enroll
@@ -139,7 +139,7 @@ export default function ShipDetailPage({
               <div className="relative">
                 <button
                   onClick={() => setEsiMenuOpen(!esiMenuOpen)}
-                  className="w-8 h-8 flex items-center justify-center rounded-lg text-muted-foreground hover:bg-[#f8f9fa] transition-colors"
+                  className="w-8 h-8 flex items-center justify-center rounded-lg text-muted-foreground hover:bg-[#ebf3ff] hover:border-[#cce1ff] active:bg-[#cce1ff] active:border-[#afd0ff] transition-colors"
                 >
                   <MoreVertical className="w-5 h-5" />
                 </button>
@@ -155,7 +155,7 @@ export default function ShipDetailPage({
                   </div>
                 )}
               </div>
-              <Link href={`/esi/${shipId}`} className="w-8 h-8 flex items-center justify-center rounded-lg text-muted-foreground hover:bg-[#f8f9fa] transition-colors">
+              <Link href={`/esi/${shipId}`} className="w-8 h-8 flex items-center justify-center rounded-lg text-muted-foreground hover:bg-[#ebf3ff] hover:border-[#cce1ff] active:bg-[#cce1ff] active:border-[#afd0ff] transition-colors">
                 <ChevronRight className="w-5 h-5" />
               </Link>
             </div>
@@ -171,7 +171,7 @@ export default function ShipDetailPage({
               </div>
               <button
                 onClick={() => { const next = new Set(optedOut); next.delete("EPI"); setOptedOut(next); }}
-                className="h-10 pl-1.5 pr-3 flex items-center gap-1 rounded-lg border border-[#1157b2] bg-white text-sm text-[#1157b2] hover:bg-[#f8f9fa] transition-colors"
+                className="h-10 pl-1.5 pr-3 flex items-center gap-1 rounded-lg border border-[#1157b2] bg-white text-sm text-[#1157b2] hover:bg-[#ebf3ff] hover:border-[#cce1ff] active:bg-[#cce1ff] active:border-[#afd0ff] transition-colors"
               >
                 <Plus className="w-5 h-5" />
                 Enroll
@@ -193,7 +193,7 @@ export default function ShipDetailPage({
               <div className="relative">
                 <button
                   onClick={() => setEpiMenuOpen(!epiMenuOpen)}
-                  className="w-8 h-8 flex items-center justify-center rounded-lg text-muted-foreground hover:bg-[#f8f9fa] transition-colors"
+                  className="w-8 h-8 flex items-center justify-center rounded-lg text-muted-foreground hover:bg-[#ebf3ff] hover:border-[#cce1ff] active:bg-[#cce1ff] active:border-[#afd0ff] transition-colors"
                 >
                   <MoreVertical className="w-5 h-5" />
                 </button>
@@ -209,7 +209,7 @@ export default function ShipDetailPage({
                   </div>
                 )}
               </div>
-              <Link href={`/epi/ships/${shipId}`} className="w-8 h-8 flex items-center justify-center rounded-lg text-muted-foreground hover:bg-[#f8f9fa] transition-colors">
+              <Link href={`/epi/ships/${shipId}`} className="w-8 h-8 flex items-center justify-center rounded-lg text-muted-foreground hover:bg-[#ebf3ff] hover:border-[#cce1ff] active:bg-[#cce1ff] active:border-[#afd0ff] transition-colors">
                 <ChevronRight className="w-5 h-5" />
               </Link>
             </div>
@@ -229,7 +229,7 @@ export default function ShipDetailPage({
                 "flex items-center gap-2 h-10 px-4 text-sm font-normal rounded-lg transition-colors",
                 activeTab === tab.id
                   ? "bg-[#cce1ff] text-foreground"
-                  : "text-foreground hover:bg-[#f3f4f6]"
+                  : "text-foreground hover:bg-[#ebf3ff] active:bg-[#cce1ff]"
               )}
             >
               <Icon className={cn("w-5 h-5", activeTab !== tab.id && "text-[#98a1ae]")} />
@@ -477,7 +477,7 @@ export default function ShipDetailPage({
                 EPI
               </span>
             </div>
-            <button className="inline-flex items-center gap-1 px-2 py-1.5 rounded-lg border border-border bg-white text-xs font-normal text-foreground hover:bg-[#f8f9fa] transition-colors">
+            <button className="inline-flex items-center gap-1 px-2 py-1.5 rounded-lg border border-border bg-white text-xs font-normal text-foreground hover:bg-[#ebf3ff] hover:border-[#cce1ff] active:bg-[#cce1ff] active:border-[#afd0ff] transition-colors">
               Add +
             </button>
           </div>
@@ -758,7 +758,7 @@ export default function ShipDetailPage({
                   <h3 className="text-base font-medium text-foreground tracking-[-0.48px]">Bulk Upload</h3>
                   <p className="text-sm text-muted-foreground">Use upload center to add more delivery notes at once</p>
                 </div>
-                <button className="inline-flex items-center gap-2 h-10 px-3 py-2.5 rounded-lg border border-border bg-white text-sm font-normal text-foreground hover:bg-[#f8f9fa] transition-colors">
+                <button className="inline-flex items-center gap-2 h-10 px-3 py-2.5 rounded-lg border border-border bg-white text-sm font-normal text-foreground hover:bg-[#ebf3ff] hover:border-[#cce1ff] active:bg-[#cce1ff] active:border-[#afd0ff] transition-colors">
                   Upload BDN
                   <ArrowRight className="w-5 h-5" />
                 </button>
@@ -774,11 +774,11 @@ export default function ShipDetailPage({
               </h2>
               <div className="flex items-center gap-2">
                 {selectedBdnRows.size > 0 && (
-                  <button className="h-10 px-3 py-2.5 rounded-lg bg-[#9e2028] text-sm font-normal text-white hover:bg-[#8a1b22] transition-colors">
+                  <button className="h-10 px-3 py-2.5 rounded-lg bg-[#9e2028] text-sm font-normal text-white hover:bg-[#82181a] transition-colors">
                     Delete Selected ({selectedBdnRows.size})
                   </button>
                 )}
-                <button className="inline-flex items-center gap-2 h-10 px-3 py-2.5 rounded-lg border border-border bg-white text-sm font-normal text-foreground hover:bg-[#f8f9fa] transition-colors">
+                <button className="inline-flex items-center gap-2 h-10 px-3 py-2.5 rounded-lg border border-border bg-white text-sm font-normal text-foreground hover:bg-[#ebf3ff] hover:border-[#cce1ff] active:bg-[#cce1ff] active:border-[#afd0ff] transition-colors">
                   <Download className="w-5 h-5 text-muted-foreground" />
                   Export
                 </button>
@@ -994,7 +994,7 @@ export default function ShipDetailPage({
                   <h3 className="text-base font-medium text-foreground tracking-[-0.48px]">Bulk Upload</h3>
                   <p className="text-sm text-muted-foreground">Use upload center to add more delivery notes at once</p>
                 </div>
-                <button className="inline-flex items-center gap-2 h-10 px-3 py-2.5 rounded-lg border border-border bg-white text-sm font-normal text-foreground hover:bg-[#f8f9fa] transition-colors">
+                <button className="inline-flex items-center gap-2 h-10 px-3 py-2.5 rounded-lg border border-border bg-white text-sm font-normal text-foreground hover:bg-[#ebf3ff] hover:border-[#cce1ff] active:bg-[#cce1ff] active:border-[#afd0ff] transition-colors">
                   Upload EDN
                   <ArrowRight className="w-5 h-5" />
                 </button>
@@ -1010,11 +1010,11 @@ export default function ShipDetailPage({
               </h2>
               <div className="flex items-center gap-2">
                 {selectedEdnRows.size > 0 && (
-                  <button className="h-10 px-3 py-2.5 rounded-lg bg-[#9e2028] text-sm font-normal text-white hover:bg-[#8a1b22] transition-colors">
+                  <button className="h-10 px-3 py-2.5 rounded-lg bg-[#9e2028] text-sm font-normal text-white hover:bg-[#82181a] transition-colors">
                     Delete Selected ({selectedEdnRows.size})
                   </button>
                 )}
-                <button className="inline-flex items-center gap-2 h-10 px-3 py-2.5 rounded-lg border border-border bg-white text-sm font-normal text-foreground hover:bg-[#f8f9fa] transition-colors">
+                <button className="inline-flex items-center gap-2 h-10 px-3 py-2.5 rounded-lg border border-border bg-white text-sm font-normal text-foreground hover:bg-[#ebf3ff] hover:border-[#cce1ff] active:bg-[#cce1ff] active:border-[#afd0ff] transition-colors">
                   <Download className="w-5 h-5 text-muted-foreground" />
                   Export
                 </button>
@@ -1283,7 +1283,7 @@ export default function ShipDetailPage({
             <div className="flex items-center justify-end gap-4 px-6 py-4">
               <button
                 onClick={() => setOptOutScheme(null)}
-                className="h-10 px-4 rounded-lg border border-[#e5e7eb] bg-white text-sm font-normal text-[#33561c] hover:bg-[#f8f9fa] transition-colors"
+                className="h-10 px-4 rounded-lg border border-[#e5e7eb] bg-white text-sm font-normal text-[#33561c] hover:bg-[#ebf3ff] hover:border-[#cce1ff] active:bg-[#cce1ff] active:border-[#afd0ff] transition-colors"
               >
                 Keep enrolled
               </button>
@@ -1292,7 +1292,7 @@ export default function ShipDetailPage({
                   setOptedOut(new Set([...optedOut, optOutScheme]));
                   setOptOutScheme(null);
                 }}
-                className="h-10 px-4 rounded-lg bg-[#c1272d] text-sm font-normal text-white hover:bg-[#a82025] transition-colors"
+                className="h-10 px-4 rounded-lg bg-[#c1272d] text-sm font-normal text-white hover:bg-[#9e2028] active:bg-[#82181a] transition-colors"
               >
                 Opt out
               </button>

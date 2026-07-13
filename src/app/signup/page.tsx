@@ -160,7 +160,7 @@ export default function SignUpPage() {
                 </div>
                 <Link
                   href="/login"
-                  className="w-full h-11 rounded-lg bg-[#061e3a] text-white text-sm font-medium hover:bg-[#0a2e57] transition-colors flex items-center justify-center mt-4"
+                  className="w-full h-11 rounded-lg bg-[#061e3a] text-white text-sm font-medium hover:bg-[#0c3c7a] active:bg-[#1157b2] transition-colors flex items-center justify-center mt-4"
                 >
                   Go to Sign In
                 </Link>
@@ -457,7 +457,7 @@ export default function SignUpPage() {
                       <button
                         type="button"
                         onClick={() => { setStep(step - 1); setError(""); }}
-                        className="h-10 px-5 rounded-lg border border-[#d1d5dc] text-sm text-[#1e2938] hover:bg-[#f8f9fa] transition-colors flex items-center gap-2"
+                        className="h-10 px-5 rounded-lg border border-[#d1d5dc] text-sm text-[#1e2938] hover:bg-[#ebf3ff] hover:border-[#cce1ff] active:bg-[#cce1ff] active:border-[#afd0ff] transition-colors flex items-center gap-2"
                       >
                         <ArrowLeft className="w-4 h-4" />
                         Back
@@ -467,7 +467,7 @@ export default function SignUpPage() {
                       <button
                         type="button"
                         onClick={handleNext}
-                        className="flex-1 h-10 rounded-lg bg-[#061e3a] text-white text-sm hover:bg-[#0a2e57] transition-colors flex items-center justify-center gap-2"
+                        className="flex-1 h-10 rounded-lg bg-[#061e3a] text-white text-sm hover:bg-[#0c3c7a] active:bg-[#1157b2] transition-colors flex items-center justify-center gap-2"
                       >
                         Continue
                         <ArrowRight className="w-4 h-4" />
@@ -475,7 +475,7 @@ export default function SignUpPage() {
                     ) : (
                       <button
                         type="submit"
-                        className="flex-1 h-10 rounded-lg bg-[#061e3a] text-white text-sm hover:bg-[#0a2e57] transition-colors"
+                        className="flex-1 h-10 rounded-lg bg-[#061e3a] text-white text-sm hover:bg-[#0c3c7a] active:bg-[#1157b2] transition-colors"
                       >
                         Create Account
                       </button>

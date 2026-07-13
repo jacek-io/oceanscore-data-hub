@@ -167,13 +167,13 @@ export default function ShipTransfersPage() {
                 <div className="px-4 flex items-center justify-end gap-2">
                   <button
                     onClick={() => handleDecline(transfer.id)}
-                    className="px-3 py-1.5 rounded-lg border border-border bg-white text-xs text-foreground hover:bg-[#f8f9fa] transition-colors"
+                    className="px-3 py-1.5 rounded-lg border border-border bg-white text-xs text-foreground hover:bg-[#ebf3ff] hover:border-[#cce1ff] active:bg-[#cce1ff] active:border-[#afd0ff] transition-colors"
                   >
                     Decline
                   </button>
                   <button
                     onClick={() => handleApprove(transfer.id)}
-                    className="px-3 py-1.5 rounded-lg border border-[#1157b2] bg-white text-xs text-[#1157b2] hover:bg-[#f8f9fa] transition-colors"
+                    className="px-3 py-1.5 rounded-lg border border-[#1157b2] bg-white text-xs text-[#1157b2] hover:bg-[#ebf3ff] hover:border-[#cce1ff] active:bg-[#cce1ff] active:border-[#afd0ff] transition-colors"
                   >
                     Approve
                   </button>
@@ -203,7 +203,7 @@ export default function ShipTransfersPage() {
             </div>
             <button
               onClick={() => setRequestDialogOpen(true)}
-              className="inline-flex items-center gap-2 h-10 px-3 rounded-lg border border-border bg-white text-sm text-foreground hover:bg-[#f8f9fa] transition-colors"
+              className="inline-flex items-center gap-2 h-10 px-3 rounded-lg border border-border bg-white text-sm text-foreground hover:bg-[#ebf3ff] hover:border-[#cce1ff] active:bg-[#cce1ff] active:border-[#afd0ff] transition-colors"
             >
               <Plus className="w-5 h-5" />
               Request Transfer
@@ -278,7 +278,7 @@ export default function ShipTransfersPage() {
               </h3>
               <button
                 onClick={() => { setRequestDialogOpen(false); setRequestImo(""); }}
-                className="w-8 h-8 flex items-center justify-center rounded-lg hover:bg-[#f3f4f6] transition-colors"
+                className="w-8 h-8 flex items-center justify-center rounded-lg hover:bg-[#ebf3ff] active:bg-[#cce1ff] transition-colors"
               >
                 <X className="w-5 h-5 text-muted-foreground" />
               </button>
@@ -299,7 +299,7 @@ export default function ShipTransfersPage() {
             <div className="flex items-center gap-2 justify-end pt-2">
               <button
                 onClick={() => { setRequestDialogOpen(false); setRequestImo(""); }}
-                className="h-9 px-4 rounded-lg border border-border text-sm text-foreground hover:bg-[#f8f9fa] transition-colors"
+                className="h-9 px-4 rounded-lg border border-border text-sm text-foreground hover:bg-[#ebf3ff] hover:border-[#cce1ff] active:bg-[#cce1ff] active:border-[#afd0ff] transition-colors"
               >
                 Cancel
               </button>
@@ -321,7 +321,7 @@ export default function ShipTransfersPage() {
                   }
                 }}
                 disabled={!requestImo.trim()}
-                className="h-9 px-4 rounded-lg bg-primary text-sm text-white hover:bg-primary/90 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+                className="h-9 px-4 rounded-lg bg-[#061e3a] text-sm text-white hover:bg-[#0c3c7a] active:bg-[#1157b2] transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
               >
                 Send Request
               </button>

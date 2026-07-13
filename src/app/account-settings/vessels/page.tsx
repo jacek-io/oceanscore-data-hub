@@ -178,7 +178,7 @@ export default function VesselsPage() {
             </div>
             <button
               onClick={openAddDialog}
-              className="inline-flex items-center gap-2 h-10 px-3 rounded-lg bg-primary text-sm text-white hover:bg-primary/90 transition-colors"
+              className="inline-flex items-center gap-2 h-10 px-3 rounded-lg bg-[#061e3a] text-sm text-white hover:bg-[#0c3c7a] active:bg-[#1157b2] transition-colors"
             >
               <Plus className="w-4 h-4" />
               Add Vessel
@@ -258,7 +258,7 @@ export default function VesselsPage() {
                 </td>
                 <td className="px-4 py-3.5 text-right">
                   <button
-                    className="w-7 h-7 rounded-md inline-flex items-center justify-center hover:bg-[#f3f4f6] transition-colors"
+                    className="w-7 h-7 rounded-md inline-flex items-center justify-center hover:bg-[#ebf3ff] active:bg-[#cce1ff] transition-colors"
                     title="Move to another sub-org (coming soon)"
                     disabled
                   >
@@ -287,7 +287,7 @@ export default function VesselsPage() {
               </h3>
               <button
                 onClick={() => setShowAddDialog(false)}
-                className="w-8 h-8 flex items-center justify-center rounded-lg text-muted-foreground hover:bg-[#f3f4f6] hover:text-foreground transition-colors"
+                className="w-8 h-8 flex items-center justify-center rounded-lg text-muted-foreground hover:bg-[#ebf3ff] active:bg-[#cce1ff] hover:text-foreground transition-colors"
               >
                 <X className="w-5 h-5" />
               </button>
@@ -362,7 +362,7 @@ export default function VesselsPage() {
             <div className="flex items-center justify-between px-6 pt-6 pb-6">
               <button
                 onClick={() => setShowAddDialog(false)}
-                className="h-10 px-4 rounded-lg border border-[#d1d5dc] bg-white text-sm text-[#1e2938] hover:bg-[#f8f9fa] transition-colors"
+                className="h-10 px-4 rounded-lg border border-[#d1d5dc] bg-white text-sm text-[#1e2938] hover:bg-[#ebf3ff] hover:border-[#cce1ff] active:bg-[#cce1ff] active:border-[#afd0ff] transition-colors"
               >
                 Cancel
               </button>
@@ -370,7 +370,7 @@ export default function VesselsPage() {
                 {lookupResult?.alreadyRegistered && (
                   <button
                     onClick={() => setShowAddDialog(false)}
-                    className="h-10 px-4 rounded-lg bg-primary text-sm text-white hover:bg-primary/90 transition-colors"
+                    className="h-10 px-4 rounded-lg bg-[#061e3a] text-sm text-white hover:bg-[#0c3c7a] active:bg-[#1157b2] transition-colors"
                   >
                     Request Transfer
                   </button>
@@ -378,7 +378,7 @@ export default function VesselsPage() {
                 <button
                   onClick={() => setShowAddDialog(false)}
                   disabled={!lookupResult || lookupResult.alreadyRegistered}
-                  className="h-10 px-4 rounded-lg bg-primary text-sm text-white hover:bg-primary/90 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+                  className="h-10 px-4 rounded-lg bg-[#061e3a] text-sm text-white hover:bg-[#0c3c7a] active:bg-[#1157b2] transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
                 >
                   Save Ship Record
                 </button>

@@ -156,7 +156,7 @@ export default function UsersPage() {
                 setInviteRoles([]);
                 setDialog("invite");
               }}
-              className="inline-flex items-center gap-2 h-10 px-3 rounded-lg bg-primary text-sm text-white hover:bg-primary/90 transition-colors"
+              className="inline-flex items-center gap-2 h-10 px-3 rounded-lg bg-[#061e3a] text-sm text-white hover:bg-[#0c3c7a] active:bg-[#1157b2] transition-colors"
             >
               <Plus className="w-4 h-4" />
               Invite User
@@ -240,7 +240,7 @@ export default function UsersPage() {
                         setEditRoles([...user.roles]);
                         setDialog("editRoles");
                       }}
-                      className="w-7 h-7 rounded-md inline-flex items-center justify-center hover:bg-[#f3f4f6] transition-colors"
+                      className="w-7 h-7 rounded-md inline-flex items-center justify-center hover:bg-[#ebf3ff] active:bg-[#cce1ff] transition-colors"
                       title="Edit roles"
                     >
                       <Pen className="w-3.5 h-3.5 text-muted-foreground" />
@@ -323,7 +323,7 @@ export default function UsersPage() {
           <div className="relative bg-white rounded-[16px] w-[480px] flex flex-col shadow-xl">
             <div className="flex items-center justify-between p-5 pb-0">
               <h3 className="text-lg font-medium text-foreground tracking-[-0.54px]">Invite User</h3>
-              <button onClick={() => setDialog(null)} className="w-8 h-8 rounded-lg flex items-center justify-center hover:bg-[#f3f4f6]">
+              <button onClick={() => setDialog(null)} className="w-8 h-8 rounded-lg flex items-center justify-center hover:bg-[#ebf3ff] active:bg-[#cce1ff]">
                 <X className="w-4 h-4 text-muted-foreground" />
               </button>
             </div>
@@ -361,14 +361,14 @@ export default function UsersPage() {
             <div className="flex items-center justify-end gap-2 p-5 pt-2">
               <button
                 onClick={() => setDialog(null)}
-                className="h-9 px-4 rounded-lg border border-border text-sm text-foreground hover:bg-[#f8f9fa] transition-colors"
+                className="h-9 px-4 rounded-lg border border-border text-sm text-foreground hover:bg-[#ebf3ff] hover:border-[#cce1ff] active:bg-[#cce1ff] active:border-[#afd0ff] transition-colors"
               >
                 Cancel
               </button>
               <button
                 disabled={!inviteEmail || inviteRoles.length === 0}
                 onClick={() => setDialog(null)}
-                className="h-9 px-4 rounded-lg bg-primary text-sm text-white hover:bg-primary/90 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+                className="h-9 px-4 rounded-lg bg-[#061e3a] text-sm text-white hover:bg-[#0c3c7a] active:bg-[#1157b2] transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
               >
                 Send Invitation
               </button>
@@ -384,7 +384,7 @@ export default function UsersPage() {
           <div className="relative bg-white rounded-[16px] w-[400px] flex flex-col shadow-xl">
             <div className="flex items-center justify-between p-5 pb-0">
               <h3 className="text-lg font-medium text-foreground tracking-[-0.54px]">Edit Roles</h3>
-              <button onClick={() => setDialog(null)} className="w-8 h-8 rounded-lg flex items-center justify-center hover:bg-[#f3f4f6]">
+              <button onClick={() => setDialog(null)} className="w-8 h-8 rounded-lg flex items-center justify-center hover:bg-[#ebf3ff] active:bg-[#cce1ff]">
                 <X className="w-4 h-4 text-muted-foreground" />
               </button>
             </div>
@@ -432,14 +432,14 @@ export default function UsersPage() {
             <div className="flex items-center justify-end gap-2 p-5 pt-2">
               <button
                 onClick={() => setDialog(null)}
-                className="h-9 px-4 rounded-lg border border-border text-sm text-foreground hover:bg-[#f8f9fa] transition-colors"
+                className="h-9 px-4 rounded-lg border border-border text-sm text-foreground hover:bg-[#ebf3ff] hover:border-[#cce1ff] active:bg-[#cce1ff] active:border-[#afd0ff] transition-colors"
               >
                 Cancel
               </button>
               <button
                 disabled={editRoles.length === 0}
                 onClick={() => setDialog(null)}
-                className="h-9 px-4 rounded-lg bg-primary text-sm text-white hover:bg-primary/90 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+                className="h-9 px-4 rounded-lg bg-[#061e3a] text-sm text-white hover:bg-[#0c3c7a] active:bg-[#1157b2] transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
               >
                 Save
               </button>
@@ -455,7 +455,7 @@ export default function UsersPage() {
           <div className="relative bg-white rounded-[16px] w-[440px] flex flex-col shadow-xl">
             <div className="flex items-center justify-between p-5 pb-0">
               <h3 className="text-lg font-medium text-foreground tracking-[-0.54px]">Deactivate User</h3>
-              <button onClick={() => setDialog(null)} className="w-8 h-8 rounded-lg flex items-center justify-center hover:bg-[#f3f4f6]">
+              <button onClick={() => setDialog(null)} className="w-8 h-8 rounded-lg flex items-center justify-center hover:bg-[#ebf3ff] active:bg-[#cce1ff]">
                 <X className="w-4 h-4 text-muted-foreground" />
               </button>
             </div>
@@ -468,7 +468,7 @@ export default function UsersPage() {
             <div className="flex items-center justify-end gap-2 p-5 pt-2">
               <button
                 onClick={() => setDialog(null)}
-                className="h-9 px-4 rounded-lg border border-border text-sm text-foreground hover:bg-[#f8f9fa] transition-colors"
+                className="h-9 px-4 rounded-lg border border-border text-sm text-foreground hover:bg-[#ebf3ff] hover:border-[#cce1ff] active:bg-[#cce1ff] active:border-[#afd0ff] transition-colors"
               >
                 Cancel
               </button>
