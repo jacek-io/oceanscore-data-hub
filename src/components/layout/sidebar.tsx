@@ -148,6 +148,9 @@ export function Sidebar() {
         >
           <MapPin className="w-5 h-5" />
           Ports
+          {pathname.startsWith("/ports") && (
+            <div className="w-2 h-2 rounded-full bg-primary-icon ml-auto" />
+          )}
         </Link>
 
         {/* Schemes */}
@@ -196,6 +199,9 @@ export function Sidebar() {
         >
           <MessageCircle className="w-5 h-5" />
           Support
+          {pathname.startsWith("/support") && (
+            <div className="w-2 h-2 rounded-full bg-primary-icon ml-auto" />
+          )}
         </Link>
 
         {/* User account */}
