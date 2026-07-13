@@ -3,7 +3,6 @@
 import { useState } from "react";
 import Link from "next/link";
 import {
-  CloudUpload,
   FilePlus2,
   ArrowRight,
   Settings2,
@@ -52,14 +51,6 @@ export default function UploadCenterPage() {
 
   return (
     <div className="flex flex-col min-h-screen">
-      {/* Top bar */}
-      <div className="bg-white flex items-center gap-2 p-5">
-        <CloudUpload className="w-5 h-5 text-foreground" />
-        <span className="text-sm font-normal text-foreground leading-[1.4]">
-          Upload Center
-        </span>
-      </div>
-
       {/* Main content */}
       <div className="flex-1 flex flex-col items-center pt-16 px-5 pb-10">
         <div className="w-[1100px] max-w-full flex flex-col items-center gap-8">

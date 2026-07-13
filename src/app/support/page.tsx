@@ -1,14 +1,8 @@
-import { Headset, Mail, ArrowRight, MessageCircle } from "lucide-react";
+import { Headset, Mail, ArrowRight } from "lucide-react";
 
 export default function SupportPage() {
   return (
     <div className="flex flex-col h-full">
-      {/* Top bar */}
-      <div className="flex items-center gap-2 px-5 py-5">
-        <MessageCircle className="w-5 h-5 text-foreground" />
-        <span className="text-sm text-foreground">Support</span>
-      </div>
-
       {/* Content area */}
       <div className="flex-1 flex flex-col items-center pt-16 px-6">
         <div className="w-full max-w-[960px] flex flex-col items-center gap-16">
