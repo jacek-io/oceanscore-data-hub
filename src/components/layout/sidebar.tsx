@@ -12,7 +12,7 @@ import {
   ChevronUp,
   LogOut,
 } from "lucide-react";
-import { useState, useRef, useEffect, useCallback } from "react";
+import { useState, useRef, useEffect } from "react";
 import { cn } from "@/lib/utils";
 
 /* ── Navigation config ── */
@@ -60,8 +60,8 @@ function isSectionActive(prefixes: string[], pathname: string) {
 export function Sidebar() {
   const pathname = usePathname();
 
-  // Single expanded section — accordion behavior
-  const [expandedSection, setExpandedSection] = useState<SectionId | null>("dataHub");
+  // Independent expand/collapse — multiple sections can be open
+  const [expandedSections, setExpandedSections] = useState<Set<SectionId>>(new Set(["dataHub"]));
   const [accountOpen, setAccountOpen] = useState(false);
   const accountRef = useRef<HTMLDivElement>(null);
 
@@ -70,12 +70,15 @@ export function Sidebar() {
   const esiActive = isSectionActive(["/esi"], pathname);
   const epiActive = isSectionActive(["/epi"], pathname);
 
-  // Auto-expand the section that owns the current route (single winner)
+  // Auto-expand the section that owns the current route
   useEffect(() => {
-    if (dataHubActive) setExpandedSection("dataHub");
-    else if (esiActive) setExpandedSection("esi");
-    else if (epiActive) setExpandedSection("epi");
-    else setExpandedSection(null);
+    setExpandedSections((prev) => {
+      const next = new Set(prev);
+      if (dataHubActive) next.add("dataHub");
+      if (esiActive) next.add("esi");
+      if (epiActive) next.add("epi");
+      return next.size !== prev.size ? next : prev;
+    });
   }, [dataHubActive, esiActive, epiActive]);
 
   // Close account popover on outside click
@@ -90,29 +93,15 @@ export function Sidebar() {
     return () => document.removeEventListener("mousedown", handleClickOutside);
   }, [accountOpen]);
 
-  // Is a given section currently active (contains the current route)?
-  const isSectionRouteActive = useCallback(
-    (section: SectionId) => {
-      if (section === "dataHub") return dataHubActive;
-      if (section === "esi") return esiActive;
-      return epiActive;
-    },
-    [dataHubActive, esiActive, epiActive]
-  );
-
-  // Toggle: expand this section (collapsing others), or collapse if already open
-  // Block collapsing if section is currently active
-  const toggleSection = useCallback(
-    (section: SectionId) => {
-      if (expandedSection === section) {
-        if (isSectionRouteActive(section)) return; // can't collapse active
-        setExpandedSection(null);
-      } else {
-        setExpandedSection(section);
-      }
-    },
-    [expandedSection, isSectionRouteActive]
-  );
+  // Toggle a single section open/closed
+  const toggleSection = (section: SectionId) => {
+    setExpandedSections((prev) => {
+      const next = new Set(prev);
+      if (next.has(section)) next.delete(section);
+      else next.add(section);
+      return next;
+    });
+  };
 
   // Hide sidebar on auth pages (after all hooks)
   const authRoutes = ["/login", "/signup", "/reset-password"];
@@ -140,7 +129,7 @@ export function Sidebar() {
           icon={<Ship className="w-5 h-5" />}
           label="Data Hub"
           href="/fleet"
-          isOpen={expandedSection === "dataHub"}
+          isOpen={expandedSections.has("dataHub")}
           isActive={dataHubActive}
           onToggle={() => toggleSection("dataHub")}
           children={dataHubChildren}
@@ -172,7 +161,7 @@ export function Sidebar() {
             badge={{ text: "ESI", color: "bg-esi-green" }}
             label={<>Environmental<br />Ship Index</>}
             href="/esi"
-            isOpen={expandedSection === "esi"}
+            isOpen={expandedSections.has("esi")}
             isActive={esiActive}
             onToggle={() => toggleSection("esi")}
             children={esiChildren}
@@ -184,7 +173,7 @@ export function Sidebar() {
             badge={{ text: "EPI", color: "bg-epi-blue" }}
             label={<>Environmental<br />Port Index</>}
             href="/epi"
-            isOpen={expandedSection === "epi"}
+            isOpen={expandedSections.has("epi")}
             isActive={epiActive}
             onToggle={() => toggleSection("epi")}
             children={epiChildren}
@@ -258,7 +247,7 @@ export function Sidebar() {
   );
 }
 
-/* ── NavSection: accordion with hybrid label-navigates + chevron-toggles ── */
+/* ── NavSection: independent expand/collapse, no parent active background ── */
 
 function NavSection({
   icon,
@@ -287,13 +276,14 @@ function NavSection({
         className={cn(
           "flex items-center justify-between rounded-lg text-sm transition-colors",
           isActive
-            ? "bg-white/5 text-white"
+            ? "text-white"
             : "text-sidebar-muted hover:bg-white/5 hover:text-white"
         )}
       >
-        {/* Label area — navigates to first child */}
+        {/* Label area — navigates to first child + expands */}
         <Link
           href={href}
+          onClick={() => { if (!isOpen) onToggle(); }}
           className="flex items-center gap-3 flex-1 min-w-0 px-3 py-2.5"
         >
           {icon}
@@ -305,20 +295,13 @@ function NavSection({
           <span className="text-left leading-tight">{label}</span>
         </Link>
 
-        {/* Chevron — only toggles expand/collapse */}
+        {/* Chevron — only toggles expand/collapse, always enabled */}
         <button
           onClick={(e) => {
             e.stopPropagation();
             onToggle();
           }}
-          className={cn(
-            "w-8 h-8 flex items-center justify-center rounded-md shrink-0 mr-1 transition-colors",
-            isActive && isOpen
-              ? "opacity-30 cursor-default"
-              : isActive
-              ? "hover:bg-white/10"
-              : "hover:bg-white/5"
-          )}
+          className="w-8 h-8 flex items-center justify-center rounded-md shrink-0 mr-1 hover:bg-white/10 transition-colors"
           aria-label={isOpen ? "Collapse" : "Expand"}
         >
           {isOpen ? (
@@ -329,9 +312,9 @@ function NavSection({
         </button>
       </div>
 
-      {/* Children — blue dot + font-medium on active sub-item */}
+      {/* Children — active sub-item gets bg highlight + blue dot */}
       {isOpen && (
-        <div className="ml-[22px] border-l border-white/15 space-y-0.5 py-1 mt-2 mb-3">
+        <div className="ml-[22px] border-l border-white/15 pl-1.5 space-y-0.5 py-1 mt-2 mb-3">
           {children.map((child) => {
             const active = isChildActive(child.href, pathname);
             return (
@@ -339,9 +322,9 @@ function NavSection({
                 key={child.href}
                 href={child.href}
                 className={cn(
-                  "flex items-center gap-2 pl-5 pr-3 py-2 rounded-lg text-sm transition-colors",
+                  "flex items-center gap-2 pl-3.5 pr-3 py-2 rounded-lg text-sm transition-colors",
                   active
-                    ? "text-white font-medium"
+                    ? "bg-white/5 text-white font-medium"
                     : "text-sidebar-muted hover:text-white"
                 )}
               >
