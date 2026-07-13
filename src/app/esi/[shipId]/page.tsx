@@ -495,21 +495,21 @@ export default function EsiShipDetailPage({
 
         {activeTab === "tier-iii" && (
           <>
-            {/* Header */}
-            <section className="bg-white rounded-[16px] p-4">
-              <div className="flex items-center justify-between">
-                <div className="flex flex-col gap-1">
+            {/* Header + Stat cards — single white container */}
+            <section className="bg-white rounded-[16px] p-4 flex flex-col gap-6">
+              <div className="flex items-end justify-between">
+                <div className="flex flex-col gap-2">
                   <h2 className="text-xl font-medium text-[#1e2938] tracking-[-0.6px]">Tier III Hours</h2>
-                  <p className="text-sm text-[#697282]">Track engine operating hours and NOx emissions in Tier III compliance mode across your fleet.</p>
+                  <p className="text-sm text-[#697282]">Track engine operating hours and NOx emissions in Tier III compliance mode.</p>
                 </div>
                 <div className="flex items-center gap-2 shrink-0">
                   <EditInDataHubButton shipId={ship.id} small />
-                  <button className="inline-flex items-center gap-2 h-8 px-3 py-1.5 rounded-lg border border-border bg-white text-[12px] font-normal text-foreground hover:bg-[#ebf3ff] hover:border-[#cce1ff] active:bg-[#cce1ff] active:border-[#afd0ff] transition-colors">
-                    <Download className="w-5 h-5 text-muted-foreground" />
+                  <button className="inline-flex items-center gap-2 h-8 px-3 py-1.5 rounded-lg border border-[#d1d5dc] bg-white text-[12px] font-normal text-[#1e2938] hover:bg-[#ebf3ff] hover:border-[#cce1ff] active:bg-[#cce1ff] active:border-[#afd0ff] transition-colors">
+                    <Download className="w-5 h-5 text-[#697282]" />
                     Export
                   </button>
                   <div className="relative">
-                    <select className="appearance-none h-8 pl-3 pr-8 rounded-lg border border-border bg-white text-[14px] text-[#1e2938]">
+                    <select className="appearance-none h-8 pl-3 pr-8 rounded-lg border border-[#d1d5dc] bg-white text-[14px] text-[#1e2938]">
                       <option>Ref. period: 2026</option>
                       <option>Ref. period: 2025</option>
                     </select>
@@ -517,65 +517,65 @@ export default function EsiShipDetailPage({
                   </div>
                 </div>
               </div>
-            </section>
 
-            {/* Top stat cards */}
-            <div className="grid grid-cols-[auto_1fr] gap-4">
-              {/* Fleet Tier III Utilization */}
-              <div className="bg-white rounded-[16px] py-4 w-[414px]">
-                <div className="flex flex-col gap-2">
-                  <div className="flex items-center justify-between px-4">
-                    <span className="text-[14px] text-[#697282]">Fleet Tier III Utilization</span>
-                    <div className="w-8 h-8 rounded-full bg-[#f3f4f6] flex items-center justify-center">
-                      <ChartBarBig className="w-4 h-4 text-[#697282]" />
+              {/* Stat cards */}
+              <div className="flex gap-4 h-[155px]">
+                {/* Fleet Tier III Utilization */}
+                <div className="border border-[#e5e7eb] rounded-[16px] py-4 w-[414px] shrink-0">
+                  <div className="flex flex-col gap-2">
+                    <div className="flex items-center justify-between px-4">
+                      <span className="text-[14px] text-[#697282]">Fleet Tier III Utilization</span>
+                      <div className="w-8 h-8 rounded-full bg-[#f3f4f6] flex items-center justify-center">
+                        <ChartBarBig className="w-4 h-4 text-[#697282]" />
+                      </div>
                     </div>
-                  </div>
-                  <div className="px-4">
-                    <div className="flex flex-col gap-4">
-                      <div>
-                        <p className="text-[32px] font-medium text-[#1e2938] leading-[1.2] tracking-[-0.32px]">37.5%</p>
-                        <div className="flex items-center gap-1">
-                          <span className="text-[12px] text-[#697282] leading-[10px]">Power-Weighted Efficiency</span>
-                          <Info className="w-4 h-4 text-[#697282]" />
+                    <div className="px-4">
+                      <div className="flex flex-col gap-4">
+                        <div>
+                          <p className="text-[32px] font-medium text-[#1e2938] leading-[1.2] tracking-[-0.32px]">37.5%</p>
+                          <div className="flex items-center gap-1">
+                            <span className="text-[12px] text-[#697282] leading-[10px]">Power-Weighted Efficiency</span>
+                            <Info className="w-4 h-4 text-[#697282]" />
+                          </div>
+                        </div>
+                        {/* Progress bar */}
+                        <div className="h-[13px] bg-[#f3f4f6] rounded-[4px] overflow-hidden">
+                          <div className="h-full bg-[#4780cf] rounded-[4px]" style={{ width: '37.5%' }} />
                         </div>
                       </div>
-                      {/* Progress bar */}
-                      <div className="h-[13px] bg-[#f3f4f6] rounded-[4px] overflow-hidden">
-                        <div className="h-full bg-[#4780cf] rounded-[4px]" style={{ width: '37.5%' }} />
-                      </div>
                     </div>
                   </div>
                 </div>
-              </div>
 
-              {/* Tier III Operational Log */}
-              <div className="bg-white rounded-[16px] py-4">
-                <div className="flex flex-col gap-2 h-full">
-                  <div className="flex items-center justify-between px-4">
-                    <span className="text-[14px] text-[#697282]">Tier III Operational Log</span>
-                    <div className="w-8 h-8 rounded-full bg-[#f3f4f6] flex items-center justify-center">
-                      <Activity className="w-4 h-4 text-[#697282]" />
-                    </div>
-                  </div>
-                  <div className="flex-1 flex gap-2 px-4">
-                    <div className="flex-1 bg-[#f3f4f6] rounded-lg p-4 flex flex-col justify-between">
-                      <span className="text-[12px] text-[#697282] leading-[1.45]">Cumulative Tier III Hours</span>
-                      <div className="flex items-end gap-1">
-                        <span className="text-[24px] font-medium text-[#1e2938] leading-[20px]">450</span>
-                        <span className="text-[12px] text-[#697282] leading-[10px]">hrs</span>
+                {/* Tier III Operational Log */}
+                <div className="border border-[#e5e7eb] rounded-[16px] py-4 flex-1">
+                  <div className="flex flex-col gap-2 h-full">
+                    <div className="flex items-center justify-between px-4">
+                      <span className="text-[14px] text-[#697282]">Tier III Operational Log</span>
+                      <div className="w-8 h-8 rounded-full bg-[#f3f4f6] flex items-center justify-center">
+                        <Activity className="w-4 h-4 text-[#697282]" />
                       </div>
                     </div>
-                    <div className="flex-1 bg-[#f3f4f6] rounded-lg p-4 flex flex-col justify-between">
-                      <span className="text-[12px] text-[#697282] leading-[1.45]">Cumulative Fleet Hours</span>
-                      <div className="flex items-end gap-1">
-                        <span className="text-[24px] font-medium text-[#1e2938] leading-[20px]">1 200</span>
-                        <span className="text-[12px] text-[#697282] leading-[10px]">hrs</span>
+                    <div className="flex-1 flex gap-2 px-4">
+                      <div className="flex-1 bg-[#f3f4f6] rounded-lg p-4 flex flex-col justify-between">
+                        <span className="text-[12px] text-[#697282] leading-[1.45]">Cumulative Tier III Hours</span>
+                        <div className="flex items-end gap-1">
+                          <span className="text-[24px] font-medium text-[#1e2938] leading-[20px]">450</span>
+                          <span className="text-[12px] text-[#697282] leading-[10px]">hrs</span>
+                        </div>
+                      </div>
+                      <div className="flex-1 bg-[#f3f4f6] rounded-lg p-4 flex flex-col justify-between">
+                        <span className="text-[12px] text-[#697282] leading-[1.45]">Cumulative Fleet Hours</span>
+                        <div className="flex items-end gap-1">
+                          <span className="text-[24px] font-medium text-[#1e2938] leading-[20px]">1 200</span>
+                          <span className="text-[12px] text-[#697282] leading-[10px]">hrs</span>
+                        </div>
                       </div>
                     </div>
                   </div>
                 </div>
               </div>
-            </div>
+            </section>
 
             {/* Engine Specific Performance Tracking */}
             <section className="bg-white rounded-[16px] p-4">
