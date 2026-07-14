@@ -174,7 +174,7 @@ export default function EsiShipDetailPage({
         <div className="flex items-center gap-3">
           <Link
             href="/esi"
-            className="w-10 h-10 flex items-center justify-center rounded-lg bg-white text-muted-foreground hover:bg-[#ebf3ff] active:bg-[#cce1ff] transition-colors"
+            className="w-10 h-10 flex items-center justify-center rounded-lg border border-[#d1d5dc] bg-white text-muted-foreground hover:bg-[#ebf3ff] hover:border-[#cce1ff] active:bg-[#cce1ff] active:border-[#afd0ff] transition-colors"
           >
             <ChevronLeft className="w-5 h-5" />
           </Link>
