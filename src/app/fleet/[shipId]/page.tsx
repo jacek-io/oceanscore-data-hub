@@ -728,8 +728,8 @@ export default function ShipDetailPage({
                     </div>
                   </div>
                   <div>
-                    <button className="h-10 px-3 py-2.5 rounded-lg bg-primary text-sm font-normal text-white hover:bg-primary/90 transition-colors">
-                      Submit BDN
+                    <button className="h-10 px-3 py-2.5 rounded-lg bg-[#061e3a] text-sm font-normal text-white hover:bg-[#0c3c7a] active:bg-[#1157b2] transition-colors">
+                      Add BDN
                     </button>
                   </div>
                 </div>
@@ -783,42 +783,49 @@ export default function ShipDetailPage({
                   </tr>
                 </thead>
                 <tbody>
-                  {/* Row 1 - Disabled/loading */}
-                  <tr className="border-b border-[#e5e7eb]">
-                    <td className="py-2 pl-4">
-                      <Checkbox disabled />
+                  {/* Row 1 - Newly added (unsaved) */}
+                  <tr className="border-b border-[#e5e7eb] bg-[#f8fbff]">
+                    <td className="py-2 pl-1">
+                      <div className="flex items-center gap-1">
+                        <div className="w-[3px] h-8 bg-[#4780cf] rounded-full shrink-0" />
+                        <Checkbox checked={selectedBdnRows.has("row1")} onCheckedChange={(checked) => { const next = new Set(selectedBdnRows); checked ? next.add("row1") : next.delete("row1"); setSelectedBdnRows(next); }} />
+                      </div>
                     </td>
                     <td className="py-2 px-2">
-                      <Input defaultValue="1928376" disabled className="h-10 rounded-lg" />
+                      <Input defaultValue="1928376" className="h-10 rounded-lg" />
                     </td>
                     <td className="py-2 px-2">
                       <div className="relative">
-                        <Input defaultValue="2025-05-11" disabled className="h-10 rounded-lg pr-10" />
-                        <Calendar className="absolute right-3 top-1/2 -translate-y-1/2 w-5 h-5 text-[#98a1ae] pointer-events-none" />
+                        <Input defaultValue="2025-05-11" className="h-10 rounded-lg pr-10" />
+                        <Calendar className="absolute right-3 top-1/2 -translate-y-1/2 w-5 h-5 text-muted-foreground pointer-events-none" />
                       </div>
                     </td>
                     <td className="py-2 px-2">
                       <div className="relative">
-                        <select disabled className="w-full h-10 pl-4 pr-10 rounded-lg border border-[#e5e7eb] bg-[#e5e7eb] text-sm text-[#98a1ae] appearance-none">
+                        <select className="w-full h-10 pl-4 pr-10 rounded-lg border border-border bg-white text-sm appearance-none focus:outline-none focus:ring-2 focus:ring-primary">
                           <option>Diesel</option>
+                          <option>LNG</option>
+                          <option>HFO</option>
                         </select>
-                        <ChevronDown className="absolute right-3 top-1/2 -translate-y-1/2 w-5 h-5 text-[#98a1ae] pointer-events-none" />
+                        <ChevronDown className="absolute right-3 top-1/2 -translate-y-1/2 w-5 h-5 text-muted-foreground pointer-events-none" />
                       </div>
                     </td>
                     <td className="py-2 px-2">
-                      <Input defaultValue="8.9" disabled className="h-10 rounded-lg text-right" />
+                      <Input defaultValue="8.9" className="h-10 rounded-lg text-right" />
                     </td>
                     <td className="py-2 px-2">
-                      <Input defaultValue="8.9" disabled className="h-10 rounded-lg text-right" />
+                      <Input defaultValue="8.9" className="h-10 rounded-lg text-right" />
                     </td>
                     <td className="py-2 px-2">
-                      <Input defaultValue="8.9" disabled className="h-10 rounded-lg text-right" />
+                      <Input defaultValue="8.9" className="h-10 rounded-lg text-right" />
                     </td>
                     <td className="py-2 px-2">
-                      <Input defaultValue="Rotterdam" disabled className="h-10 rounded-lg" />
+                      <Input defaultValue="Rotterdam" className="h-10 rounded-lg" />
                     </td>
                     <td className="py-2 pl-2 pr-4">
-                      <Loader2 className="w-5 h-5 text-muted-foreground animate-spin" />
+                      <button className="text-muted-foreground hover:text-destructive transition-colors">
+                        <Trash className="w-5 h-5" />
+                      </button>
                     </td>
                   </tr>
                   {/* Row 2 - Selected */}
