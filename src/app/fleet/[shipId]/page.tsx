@@ -785,10 +785,12 @@ export default function ShipDetailPage({
                 <tbody>
                   {/* Row 1 - Newly added (unsaved) */}
                   <tr className="border-b border-[#e5e7eb] bg-[#f8fbff]">
-                    <td className="py-2 pl-1">
-                      <div className="flex items-center gap-1">
+                    <td className="py-2 pl-0">
+                      <div className="flex items-center">
                         <div className="w-[3px] h-8 bg-[#4780cf] rounded-full shrink-0" />
-                        <Checkbox checked={selectedBdnRows.has("row1")} onCheckedChange={(checked) => { const next = new Set(selectedBdnRows); checked ? next.add("row1") : next.delete("row1"); setSelectedBdnRows(next); }} />
+                        <div className="pl-[13px]">
+                          <Checkbox checked={selectedBdnRows.has("row1")} onCheckedChange={(checked) => { const next = new Set(selectedBdnRows); checked ? next.add("row1") : next.delete("row1"); setSelectedBdnRows(next); }} />
+                        </div>
                       </div>
                     </td>
                     <td className="py-2 px-2">
