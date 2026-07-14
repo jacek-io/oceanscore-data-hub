@@ -25,9 +25,12 @@ import {
 } from "lucide-react";
 import { Input } from "@/components/ui/input";
 import { Checkbox } from "@/components/ui/checkbox";
+import { UnsavedChangesBar } from "@/components/ui/unsaved-changes-bar";
+import { LeavePageDialog } from "@/components/ui/leave-page-dialog";
 import { ships } from "@/lib/mock-data";
 import { cn } from "@/lib/utils";
-import { useState } from "react";
+import { useState, useCallback, useRef } from "react";
+import { useRouter } from "next/navigation";
 
 const tabs = [
   { id: "ship-data", label: "Ship Data", icon: Ship },
@@ -36,6 +39,26 @@ const tabs = [
   { id: "edn-solar", label: "EDN / Solar", icon: Zap },
   { id: "urn", label: "URN", icon: Volume2 },
 ];
+
+type BdnRow = {
+  id: string;
+  bdnId: string;
+  deliveryDate: string;
+  fuelType: string;
+  fuelWtt: string;
+  mass: string;
+  sulphur: string;
+  bunkerPort: string;
+  isNew: boolean;
+};
+
+const initialBdnRows: BdnRow[] = [
+  { id: "row1", bdnId: "1928376", deliveryDate: "2025-05-11", fuelType: "Diesel", fuelWtt: "8.9", mass: "8.9", sulphur: "8.9", bunkerPort: "Rotterdam", isNew: true },
+  { id: "row2", bdnId: "5638291", deliveryDate: "2025-05-11", fuelType: "Diesel", fuelWtt: "8.9", mass: "8.9", sulphur: "8.9", bunkerPort: "Rotterdam", isNew: false },
+  { id: "row3", bdnId: "8472639", deliveryDate: "2025-05-11", fuelType: "Diesel", fuelWtt: "8.9", mass: "8.9", sulphur: "8.9", bunkerPort: "Rotterdam", isNew: false },
+];
+
+let bdnCounter = 4;
 
 const technologies = [
   { id: "fuel-cells", label: "Fuel Cells", autoSelected: true, checked: true },
@@ -64,20 +87,69 @@ export default function ShipDetailPage({
   const [checkedTechs, setCheckedTechs] = useState<Set<string>>(
     new Set(technologies.filter((t) => t.checked).map((t) => t.id))
   );
-  const [selectedBdnRows, setSelectedBdnRows] = useState<Set<string>>(new Set(["row2", "row3"]));
+  const [bdnRows, setBdnRows] = useState<BdnRow[]>(initialBdnRows);
+  const [selectedBdnRows, setSelectedBdnRows] = useState<Set<string>>(new Set());
+  const [bdnForm, setBdnForm] = useState({ bdnId: "", deliveryDate: "11.05.2026", fuelType: "Select", fuelWtt: "", mass: "", sulphur: "", bunkerPort: "" });
   const [selectedEdnRows, setSelectedEdnRows] = useState<Set<string>>(new Set());
   const [urnNoiceNotation, setUrnNoiceNotation] = useState(true);
   const [urnVsr, setUrnVsr] = useState(true);
   const [checkedUrnTechs, setCheckedUrnTechs] = useState<Set<string>>(new Set(["urn-espro-propeller", "urn-schneekluth-duct"]));
   const [checkedVsrLocations, setCheckedVsrLocations] = useState<Set<string>>(new Set());
 
+  const recordedBdnRef = useRef<HTMLElement>(null);
+
+  // Unsaved changes tracking
+  const [hasUnsavedChanges, setHasUnsavedChanges] = useState(false);
+  const [leaveDialogOpen, setLeaveDialogOpen] = useState(false);
+  const pendingNavRef = useRef<string | null>(null);
+  const router = useRouter();
+
+  const markDirty = useCallback(() => {
+    setHasUnsavedChanges(true);
+  }, []);
+
+  const handleSave = useCallback(async () => {
+    // Prototype: simulate save
+    setHasUnsavedChanges(false);
+  }, []);
+
+  const handleDiscard = useCallback(() => {
+    setHasUnsavedChanges(false);
+  }, []);
+
+  const handleNavClick = useCallback(
+    (e: React.MouseEvent<HTMLAnchorElement>, href: string) => {
+      if (hasUnsavedChanges) {
+        e.preventDefault();
+        pendingNavRef.current = href;
+        setLeaveDialogOpen(true);
+      }
+    },
+    [hasUnsavedChanges]
+  );
+
+  const handleLeave = useCallback(() => {
+    setHasUnsavedChanges(false);
+    setLeaveDialogOpen(false);
+    if (pendingNavRef.current) {
+      router.push(pendingNavRef.current);
+      pendingNavRef.current = null;
+    }
+  }, [router]);
+
+  const handleStay = useCallback(() => {
+    setLeaveDialogOpen(false);
+    pendingNavRef.current = null;
+  }, []);
+
   return (
-    <div className="px-6 py-5 space-y-5">
+    <div className="px-6 py-5 space-y-5 pb-24" onInput={markDirty} onChange={markDirty}>
       {/* Top Bar */}
       <div className="flex items-center justify-between">
         <div className="flex items-center gap-3">
           <Link
             href="/fleet"
+            onClick={(e) => handleNavClick(e, "/fleet")}
             className="w-10 h-10 flex items-center justify-center rounded-lg bg-white text-muted-foreground hover:bg-[#ebf3ff] hover:border-[#cce1ff] active:bg-[#cce1ff] active:border-[#afd0ff] transition-colors"
           >
             <ChevronLeft className="w-5 h-5" />
@@ -359,6 +431,7 @@ export default function ShipDetailPage({
                 if (next.has(tech.id)) next.delete(tech.id);
                 else next.add(tech.id);
                 setCheckedTechs(next);
+                markDirty();
               };
               return (
               <div
@@ -685,13 +758,15 @@ export default function ShipDetailPage({
                   <div className="grid grid-cols-4 gap-5">
                     <div>
                       <label className="text-sm text-[#4a5565]">BDN ID</label>
-                      <Input placeholder="Enter BDN ID" className="mt-1 rounded-lg" />
+                      <Input placeholder="Enter BDN ID" value={bdnForm.bdnId} onChange={(e) => setBdnForm(f => ({ ...f, bdnId: e.target.value }))} className="mt-1 rounded-lg" />
                     </div>
                     <div>
                       <label className="text-sm text-[#4a5565]">Delivery Date</label>
                       <div className="relative mt-1">
-                        <select className="w-full h-10 pl-4 pr-10 rounded-lg border border-border bg-white text-sm appearance-none focus:outline-none focus:ring-2 focus:ring-primary">
+                        <select value={bdnForm.deliveryDate} onChange={(e) => setBdnForm(f => ({ ...f, deliveryDate: e.target.value }))} className="w-full h-10 pl-4 pr-10 rounded-lg border border-border bg-white text-sm appearance-none focus:outline-none focus:ring-2 focus:ring-primary">
                           <option>11.05.2026</option>
+                          <option>10.05.2026</option>
+                          <option>09.05.2026</option>
                         </select>
                         <ChevronDown className="absolute right-3 top-1/2 -translate-y-1/2 w-5 h-5 text-muted-foreground pointer-events-none" />
                       </div>
@@ -699,7 +774,7 @@ export default function ShipDetailPage({
                     <div>
                       <label className="text-sm text-[#4a5565]">Fuel Type</label>
                       <div className="relative mt-1">
-                        <select className="w-full h-10 pl-4 pr-10 rounded-lg border border-border bg-white text-sm text-[#98a1ae] appearance-none focus:outline-none focus:ring-2 focus:ring-primary">
+                        <select value={bdnForm.fuelType} onChange={(e) => setBdnForm(f => ({ ...f, fuelType: e.target.value }))} className={cn("w-full h-10 pl-4 pr-10 rounded-lg border border-border bg-white text-sm appearance-none focus:outline-none focus:ring-2 focus:ring-primary", bdnForm.fuelType === "Select" && "text-[#98a1ae]")}>
                           <option>Select</option>
                           <option>Diesel</option>
                           <option>LNG</option>
@@ -710,25 +785,46 @@ export default function ShipDetailPage({
                     </div>
                     <div>
                       <label className="text-sm text-[#4a5565]">Fuel WTT (gCO2e/MJ)</label>
-                      <Input placeholder="0" className="mt-1 rounded-lg" />
+                      <Input placeholder="0" value={bdnForm.fuelWtt} onChange={(e) => setBdnForm(f => ({ ...f, fuelWtt: e.target.value }))} className="mt-1 rounded-lg" />
                     </div>
                   </div>
                   <div className="grid grid-cols-4 gap-5">
                     <div>
                       <label className="text-sm text-[#4a5565]">Mass (tonnes)</label>
-                      <Input placeholder="0" className="mt-1 rounded-lg" />
+                      <Input placeholder="0" value={bdnForm.mass} onChange={(e) => setBdnForm(f => ({ ...f, mass: e.target.value }))} className="mt-1 rounded-lg" />
                     </div>
                     <div>
                       <label className="text-sm text-[#4a5565]">Sulphur Content (%)</label>
-                      <Input placeholder="0" className="mt-1 rounded-lg" />
+                      <Input placeholder="0" value={bdnForm.sulphur} onChange={(e) => setBdnForm(f => ({ ...f, sulphur: e.target.value }))} className="mt-1 rounded-lg" />
                     </div>
                     <div>
                       <label className="text-sm text-[#4a5565]">Bunker Port</label>
-                      <Input placeholder="Enter port name" className="mt-1 rounded-lg" />
+                      <Input placeholder="Enter port name" value={bdnForm.bunkerPort} onChange={(e) => setBdnForm(f => ({ ...f, bunkerPort: e.target.value }))} className="mt-1 rounded-lg" />
                     </div>
                   </div>
                   <div>
-                    <button className="h-10 px-3 py-2.5 rounded-lg bg-[#061e3a] text-sm font-normal text-white hover:bg-[#0c3c7a] active:bg-[#1157b2] transition-colors">
+                    <button
+                      onClick={() => {
+                        const newRow: BdnRow = {
+                          id: `row${bdnCounter++}`,
+                          bdnId: bdnForm.bdnId || String(Math.floor(Math.random() * 9000000) + 1000000),
+                          deliveryDate: bdnForm.deliveryDate,
+                          fuelType: bdnForm.fuelType === "Select" ? "Diesel" : bdnForm.fuelType,
+                          fuelWtt: bdnForm.fuelWtt || "0",
+                          mass: bdnForm.mass || "0",
+                          sulphur: bdnForm.sulphur || "0",
+                          bunkerPort: bdnForm.bunkerPort || "—",
+                          isNew: true,
+                        };
+                        setBdnRows(prev => [newRow, ...prev]);
+                        setBdnForm({ bdnId: "", deliveryDate: "11.05.2026", fuelType: "Select", fuelWtt: "", mass: "", sulphur: "", bunkerPort: "" });
+                        markDirty();
+                        setTimeout(() => {
+                          recordedBdnRef.current?.scrollIntoView({ behavior: "smooth", block: "start" });
+                        }, 50);
+                      }}
+                      className="h-10 px-3 py-2.5 rounded-lg bg-[#061e3a] text-sm font-normal text-white hover:bg-[#0c3c7a] active:bg-[#1157b2] transition-colors"
+                    >
                       Add BDN
                     </button>
                   </div>
@@ -750,14 +846,14 @@ export default function ShipDetailPage({
           </section>
 
           {/* Recorded Delivery Notes */}
-          <section className="bg-white rounded-[16px] p-4">
+          <section ref={recordedBdnRef} className="bg-white rounded-[16px] p-4">
             <div className="flex items-center justify-between mb-6">
               <h2 className="text-xl font-medium text-foreground tracking-[-0.6px]">
                 Recorded Delivery Notes
               </h2>
               <div className="flex items-center gap-2">
                 {selectedBdnRows.size > 0 && (
-                  <button className="h-10 px-3 py-2.5 rounded-lg bg-[#9e2028] text-sm font-normal text-white hover:bg-[#82181a] transition-colors">
+                  <button onClick={() => { setBdnRows(prev => prev.filter(r => !selectedBdnRows.has(r.id))); setSelectedBdnRows(new Set()); markDirty(); }} className="h-10 px-3 py-2.5 rounded-lg bg-[#9e2028] text-sm font-normal text-white hover:bg-[#82181a] transition-colors">
                     Delete Selected ({selectedBdnRows.size})
                   </button>
                 )}
@@ -783,137 +879,58 @@ export default function ShipDetailPage({
                   </tr>
                 </thead>
                 <tbody>
-                  {/* Row 1 - Newly added (unsaved) */}
-                  <tr className="border-b border-[#e5e7eb] bg-[#f8fbff]">
-                    <td className="py-2 pl-0">
-                      <div className="flex items-center">
-                        <div className="w-[3px] h-8 bg-[#4780cf] rounded-full shrink-0" />
-                        <div className="pl-[13px]">
-                          <Checkbox checked={selectedBdnRows.has("row1")} onCheckedChange={(checked) => { const next = new Set(selectedBdnRows); checked ? next.add("row1") : next.delete("row1"); setSelectedBdnRows(next); }} />
+                  {bdnRows.map((row, idx) => (
+                    <tr key={row.id} className={`${idx < bdnRows.length - 1 ? "border-b border-[#e5e7eb]" : ""} ${row.isNew ? "bg-[#f8fbff]" : ""}`}>
+                      <td className={`py-2 ${row.isNew ? "pl-0" : "pl-4"}`}>
+                        {row.isNew ? (
+                          <div className="flex items-center">
+                            <div className="w-[3px] h-8 bg-[#4780cf] rounded-full shrink-0" />
+                            <div className="pl-[13px]">
+                              <Checkbox checked={selectedBdnRows.has(row.id)} onCheckedChange={(checked) => { const next = new Set(selectedBdnRows); checked ? next.add(row.id) : next.delete(row.id); setSelectedBdnRows(next); }} />
+                            </div>
+                          </div>
+                        ) : (
+                          <Checkbox checked={selectedBdnRows.has(row.id)} onCheckedChange={(checked) => { const next = new Set(selectedBdnRows); checked ? next.add(row.id) : next.delete(row.id); setSelectedBdnRows(next); }} />
+                        )}
+                      </td>
+                      <td className="py-2 px-2">
+                        <Input defaultValue={row.bdnId} className="h-10 rounded-lg" />
+                      </td>
+                      <td className="py-2 px-2">
+                        <div className="relative">
+                          <Input defaultValue={row.deliveryDate} className="h-10 rounded-lg pr-10" />
+                          <Calendar className="absolute right-3 top-1/2 -translate-y-1/2 w-5 h-5 text-muted-foreground pointer-events-none" />
                         </div>
-                      </div>
-                    </td>
-                    <td className="py-2 px-2">
-                      <Input defaultValue="1928376" className="h-10 rounded-lg" />
-                    </td>
-                    <td className="py-2 px-2">
-                      <div className="relative">
-                        <Input defaultValue="2025-05-11" className="h-10 rounded-lg pr-10" />
-                        <Calendar className="absolute right-3 top-1/2 -translate-y-1/2 w-5 h-5 text-muted-foreground pointer-events-none" />
-                      </div>
-                    </td>
-                    <td className="py-2 px-2">
-                      <div className="relative">
-                        <select className="w-full h-10 pl-4 pr-10 rounded-lg border border-border bg-white text-sm appearance-none focus:outline-none focus:ring-2 focus:ring-primary">
-                          <option>Diesel</option>
-                          <option>LNG</option>
-                          <option>HFO</option>
-                        </select>
-                        <ChevronDown className="absolute right-3 top-1/2 -translate-y-1/2 w-5 h-5 text-muted-foreground pointer-events-none" />
-                      </div>
-                    </td>
-                    <td className="py-2 px-2">
-                      <Input defaultValue="8.9" className="h-10 rounded-lg text-right" />
-                    </td>
-                    <td className="py-2 px-2">
-                      <Input defaultValue="8.9" className="h-10 rounded-lg text-right" />
-                    </td>
-                    <td className="py-2 px-2">
-                      <Input defaultValue="8.9" className="h-10 rounded-lg text-right" />
-                    </td>
-                    <td className="py-2 px-2">
-                      <Input defaultValue="Rotterdam" className="h-10 rounded-lg" />
-                    </td>
-                    <td className="py-2 pl-2 pr-4">
-                      <button className="text-muted-foreground hover:text-destructive transition-colors">
-                        <Trash className="w-5 h-5" />
-                      </button>
-                    </td>
-                  </tr>
-                  {/* Row 2 - Selected */}
-                  <tr className="border-b border-[#e5e7eb]">
-                    <td className="py-2 pl-4">
-                      <Checkbox checked={selectedBdnRows.has("row2")} onCheckedChange={(checked) => { const next = new Set(selectedBdnRows); checked ? next.add("row2") : next.delete("row2"); setSelectedBdnRows(next); }} />
-                    </td>
-                    <td className="py-2 px-2">
-                      <Input defaultValue="5638291" className="h-10 rounded-lg" />
-                    </td>
-                    <td className="py-2 px-2">
-                      <div className="relative">
-                        <Input defaultValue="2025-05-11" className="h-10 rounded-lg pr-10" />
-                        <Calendar className="absolute right-3 top-1/2 -translate-y-1/2 w-5 h-5 text-muted-foreground pointer-events-none" />
-                      </div>
-                    </td>
-                    <td className="py-2 px-2">
-                      <div className="relative">
-                        <select className="w-full h-10 pl-4 pr-10 rounded-lg border border-border bg-white text-sm appearance-none focus:outline-none focus:ring-2 focus:ring-primary">
-                          <option>Diesel</option>
-                          <option>LNG</option>
-                          <option>HFO</option>
-                        </select>
-                        <ChevronDown className="absolute right-3 top-1/2 -translate-y-1/2 w-5 h-5 text-muted-foreground pointer-events-none" />
-                      </div>
-                    </td>
-                    <td className="py-2 px-2">
-                      <Input defaultValue="8.9" className="h-10 rounded-lg text-right" />
-                    </td>
-                    <td className="py-2 px-2">
-                      <Input defaultValue="8.9" className="h-10 rounded-lg text-right" />
-                    </td>
-                    <td className="py-2 px-2">
-                      <Input defaultValue="8.9" className="h-10 rounded-lg text-right" />
-                    </td>
-                    <td className="py-2 px-2">
-                      <Input defaultValue="Rotterdam" className="h-10 rounded-lg" />
-                    </td>
-                    <td className="py-2 pl-2 pr-4">
-                      <button className="text-muted-foreground hover:text-destructive transition-colors">
-                        <Trash className="w-5 h-5" />
-                      </button>
-                    </td>
-                  </tr>
-                  {/* Row 3 - Selected */}
-                  <tr>
-                    <td className="py-2 pl-4">
-                      <Checkbox checked={selectedBdnRows.has("row3")} onCheckedChange={(checked) => { const next = new Set(selectedBdnRows); checked ? next.add("row3") : next.delete("row3"); setSelectedBdnRows(next); }} />
-                    </td>
-                    <td className="py-2 px-2">
-                      <Input defaultValue="8472639" className="h-10 rounded-lg" />
-                    </td>
-                    <td className="py-2 px-2">
-                      <div className="relative">
-                        <Input defaultValue="2025-05-11" className="h-10 rounded-lg pr-10" />
-                        <Calendar className="absolute right-3 top-1/2 -translate-y-1/2 w-5 h-5 text-muted-foreground pointer-events-none" />
-                      </div>
-                    </td>
-                    <td className="py-2 px-2">
-                      <div className="relative">
-                        <select className="w-full h-10 pl-4 pr-10 rounded-lg border border-border bg-white text-sm appearance-none focus:outline-none focus:ring-2 focus:ring-primary">
-                          <option>Diesel</option>
-                          <option>LNG</option>
-                          <option>HFO</option>
-                        </select>
-                        <ChevronDown className="absolute right-3 top-1/2 -translate-y-1/2 w-5 h-5 text-muted-foreground pointer-events-none" />
-                      </div>
-                    </td>
-                    <td className="py-2 px-2">
-                      <Input defaultValue="8.9" className="h-10 rounded-lg text-right" />
-                    </td>
-                    <td className="py-2 px-2">
-                      <Input defaultValue="8.9" className="h-10 rounded-lg text-right" />
-                    </td>
-                    <td className="py-2 px-2">
-                      <Input defaultValue="8.9" className="h-10 rounded-lg text-right" />
-                    </td>
-                    <td className="py-2 px-2">
-                      <Input defaultValue="Rotterdam" className="h-10 rounded-lg" />
-                    </td>
-                    <td className="py-2 pl-2 pr-4">
-                      <button className="text-muted-foreground hover:text-destructive transition-colors">
-                        <Trash className="w-5 h-5" />
-                      </button>
-                    </td>
-                  </tr>
+                      </td>
+                      <td className="py-2 px-2">
+                        <div className="relative">
+                          <select defaultValue={row.fuelType} className="w-full h-10 pl-4 pr-10 rounded-lg border border-border bg-white text-sm appearance-none focus:outline-none focus:ring-2 focus:ring-primary">
+                            <option>Diesel</option>
+                            <option>LNG</option>
+                            <option>HFO</option>
+                          </select>
+                          <ChevronDown className="absolute right-3 top-1/2 -translate-y-1/2 w-5 h-5 text-muted-foreground pointer-events-none" />
+                        </div>
+                      </td>
+                      <td className="py-2 px-2">
+                        <Input defaultValue={row.fuelWtt} className="h-10 rounded-lg text-right" />
+                      </td>
+                      <td className="py-2 px-2">
+                        <Input defaultValue={row.mass} className="h-10 rounded-lg text-right" />
+                      </td>
+                      <td className="py-2 px-2">
+                        <Input defaultValue={row.sulphur} className="h-10 rounded-lg text-right" />
+                      </td>
+                      <td className="py-2 px-2">
+                        <Input defaultValue={row.bunkerPort} className="h-10 rounded-lg" />
+                      </td>
+                      <td className="py-2 pl-2 pr-4">
+                        <button onClick={() => { setBdnRows(prev => prev.filter(r => r.id !== row.id)); setSelectedBdnRows(prev => { const next = new Set(prev); next.delete(row.id); return next; }); markDirty(); }} className="text-muted-foreground hover:text-destructive transition-colors">
+                          <Trash className="w-5 h-5" />
+                        </button>
+                      </td>
+                    </tr>
+                  ))}
                 </tbody>
               </table>
             </div>
@@ -1106,7 +1123,7 @@ export default function ShipDetailPage({
                 {/* Toggle switches row */}
                 <div className="grid grid-cols-2 gap-4">
                   <button
-                    onClick={() => setUrnNoiceNotation(!urnNoiceNotation)}
+                    onClick={() => { setUrnNoiceNotation(!urnNoiceNotation); markDirty(); }}
                     className={cn(
                       "h-10 rounded-lg flex items-center justify-between pl-4 pr-3.5 text-sm text-foreground text-left transition-colors",
                       urnNoiceNotation ? "bg-[#ebf3ff]" : "bg-[#f9fafb]"
@@ -1118,7 +1135,7 @@ export default function ShipDetailPage({
                     </div>
                   </button>
                   <button
-                    onClick={() => setUrnVsr(!urnVsr)}
+                    onClick={() => { setUrnVsr(!urnVsr); markDirty(); }}
                     className={cn(
                       "h-10 rounded-lg flex items-center justify-between pl-4 pr-3.5 text-sm text-foreground text-left transition-colors",
                       urnVsr ? "bg-[#ebf3ff]" : "bg-[#f9fafb]"
@@ -1167,6 +1184,7 @@ export default function ShipDetailPage({
                         const next = new Set(checkedVsrLocations);
                         isChecked ? next.delete(loc.id) : next.add(loc.id);
                         setCheckedVsrLocations(next);
+                        markDirty();
                       };
                       return (
                         <div
@@ -1216,6 +1234,7 @@ export default function ShipDetailPage({
                     const next = new Set(checkedUrnTechs);
                     isChecked ? next.delete(tech.id) : next.add(tech.id);
                     setCheckedUrnTechs(next);
+                    markDirty();
                   };
                   return (
                     <div
@@ -1292,6 +1311,20 @@ export default function ShipDetailPage({
           </div>
         </div>
       )}
+
+      {/* Floating Save Bar */}
+      <UnsavedChangesBar
+        hasChanges={hasUnsavedChanges}
+        onSave={handleSave}
+        onDiscard={handleDiscard}
+      />
+
+      {/* Leave Page Confirmation */}
+      <LeavePageDialog
+        open={leaveDialogOpen}
+        onStay={handleStay}
+        onLeave={handleLeave}
+      />
     </div>
   );
 }
