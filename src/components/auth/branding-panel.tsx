@@ -15,11 +15,10 @@ export function BrandingPanel() {
       {/* Logo */}
       <div className="relative z-10 flex flex-col justify-center h-[70px] px-6 w-full mt-4">
         <Image
-          src="/oceanscore-logo.svg"
-          alt="OceanScore"
-          width={165}
-          height={25}
-          className="brightness-0 invert"
+          src="/esi-os-logo.svg"
+          alt="ESI by OceanScore"
+          width={280}
+          height={40}
         />
       </div>
 
@@ -35,6 +34,16 @@ export function BrandingPanel() {
             Manage your fleet&apos;s ESI &amp; EPI scores, BDNs, EDNs, and Tier III hours — all in one place.
           </p>
         </div>
+      </div>
+
+      {/* Partner logos */}
+      <div className="relative z-10 px-6 pb-3 w-full">
+        <Image
+          src="/partners-logo.svg"
+          alt="IAPH & WPSP"
+          width={180}
+          height={50}
+        />
       </div>
 
       {/* Copyright */}

@@ -201,7 +201,7 @@ export default function ShipDetailPage({
               <div className="flex-1">
                 <div className="flex items-center gap-2">
                   <span className="text-sm text-muted-foreground">
-                    Current ESI Score
+                    Environmental Ship Index
                   </span>
                   <span className="inline-flex items-center px-2 py-1 rounded-[36px] text-[11px] font-medium leading-[1.45] bg-status-active-bg text-status-active border border-status-active-border">
                     Enrolled
@@ -255,7 +255,7 @@ export default function ShipDetailPage({
               <div className="flex-1">
                 <div className="flex items-center gap-2">
                   <span className="text-sm text-muted-foreground">
-                    Current EPI Score
+                    Environmental Port Index
                   </span>
                   <span className="inline-flex items-center px-2 py-1 rounded-[36px] text-[11px] font-medium leading-[1.45] bg-status-active-bg text-status-active border border-status-active-border">
                     Enrolled
