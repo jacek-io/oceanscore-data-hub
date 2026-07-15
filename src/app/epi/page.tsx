@@ -2,6 +2,7 @@
 
 import { useState } from "react";
 import Link from "next/link";
+import { useRouter } from "next/navigation";
 import {
   Database,
   Search,
@@ -70,6 +71,7 @@ function ScorePill({ score }: { score: number }) {
 type SortKey = "ship" | "status" | "port" | "arrival" | "departure" | "hours" | "epiScore" | "vsBaseline";
 
 export default function EpiPortCallsPage() {
+  const router = useRouter();
   const [search, setSearch] = useState("");
   const [portFilter, setPortFilter] = useState("all");
   const [statusFilter, setStatusFilter] = useState("all");
@@ -363,7 +365,8 @@ export default function EpiPortCallsPage() {
             {filtered.map((pc) => (
               <tr
                 key={pc.id}
-                className="border-b border-[#f0f1f3] last:border-b-0 hover:bg-[#fafbfc] transition-colors"
+                onClick={() => router.push(`/epi/ships/${pc.id}`)}
+                className="border-b border-[#f0f1f3] last:border-b-0 hover:bg-[#fafbfc] transition-colors cursor-pointer"
               >
                 <td className="px-4 py-3.5">
                   <p className="text-sm font-normal text-foreground">{pc.ship}</p>
