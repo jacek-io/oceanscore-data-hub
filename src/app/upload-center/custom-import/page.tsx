@@ -11,7 +11,6 @@ import {
   Ship,
   Fan,
   Check,
-  ChevronRight,
   ChevronDown,
   ArrowUpDown,
   ArrowRight,
@@ -303,6 +302,8 @@ function StepUploadFile({
   onFileUploaded: (filename: string | null) => void;
 }) {
   const [uploaded, setUploaded] = useState(false);
+  const [headerRow, setHeaderRow] = useState(1);
+  const [headerRowInput, setHeaderRowInput] = useState("1");
 
   const handleMockUpload = () => {
     setUploaded(true);
@@ -359,6 +360,40 @@ function StepUploadFile({
             >
               <Trash2 className="w-4 h-4 text-muted-foreground" />
             </button>
+          </div>
+
+          {/* Header row selector */}
+          <div className="flex items-center gap-3">
+            <label className="text-sm text-muted-foreground whitespace-nowrap">
+              Header is in row:
+            </label>
+            <input
+              type="number"
+              min={1}
+              value={headerRowInput}
+              onChange={(e) => setHeaderRowInput(e.target.value)}
+              onKeyDown={(e) => {
+                if (e.key === "Enter") {
+                  const val = parseInt(headerRowInput, 10);
+                  if (val >= 1) setHeaderRow(val);
+                }
+              }}
+              className="w-[72px] h-10 px-3 rounded-lg border border-border bg-white text-sm text-foreground text-center focus:outline-none focus:ring-2 focus:ring-primary"
+            />
+            <button
+              onClick={() => {
+                const val = parseInt(headerRowInput, 10);
+                if (val >= 1) setHeaderRow(val);
+              }}
+              className="inline-flex items-center justify-center h-10 px-3 py-2.5 rounded-lg border border-border bg-white text-sm font-normal text-foreground hover:bg-[#ebf3ff] hover:border-[#cce1ff] active:bg-[#cce1ff] active:border-[#afd0ff] transition-colors"
+            >
+              Use this row
+            </button>
+            {headerRow > 1 && (
+              <span className="text-[12px] text-muted-foreground">
+                Skipping {headerRow - 1} row{headerRow > 2 ? "s" : ""} before header
+              </span>
+            )}
           </div>
 
           {/* Preview table */}
@@ -419,61 +454,72 @@ function StepUploadFile({
   );
 }
 
-interface ColumnMapping {
-  sourceColumn: string;
-  example: string;
-  targetField: string;
-  autoMatched: boolean;
+interface OceanScoreField {
+  key: string;
+  label: string;
+  required: boolean;
 }
 
-const oceanScoreFields = [
-  "- don't import -",
-  "imo *",
-  "bdn_number *",
-  "delivery_date *",
-  "bunker_port *",
-  "fuel_type*",
-  "sulphur_content_pct*",
-  "mass",
-  "lower_heating_value",
-  "higher_heating_value",
-  "source_system",
-  "last_updated",
-  "used_by_bdn",
-  "coming_from_bdn",
-  "delivery_time",
-  "fuel_pathway_code",
-  "sustainability",
-  "eu_ghg_intensity",
-  "imo_ghg_intensity",
-  "eu_lower_calorific_value",
-  "fll_energy_share",
+const oceanScoreFieldList: OceanScoreField[] = [
+  { key: "imo", label: "IMO", required: true },
+  { key: "bdn_number", label: "BDN number", required: true },
+  { key: "delivery_date", label: "Delivery date", required: true },
+  { key: "bunker_port", label: "Bunker port", required: true },
+  { key: "fuel_type", label: "Fuel type", required: true },
+  { key: "sulphur_content_pct", label: "Sulphur content (%)", required: true },
+  { key: "mass", label: "Mass", required: true },
+  { key: "lower_heating_value", label: "Lower heating value", required: false },
+  { key: "higher_heating_value", label: "Higher heating value", required: false },
+  { key: "source_system", label: "Source system", required: false },
+  { key: "last_updated", label: "Last updated", required: false },
+  { key: "used_by_bdn", label: "Used by BDN", required: false },
+  { key: "coming_from_bdn", label: "Coming from BDN", required: false },
+  { key: "delivery_time", label: "Delivery time", required: false },
+  { key: "fuel_pathway_code", label: "Fuel pathway code", required: false },
+  { key: "sustainability", label: "Sustainability", required: false },
+  { key: "eu_ghg_intensity", label: "EU GHG intensity", required: false },
+  { key: "imo_ghg_intensity", label: "IMO GHG intensity", required: false },
+  { key: "eu_lower_calorific_value", label: "EU lower calorific value", required: false },
+  { key: "fll_energy_share", label: "FLL energy share", required: false },
 ];
 
-const initialMappings: ColumnMapping[] = [
-  { sourceColumn: "Source System", example: "Veson IMOS", targetField: "- don't import -", autoMatched: false },
-  { sourceColumn: "Last Updated", example: "2026-06-12", targetField: "- don't import -", autoMatched: false },
-  { sourceColumn: "IMO", example: "9412345", targetField: "imo *", autoMatched: true },
-  { sourceColumn: "BDN Number", example: "BDN-2026-0141", targetField: "bdn_number *", autoMatched: true },
-  { sourceColumn: "Used By BDN", example: "-", targetField: "- don't import -", autoMatched: false },
-  { sourceColumn: "Coming From BDN", example: "-", targetField: "- don't import -", autoMatched: false },
-  { sourceColumn: "Bunker Delivery Date", example: "2026-03-14", targetField: "delivery_date *", autoMatched: true },
-  { sourceColumn: "Bunker Delivery Time", example: "14:20", targetField: "- don't import -", autoMatched: false },
-  { sourceColumn: "Bunker Port", example: "Rotterdam", targetField: "bunker_port *", autoMatched: true },
-  { sourceColumn: "Fuel Type", example: "HFO", targetField: "fuel_type*", autoMatched: true },
-  { sourceColumn: "IMO Fuel Pathway Code", example: "FP-01", targetField: "- don't import -", autoMatched: false },
-  { sourceColumn: "Sustainability", example: "-", targetField: "- don't import -", autoMatched: false },
-  { sourceColumn: "Mass", example: "842.5", targetField: "- don't import -", autoMatched: false },
-  { sourceColumn: "Lower Heating Value", example: "40.2", targetField: "sulphur_content_pct*", autoMatched: true },
-  { sourceColumn: "Higher Heating Value", example: "42.7", targetField: "- don't import -", autoMatched: false },
-  { sourceColumn: "EU GHG Intensity", example: "91.4", targetField: "- don't import -", autoMatched: false },
-  { sourceColumn: "IMO GHG Intensity", example: "93.3", targetField: "- don't import -", autoMatched: false },
-  { sourceColumn: "EU Lower Calorific Value", example: "0.0405", targetField: "- don't import -", autoMatched: false },
-  { sourceColumn: "FLL Energy Share", example: "0", targetField: "- don't import -", autoMatched: false },
-  { sourceColumn: "Sulphur Content", example: "0.48", targetField: "- don't import -", autoMatched: false },
+interface SourceColumn {
+  name: string;
+  example: string;
+}
+
+const sourceColumns: SourceColumn[] = [
+  { name: "Source System", example: "Veson IMOS" },
+  { name: "Last Updated", example: "2026-06-12" },
+  { name: "IMO", example: "9412345" },
+  { name: "BDN Number", example: "BDN-2026-0141" },
+  { name: "Used By BDN", example: "-" },
+  { name: "Coming From BDN", example: "-" },
+  { name: "Bunker Delivery Date", example: "2026-03-14" },
+  { name: "Bunker Delivery Time", example: "14:20" },
+  { name: "Bunker Port", example: "Rotterdam" },
+  { name: "Fuel Type", example: "HFO" },
+  { name: "IMO Fuel Pathway Code", example: "FP-01" },
+  { name: "Sustainability", example: "-" },
+  { name: "Mass", example: "842.5" },
+  { name: "Lower Heating Value", example: "40.2" },
+  { name: "Higher Heating Value", example: "42.7" },
+  { name: "EU GHG Intensity", example: "91.4" },
+  { name: "IMO GHG Intensity", example: "93.3" },
+  { name: "EU Lower Calorific Value", example: "0.0405" },
+  { name: "FLL Energy Share", example: "0" },
+  { name: "Sulphur Content", example: "0.48" },
 ];
 
-const requiredFields = ["imo *", "bdn_number *", "delivery_date *", "bunker_port *", "fuel_type*", "sulphur_content_pct*", "mass"];
+const autoMatchMap: Record<string, string> = {
+  imo: "IMO",
+  bdn_number: "BDN Number",
+  delivery_date: "Bunker Delivery Date",
+  bunker_port: "Bunker Port",
+  fuel_type: "Fuel Type",
+  sulphur_content_pct: "Sulphur Content",
+  mass: "Mass",
+};
 
 function StepMapColumns({
   onBack,
@@ -482,26 +528,179 @@ function StepMapColumns({
   onBack: () => void;
   onContinue: () => void;
 }) {
-  const [mappings, setMappings] = useState<ColumnMapping[]>(initialMappings);
+  const [mappings, setMappings] = useState<Record<string, string>>(() => {
+    const init: Record<string, string> = {};
+    for (const field of oceanScoreFieldList) {
+      init[field.key] = autoMatchMap[field.key] || "";
+    }
+    return init;
+  });
 
-  const mappedRequired = requiredFields.filter((rf) =>
-    mappings.some((m) => m.targetField === rf)
-  );
-  const missingRequired = requiredFields.filter(
-    (rf) => !mappings.some((m) => m.targetField === rf)
-  );
+  const [autoMatched] = useState<Set<string>>(() => new Set(Object.keys(autoMatchMap)));
+  const [fixedValues, setFixedValues] = useState<Record<string, string>>({});
+  const [fixedMode, setFixedMode] = useState<Set<string>>(new Set());
+
+  const requiredFields = oceanScoreFieldList.filter((f) => f.required);
+  const optionalFields = oceanScoreFieldList.filter((f) => !f.required);
+  const isMappedOrFixed = (key: string) => mappings[key] !== "" || (fixedMode.has(key) && fixedValues[key]?.trim() !== "");
+  const mappedRequired = requiredFields.filter((f) => isMappedOrFixed(f.key));
+  const missingRequired = requiredFields.filter((f) => !isMappedOrFixed(f.key));
   const allRequiredMapped = missingRequired.length === 0;
 
-  const handleFieldChange = (index: number, value: string) => {
-    setMappings((prev) =>
-      prev.map((m, i) =>
-        i === index ? { ...m, targetField: value, autoMatched: false } : m
-      )
-    );
+  const usedSourceColumns = new Set(Object.values(mappings).filter(Boolean));
+
+  const handleChange = (fieldKey: string, sourceCol: string) => {
+    setMappings((prev) => ({ ...prev, [fieldKey]: sourceCol }));
   };
 
-  const totalSegments = requiredFields.length;
-  const mappedCount = mappedRequired.length;
+  const getSourceExample = (sourceName: string) => {
+    return sourceColumns.find((s) => s.name === sourceName)?.example || "";
+  };
+
+  const enableFixedMode = (fieldKey: string) => {
+    setFixedMode((prev) => new Set(prev).add(fieldKey));
+    setMappings((prev) => ({ ...prev, [fieldKey]: "" }));
+  };
+
+  const disableFixedMode = (fieldKey: string) => {
+    setFixedMode((prev) => {
+      const next = new Set(prev);
+      next.delete(fieldKey);
+      return next;
+    });
+    setFixedValues((prev) => ({ ...prev, [fieldKey]: "" }));
+  };
+
+  const renderRow = (field: OceanScoreField) => {
+    const isFixed = fixedMode.has(field.key);
+    const fixedVal = fixedValues[field.key] || "";
+    const isMapped = isFixed ? fixedVal.trim() !== "" : mappings[field.key] !== "";
+    const isAutoMatched = !isFixed && isMapped && autoMatched.has(field.key);
+    const isMissingRequired = field.required && !isMapped;
+
+    return (
+      <div key={field.key} className="flex flex-col gap-2">
+        <div className="grid grid-cols-[1fr_32px_1fr] items-center">
+          {/* OceanScore field (left) */}
+          <div
+            className={cn(
+              "flex items-center gap-3 px-4 py-3 rounded-lg border",
+              isMapped
+                ? "bg-[#f0faf0] border-[#d0e5c3]"
+                : isMissingRequired
+                ? "bg-[#fef2f2] border-[#fecaca]"
+                : "bg-[#f9fafb] border-border"
+            )}
+          >
+            <span
+              className={cn(
+                "inline-flex items-center px-2 py-0.5 rounded text-[12px] font-medium",
+                isMapped
+                  ? "bg-[#e3f0db] text-[#3d6b24]"
+                  : "bg-[#e5e7eb] text-foreground"
+              )}
+            >
+              {field.label}
+              {field.required && " *"}
+            </span>
+            {isMapped && !isFixed && (
+              <span className="text-[12px] text-muted-foreground">
+                e.g. {getSourceExample(mappings[field.key])}
+              </span>
+            )}
+            {isFixed && fixedVal.trim() && (
+              <span className="text-[12px] text-muted-foreground">
+                = {fixedVal} for all rows
+              </span>
+            )}
+          </div>
+
+          {/* Arrow */}
+          <div className="flex items-center justify-center">
+            <ArrowLeft className="w-4 h-4 text-muted-foreground" />
+          </div>
+
+          {/* Source column dropdown or fixed value input (right) */}
+          <div className="flex items-center gap-2">
+            {isFixed ? (
+              <div className="relative flex-1 flex items-center gap-2">
+                <input
+                  type="text"
+                  value={fixedVal}
+                  onChange={(e) => setFixedValues((prev) => ({ ...prev, [field.key]: e.target.value }))}
+                  placeholder={`Enter ${field.label} number`}
+                  className={cn(
+                    "w-full h-10 pl-4 pr-10 rounded-lg border text-sm focus:outline-none focus:ring-2 focus:ring-primary",
+                    fixedVal.trim()
+                      ? "bg-[#ebf3ff] border-[#AFD0FF] text-[#1157b2] font-medium"
+                      : "bg-white border-[#fecaca]"
+                  )}
+                />
+                <button
+                  onClick={() => disableFixedMode(field.key)}
+                  className="absolute right-3 top-1/2 -translate-y-1/2 text-muted-foreground hover:text-foreground"
+                >
+                  <Trash2 className="w-3.5 h-3.5" />
+                </button>
+              </div>
+            ) : (
+              <div className="relative flex-1">
+                <select
+                  value={mappings[field.key]}
+                  onChange={(e) => handleChange(field.key, e.target.value)}
+                  className={cn(
+                    "w-full h-10 pl-4 pr-10 rounded-lg border text-sm appearance-none focus:outline-none focus:ring-2 focus:ring-primary",
+                    isMapped
+                      ? "bg-[#ebf3ff] border-[#AFD0FF] text-[#1157b2] font-medium"
+                      : isMissingRequired
+                      ? "bg-white border-[#fecaca] text-muted-foreground"
+                      : "bg-white border-border text-muted-foreground"
+                  )}
+                >
+                  <option value="">- not mapped -</option>
+                  {sourceColumns.map((sc) => (
+                    <option
+                      key={sc.name}
+                      value={sc.name}
+                      disabled={usedSourceColumns.has(sc.name) && mappings[field.key] !== sc.name}
+                    >
+                      {sc.name}
+                    </option>
+                  ))}
+                </select>
+                <ChevronDown className="absolute right-3 top-1/2 -translate-y-1/2 w-4 h-4 text-muted-foreground pointer-events-none" />
+              </div>
+            )}
+            {isAutoMatched ? (
+              <span className="inline-flex items-center px-2 py-1 rounded-full text-[11px] font-medium text-[#3d6b24] bg-[#e3f0db] border border-[#d0e5c3] whitespace-nowrap shrink-0">
+                Auto-matched
+              </span>
+            ) : isFixed && fixedVal.trim() ? (
+              <span className="inline-flex items-center px-2 py-1 rounded-full text-[11px] font-medium text-[#1157b2] bg-[#ebf3ff] border border-[#cce1ff] whitespace-nowrap shrink-0">
+                Fixed value
+              </span>
+            ) : (
+              <div className="w-[97px] shrink-0" />
+            )}
+          </div>
+        </div>
+
+        {/* Fixed value hint — show when IMO is unmapped and not in fixed mode */}
+        {field.key === "imo" && !isMapped && !isFixed && (
+          <div className="grid grid-cols-[1fr_32px_1fr] items-center">
+            <div />
+            <div />
+            <button
+              onClick={() => enableFixedMode("imo")}
+              className="text-[12px] text-[#1157b2] hover:text-[#0c3c7a] text-left transition-colors"
+            >
+              No IMO column? Apply a single value to all rows →
+            </button>
+          </div>
+        )}
+      </div>
+    );
+  };
 
   return (
     <div className="bg-white rounded-[16px] p-4 flex flex-col gap-8">
@@ -511,8 +710,8 @@ function StepMapColumns({
           Map your columns
         </h2>
         <p className="text-sm text-muted-foreground tracking-[-0.14px]">
-          Match each column from your file to an OceanScore field, or leave it
-          unmapped. We&apos;ve pre-matched the ones we recognized.
+          For each OceanScore field, pick the matching column from your file.
+          We&apos;ve pre-matched the ones we recognized.
         </p>
       </div>
 
@@ -520,14 +719,14 @@ function StepMapColumns({
       <div className="bg-[#f9fafb] rounded-lg p-4 flex flex-col gap-3">
         <div className="flex items-center justify-between">
           <p className="text-sm text-foreground">
-            <span className="font-medium">{mappedCount} of {totalSegments}</span>{" "}
+            <span className="font-medium">{mappedRequired.length} of {requiredFields.length}</span>{" "}
             <span className="text-muted-foreground">required fields mapped</span>
           </p>
           {missingRequired.length > 0 && (
             <p className="text-sm text-muted-foreground">
               Still missing:{" "}
               <span className="font-medium text-foreground">
-                {missingRequired.map((f) => f.replace(" *", "").replace("*", "")).join(", ")}
+                {missingRequired.map((f) => f.label).join(", ")}
               </span>
             </p>
           )}
@@ -535,106 +734,40 @@ function StepMapColumns({
         <div className="flex gap-2">
           {requiredFields.map((rf) => (
             <div
-              key={rf}
+              key={rf.key}
               className={cn(
                 "flex-1 h-2 rounded-full",
-                mappedRequired.includes(rf) ? "bg-[#5C8A3E]" : "bg-[#d1d5dc]"
+                mappings[rf.key] !== "" ? "bg-[#5C8A3E]" : "bg-[#d1d5dc]"
               )}
             />
           ))}
         </div>
       </div>
 
-      {/* Column mappings */}
+      {/* Required fields */}
       <div className="flex flex-col gap-3">
-        {/* Labels */}
-        <div className="flex items-center">
-          <div className="flex-1">
-            <span className="text-[12px] text-muted-foreground">
-              Your file · {mappings.length} columns
-            </span>
-          </div>
-          <div className="w-8" />
-          <div className="flex-1 pl-4">
-            <span className="text-[12px] text-muted-foreground">
-              OceanScore fields
-            </span>
-          </div>
+        <div className="grid grid-cols-[1fr_32px_1fr] items-center">
+          <span className="text-[12px] text-muted-foreground">
+            OceanScore fields · required
+          </span>
+          <div />
+          <span className="text-[12px] text-muted-foreground">
+            Your file · {sourceColumns.length} columns
+          </span>
         </div>
+        {requiredFields.map(renderRow)}
+      </div>
 
-        {/* Mapping rows */}
-        {mappings.map((mapping, i) => {
-          const isMapped = mapping.targetField !== "- don't import -";
-          const isRequired = isMapped && mapping.targetField.includes("*");
-          const sourceKey = mapping.sourceColumn.toLowerCase().replace(/\s+/g, "_");
-          const hasMissingMatch = !isMapped && missingRequired.some(
-            (rf) => rf.replace(" *", "").replace("*", "") === sourceKey
-          );
-          return (
-            <div key={i} className="flex items-center gap-0">
-              {/* Source column */}
-              <div
-                className={cn(
-                  "flex-1 flex items-center gap-3 px-4 py-3 rounded-lg border",
-                  isMapped
-                    ? "bg-[#f0faf0] border-[#d0e5c3]"
-                    : hasMissingMatch
-                    ? "bg-[#fef2f2] border-[#fecaca]"
-                    : "bg-[#f9fafb] border-border"
-                )}
-              >
-                <span
-                  className={cn(
-                    "inline-flex items-center px-2 py-0.5 rounded text-[12px] font-medium",
-                    isMapped
-                      ? "bg-[#e3f0db] text-[#3d6b24]"
-                      : "bg-[#e5e7eb] text-foreground"
-                  )}
-                >
-                  {mapping.sourceColumn}
-                </span>
-                <span className="text-[12px] text-muted-foreground">
-                  e.g. {mapping.example}
-                </span>
-              </div>
-
-              {/* Arrow */}
-              <div className="w-8 flex items-center justify-center shrink-0">
-                <ArrowRight className="w-4 h-4 text-muted-foreground" />
-              </div>
-
-              {/* Target field dropdown */}
-              <div className="flex-1 flex items-center gap-2">
-                <div className="relative flex-1">
-                  <select
-                    value={mapping.targetField}
-                    onChange={(e) => handleFieldChange(i, e.target.value)}
-                    className={cn(
-                      "w-full h-10 pl-4 pr-10 rounded-lg border text-sm appearance-none focus:outline-none focus:ring-2 focus:ring-primary",
-                      isMapped
-                        ? "bg-[#ebf3ff] border-[#AFD0FF] text-[#1157b2] font-medium"
-                        : hasMissingMatch
-                        ? "bg-white border-[#fecaca] text-muted-foreground"
-                        : "bg-white border-border text-muted-foreground"
-                    )}
-                  >
-                    {oceanScoreFields.map((field) => (
-                      <option key={field} value={field}>
-                        {field}
-                      </option>
-                    ))}
-                  </select>
-                  <ChevronDown className="absolute right-3 top-1/2 -translate-y-1/2 w-4 h-4 text-muted-foreground pointer-events-none" />
-                </div>
-                {mapping.autoMatched && isMapped && (
-                  <span className="inline-flex items-center px-2 py-1 rounded-full text-[11px] font-medium text-[#3d6b24] bg-[#e3f0db] border border-[#d0e5c3] whitespace-nowrap">
-                    Auto-matched
-                  </span>
-                )}
-              </div>
-            </div>
-          );
-        })}
+      {/* Optional fields */}
+      <div className="flex flex-col gap-3">
+        <div className="grid grid-cols-[1fr_32px_1fr] items-center">
+          <span className="text-[12px] text-muted-foreground">
+            Optional fields
+          </span>
+          <div />
+          <div />
+        </div>
+        {optionalFields.map(renderRow)}
       </div>
 
       {/* Footer */}
@@ -1362,18 +1495,6 @@ export default function CustomImportPage() {
 
   return (
     <div className="flex flex-col min-h-screen">
-      {/* Top bar */}
-      <div className="bg-white flex items-center gap-2 p-5">
-        <CloudUpload className="w-5 h-5 text-foreground" />
-        <span className="text-sm font-normal text-foreground leading-[1.4]">
-          Upload Center
-        </span>
-        <ChevronRight className="w-3.5 h-3.5 text-muted-foreground" />
-        <span className="text-sm font-normal text-foreground leading-[1.4]">
-          Custom File Import
-        </span>
-      </div>
-
       {/* Main content */}
       <div className="flex-1 flex flex-col px-5 pb-10">
         <div className="w-[1100px] max-w-full mx-auto flex flex-col gap-6">
