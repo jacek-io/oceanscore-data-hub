@@ -32,7 +32,7 @@ export default function LoginPage() {
       <BrandingPanel />
 
       {/* Right — Login form */}
-      <div className="flex-1 lg:w-1/2 flex items-center justify-center">
+      <div className="flex-1 lg:w-1/2 flex flex-col items-center justify-center relative">
         <div className="w-[420px]">
           {/* Mobile logo */}
           <div className="lg:hidden flex justify-center mb-8">
@@ -45,7 +45,7 @@ export default function LoginPage() {
                 Welcome back
               </h1>
               <p className="text-sm text-[#697282] leading-[1.4] tracking-[-0.42px]">
-                Sign in to your Data Hub account
+                Sign in to manage your ESI account
               </p>
             </div>
 
@@ -123,6 +123,9 @@ export default function LoginPage() {
             </div>
           </div>
         </div>
+        <p className="absolute bottom-4 text-xs text-[#98a1ae] tracking-[-0.36px]">
+          OceanScore Madeira, LDA (Zona Franca da Madeira)
+        </p>
       </div>
     </div>
   );

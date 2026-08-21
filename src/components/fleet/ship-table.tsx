@@ -13,6 +13,8 @@ function SchemeBadge({ scheme }: { scheme: Scheme }) {
         "inline-flex items-center justify-center px-2 py-1 rounded-[36px] text-[11px] font-medium leading-[1.45] border",
         scheme === "ESI"
           ? "bg-status-active-bg text-status-active border-status-active-border"
+          : scheme === "URN"
+          ? "bg-urn-purple-light text-urn-purple border-urn-purple-border"
           : "bg-epi-blue-light text-epi-blue border-epi-blue-border"
       )}
     >

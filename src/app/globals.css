@@ -52,6 +52,9 @@
   --color-epi-blue: var(--epi-blue);
   --color-epi-blue-light: var(--epi-blue-light);
   --color-epi-blue-border: var(--epi-blue-border);
+  --color-urn-purple: var(--urn-purple);
+  --color-urn-purple-light: var(--urn-purple-light);
+  --color-urn-purple-border: var(--urn-purple-border);
   --color-status-active: var(--status-active);
   --color-status-active-bg: var(--status-active-bg);
   --color-status-active-border: var(--status-active-border);
@@ -103,6 +106,9 @@
   --epi-blue: #1157B2;
   --epi-blue-light: #ebf3ff;
   --epi-blue-border: #cce1ff;
+  --urn-purple: #7C3AED;
+  --urn-purple-light: #f3e8ff;
+  --urn-purple-border: #ddd6fe;
   --primary-icon: #8CBCFF;
   --status-active: #294215;
   --status-active-bg: #e3f0db;
@@ -125,5 +131,15 @@
   }
   html {
     @apply font-sans;
+  }
+}
+
+@layer utilities {
+  .scrollbar-hide {
+    -ms-overflow-style: none;
+    scrollbar-width: none;
+  }
+  .scrollbar-hide::-webkit-scrollbar {
+    display: none;
   }
 }

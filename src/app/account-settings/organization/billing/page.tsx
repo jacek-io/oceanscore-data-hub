@@ -151,7 +151,7 @@ export default function BillingPreferencesPage() {
           </div>
           <div className="grid grid-cols-3 gap-5">
             <Field label="Invoice Email" value={invoiceEmail} />
-            <Field label="PO Number" value={poNumber || "—"} />
+            <Field label="PO Number" value={poNumber || "-"} />
             <Field
               label="Copy address from corporate"
               value={copyFromCorporate ? "Yes" : "No"}

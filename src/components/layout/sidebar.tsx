@@ -17,10 +17,11 @@ import { cn } from "@/lib/utils";
 
 /* ── Navigation config ── */
 
-type SectionId = "dataHub" | "esi" | "epi";
+type SectionId = "dataHub" | "esi" | "epi" | "urn";
 
 const dataHubChildren = [
   { label: "Fleet", href: "/fleet" },
+  { label: "Port Calls", href: "/fleet/port-calls" },
   { label: "Ship Transfers", href: "/fleet/transfers" },
   { label: "Upload Center", href: "/upload-center" },
 ];
@@ -36,17 +37,25 @@ const epiChildren = [
   { label: "Knowledge", href: "/epi/knowledge" },
 ];
 
+const urnChildren = [
+  { label: "Fleet", href: "/urn" },
+  { label: "Knowledge", href: "/urn/knowledge" },
+];
+
 /* ── Route matching helpers ── */
 
 function isChildActive(href: string, pathname: string) {
   if (href === "/fleet") {
-    return pathname === "/fleet" || (pathname.startsWith("/fleet/") && !pathname.startsWith("/fleet/transfers"));
+    return pathname === "/fleet" || (pathname.startsWith("/fleet/") && !pathname.startsWith("/fleet/transfers") && !pathname.startsWith("/fleet/port-calls"));
   }
   if (href === "/esi") {
     return pathname === "/esi" || (pathname.startsWith("/esi/") && !pathname.startsWith("/esi/knowledge"));
   }
   if (href === "/epi") {
     return pathname === "/epi" && !pathname.startsWith("/epi/ships") && !pathname.startsWith("/epi/knowledge");
+  }
+  if (href === "/urn") {
+    return pathname === "/urn" || (pathname.startsWith("/urn/") && !pathname.startsWith("/urn/knowledge"));
   }
   return pathname.startsWith(href);
 }
@@ -69,6 +78,7 @@ export function Sidebar() {
   const dataHubActive = isSectionActive(["/fleet", "/upload-center"], pathname);
   const esiActive = isSectionActive(["/esi"], pathname);
   const epiActive = isSectionActive(["/epi"], pathname);
+  const urnActive = isSectionActive(["/urn"], pathname);
 
   // Auto-expand the section that owns the current route
   useEffect(() => {
@@ -77,9 +87,10 @@ export function Sidebar() {
       if (dataHubActive) next.add("dataHub");
       if (esiActive) next.add("esi");
       if (epiActive) next.add("epi");
+      if (urnActive) next.add("urn");
       return next.size !== prev.size ? next : prev;
     });
-  }, [dataHubActive, esiActive, epiActive]);
+  }, [dataHubActive, esiActive, epiActive, urnActive]);
 
   // Close account popover on outside click
   useEffect(() => {
@@ -113,17 +124,17 @@ export function Sidebar() {
       <div className="px-6 py-5">
         <Link href="/">
           <Image
-            src="/oceanscore-logo.svg"
-            alt="OceanScore"
-            width={165}
-            height={25}
+            src="/iaph-logo.svg"
+            alt="IAPH"
+            width={96}
+            height={48}
             priority
           />
         </Link>
       </div>
 
       {/* Navigation */}
-      <nav className="flex-1 overflow-y-auto px-3 space-y-1">
+      <nav className="flex-1 overflow-y-auto scrollbar-hide px-3 space-y-1">
         {/* Data Hub */}
         <NavSection
           icon={<Ship className="w-5 h-5" />}
@@ -155,13 +166,13 @@ export function Sidebar() {
 
         {/* Schemes */}
         <div className="pt-4">
-          <p className="px-3 text-[12px] font-normal uppercase tracking-wider text-sidebar-muted mb-2">
+          <p className="px-3 text-[11px] font-normal uppercase tracking-wider text-sidebar-muted/40 mb-2">
             Schemes
           </p>
 
           {/* ESI */}
           <NavSection
-            badge={{ text: "ESI", color: "bg-esi-green" }}
+            badge={{ text: "ESI", icon: "/esi-icon.svg" }}
             label={<>Environmental<br />Ship Index</>}
             href="/esi"
             isOpen={expandedSections.has("esi")}
@@ -173,7 +184,7 @@ export function Sidebar() {
 
           {/* EPI */}
           <NavSection
-            badge={{ text: "EPI", color: "bg-epi-blue" }}
+            badge={{ text: "EPI", icon: "/epi-icon.svg" }}
             label={<>Environmental<br />Port Index</>}
             href="/epi"
             isOpen={expandedSections.has("epi")}
@@ -182,12 +193,25 @@ export function Sidebar() {
             children={epiChildren}
             pathname={pathname}
           />
+
+          {/* URN */}
+          <NavSection
+            badge={{ text: "URN", icon: "/urn-icon.svg" }}
+            label={<>Underwater<br />Radiated Noise</>}
+            href="/urn"
+            isOpen={expandedSections.has("urn")}
+            isActive={urnActive}
+            onToggle={() => toggleSection("urn")}
+            children={urnChildren}
+            pathname={pathname}
+          />
         </div>
+
       </nav>
 
       {/* Bottom */}
       <div className="px-3 pb-4 space-y-0.5">
-        {/* Support — standalone link, no dot */}
+        {/* Support */}
         <Link
           href="/support"
           className={cn(
@@ -203,16 +227,13 @@ export function Sidebar() {
             <div className="w-2 h-2 rounded-full bg-primary-icon ml-auto" />
           )}
         </Link>
-
         {/* User account */}
         <div ref={accountRef} className="relative mt-3">
           <button
             onClick={() => setAccountOpen(!accountOpen)}
             className="flex items-center gap-2 w-full px-3.5 py-3 rounded-lg border border-white/10 text-white hover:bg-white/5 transition-colors"
           >
-            <div className="w-8 h-8 rounded-full bg-[#5c96e5] flex items-center justify-center text-xs text-white shrink-0">
-              JZ
-            </div>
+            <Image src="/avatar-jacek.png" alt="Jacek Zabicki" width={32} height={32} className="w-8 h-8 rounded-full object-cover shrink-0" />
             <div className="flex-1 text-left min-w-0">
               <p className="text-sm leading-tight truncate">Jacek Zabicki</p>
               <p className="text-[11px] opacity-50 leading-tight truncate">jacek.z@oceanscore.com</p>
@@ -223,9 +244,7 @@ export function Sidebar() {
             <div className="absolute bottom-0 left-full ml-3 w-[260px] bg-white rounded-2xl shadow-xl border border-[#e5e7eb] overflow-hidden z-50">
               <div className="p-2">
                 <div className="flex flex-col items-center bg-[#ebf3ff] rounded-xl px-5 pt-6 pb-5">
-                  <div className="w-[72px] h-[72px] rounded-full bg-[#5c96e5] flex items-center justify-center text-2xl font-medium text-white mb-3">
-                    JZ
-                  </div>
+                  <Image src="/avatar-jacek.png" alt="Jacek Zabicki" width={72} height={72} className="w-[72px] h-[72px] rounded-full object-cover mb-3" />
                   <p className="text-lg font-medium text-[#1e2938]">Jacek Zabicki</p>
                   <p className="text-sm text-[#697282] mt-0.5">jacek.z@oceanscore.com</p>
                 </div>
@@ -267,7 +286,7 @@ function NavSection({
   pathname,
 }: {
   icon?: React.ReactNode;
-  badge?: { text: string; color: string };
+  badge?: { text: string; icon: string };
   label: React.ReactNode;
   href: string;
   isOpen: boolean;
@@ -294,9 +313,7 @@ function NavSection({
         >
           {icon}
           {badge && (
-            <span className={cn("w-7 h-7 rounded-md flex items-center justify-center text-[10px] font-medium text-white shrink-0", badge.color)}>
-              {badge.text}
-            </span>
+            <Image src={badge.icon} alt={badge.text} width={20} height={20} className="w-5 h-5 shrink-0" />
           )}
           <span className="text-left leading-tight">{label}</span>
         </Link>

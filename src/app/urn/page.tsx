@@ -17,34 +17,33 @@ import {
 import { ships, type ShipStatus } from "@/lib/mock-data";
 import { cn } from "@/lib/utils";
 
-/* ── Mock ESI scores per ship ── */
-const esiShipData = [
-  { shipId: "1", ghg: [28, 40], sox: [32, 40], nox: [8, 10], inn: [6, 10], esiScore: 83, urnScore: 86 },
-  { shipId: "2", ghg: [35, 40], sox: [38, 40], nox: [9, 10], inn: [8, 10], esiScore: 88, urnScore: 92 },
-  { shipId: "3", ghg: [20, 40], sox: [25, 40], nox: [5, 10], inn: [4, 10], esiScore: 35, urnScore: 35 },
-  { shipId: "5", ghg: [30, 40], sox: [35, 40], nox: [7, 10], inn: [7, 10], esiScore: 72, urnScore: 78 },
-  { shipId: "6", ghg: [10, 40], sox: [12, 40], nox: [3, 10], inn: [2, 10], esiScore: 25, urnScore: 20 },
-  { shipId: "7", ghg: [15, 40], sox: [18, 40], nox: [4, 10], inn: [5, 10], esiScore: 55, urnScore: 30 },
-  { shipId: "8", ghg: [33, 40], sox: [36, 40], nox: [9, 10], inn: [9, 10], esiScore: 37, urnScore: 90 },
-  { shipId: "9", ghg: [18, 40], sox: [20, 40], nox: [6, 10], inn: [3, 10], esiScore: 62, urnScore: 40 },
-  { shipId: "10", ghg: [31, 40], sox: [34, 40], nox: [8, 10], inn: [7, 10], esiScore: 80, urnScore: 82 },
+/* ── Mock URN scores per ship ── */
+const urnShipData = [
+  { shipId: "1", urnScore: 86 },
+  { shipId: "2", urnScore: 92 },
+  { shipId: "3", urnScore: 35 },
+  { shipId: "5", urnScore: 78 },
+  { shipId: "6", urnScore: 20 },
+  { shipId: "7", urnScore: 30 },
+  { shipId: "8", urnScore: 90 },
+  { shipId: "10", urnScore: 82 },
 ];
 
-/* Only ships enrolled in ESI */
-const esiShips = ships.filter((s) => s.schemes.includes("ESI"));
-const esiData = esiShips.map((ship) => {
-  const data = esiShipData.find((d) => d.shipId === ship.id);
-  return { ...ship, ...(data ?? { ghg: [0, 40], sox: [0, 40], nox: [0, 10], inn: [0, 10], esiScore: 0, urnScore: 0 }) };
+/* Only ships enrolled in URN */
+const urnShips = ships.filter((s) => s.schemes.includes("URN"));
+const urnData = urnShips.map((ship) => {
+  const data = urnShipData.find((d) => d.shipId === ship.id);
+  return { ...ship, urnScore: data?.urnScore ?? 0 };
 });
 
-const activeCount = esiData.filter((s) => s.status === "Active").length;
-const inactiveCount = esiData.filter((s) => s.status === "Inactive").length;
-const revokedCount = esiData.filter((s) => s.status === "Revoked").length;
+const activeCount = urnData.filter((s) => s.status === "Active").length;
+const inactiveCount = urnData.filter((s) => s.status === "Inactive").length;
+const revokedCount = urnData.filter((s) => s.status === "Revoked").length;
 
 /* Score distribution: 8 axis labels, 7 bars between them */
 const chartLabels = [20, 30, 40, 50, 60, 70, 80, 90];
 /* Hardcoded bar heights (%) to match design presentation */
-const chartBarHeights = [33, 69, 11, 27, 9, 64, 92];
+const chartBarHeights = [27, 11, 9, 15, 33, 64, 92];
 
 function StatusBadge({ status }: { status: ShipStatus }) {
   return (
@@ -76,9 +75,9 @@ function ScorePill({ score, total }: { score: number; total: number }) {
   );
 }
 
-type SortKey = "name" | "status" | "ghg" | "sox" | "nox" | "inn" | "esiScore" | "urnScore";
+type SortKey = "name" | "status" | "urnScore";
 
-export default function EsiOverviewPage() {
+export default function UrnOverviewPage() {
   const [search, setSearch] = useState("");
   const [statusFilter, setStatusFilter] = useState("all");
   const [sortKey, setSortKey] = useState<SortKey>("name");
@@ -103,7 +102,7 @@ export default function EsiOverviewPage() {
     );
   };
 
-  const filtered = esiData
+  const filtered = urnData
     .filter((ship) => {
       const matchSearch =
         search === "" ||
@@ -119,16 +118,6 @@ export default function EsiOverviewPage() {
           return dir * a.name.localeCompare(b.name);
         case "status":
           return dir * a.status.localeCompare(b.status);
-        case "ghg":
-          return dir * (a.ghg[0] - b.ghg[0]);
-        case "sox":
-          return dir * (a.sox[0] - b.sox[0]);
-        case "nox":
-          return dir * (a.nox[0] - b.nox[0]);
-        case "inn":
-          return dir * (a.inn[0] - b.inn[0]);
-        case "esiScore":
-          return dir * (a.esiScore - b.esiScore);
         case "urnScore":
           return dir * (a.urnScore - b.urnScore);
         default:
@@ -142,7 +131,7 @@ export default function EsiOverviewPage() {
       <div className="flex items-start justify-between">
         <div>
           <h1 className="text-[32px] font-medium text-foreground leading-tight">
-            Environmental Ship Index
+            Underwater Radiated Noise
           </h1>
           <p className="text-sm text-muted-foreground mt-1">
             Fleet overview - read-only analytics view
@@ -169,7 +158,7 @@ export default function EsiOverviewPage() {
           </div>
           <div className="flex-1 flex items-center">
             <p className="text-[40px] font-medium text-foreground leading-none">
-              {esiData.length}
+              {urnData.length}
             </p>
           </div>
           <div className="flex flex-wrap gap-2">
@@ -185,10 +174,10 @@ export default function EsiOverviewPage() {
           </div>
         </div>
 
-        {/* ESI Score Distribution */}
+        {/* URN Score Distribution */}
         <div className="bg-white rounded-[16px] p-4 flex flex-col gap-4">
           <div className="flex items-center justify-between">
-            <p className="text-sm text-muted-foreground">ESI Score Distribution</p>
+            <p className="text-sm text-muted-foreground">URN Score Distribution</p>
             <div className="w-8 h-8 rounded-full bg-[#f3f4f6] flex items-center justify-center">
               <BarChart3 className="w-4 h-4 text-muted-foreground" />
             </div>
@@ -241,15 +230,15 @@ export default function EsiOverviewPage() {
           <div className="mt-4 space-y-0 flex-1">
             <button className="w-full flex items-center justify-between py-3 border-b border-[#f0f1f3] hover:bg-[#fafbfc] transition-colors text-left">
               <div>
-                <p className="text-sm font-medium text-foreground">Arctic Navigator</p>
-                <p className="text-sm text-muted-foreground mt-0.5">Improve Score - NOx levels above threshold</p>
+                <p className="text-sm font-medium text-foreground">Caspian Trader</p>
+                <p className="text-sm text-muted-foreground mt-0.5">Noise level critical - broadband above 188 dB re 1uPa</p>
               </div>
               <ChevronRight className="w-4 h-4 text-muted-foreground shrink-0 ml-3" />
             </button>
             <button className="w-full flex items-center justify-between py-3 hover:bg-[#fafbfc] transition-colors text-left">
               <div>
-                <p className="text-sm font-medium text-foreground">Caspian Trader</p>
-                <p className="text-sm text-muted-foreground mt-0.5">Improve Score - SOx levels above threshold</p>
+                <p className="text-sm font-medium text-foreground">Shadow</p>
+                <p className="text-sm text-muted-foreground mt-0.5">Noise level critical - low-frequency output exceeds limit</p>
               </div>
               <ChevronRight className="w-4 h-4 text-muted-foreground shrink-0 ml-3" />
             </button>
@@ -264,7 +253,7 @@ export default function EsiOverviewPage() {
           <div>
             <h2 className="text-xl font-medium text-foreground tracking-[-0.6px]">Ships</h2>
             <p className="text-sm text-muted-foreground mt-0.5">
-              Click a ship to edit its data
+              Click a ship to view its noise data
             </p>
           </div>
           <div className="flex items-center gap-3">
@@ -311,92 +300,37 @@ export default function EsiOverviewPage() {
                 Status <SortIcon col="status" />
               </th>
               <th
-                onClick={() => handleSort("ghg")}
-                className="text-left text-xs font-normal text-muted-foreground px-4 h-10 bg-[#F3F4F6] cursor-pointer select-none"
-              >
-                GHG <SortIcon col="ghg" />
-              </th>
-              <th
-                onClick={() => handleSort("sox")}
-                className="text-left text-xs font-normal text-muted-foreground px-4 h-10 bg-[#F3F4F6] cursor-pointer select-none"
-              >
-                SOX <SortIcon col="sox" />
-              </th>
-              <th
-                onClick={() => handleSort("nox")}
-                className="text-left text-xs font-normal text-muted-foreground px-4 h-10 bg-[#F3F4F6] cursor-pointer select-none"
-              >
-                NOX <SortIcon col="nox" />
-              </th>
-              <th
-                onClick={() => handleSort("inn")}
-                className="text-left text-xs font-normal text-muted-foreground px-4 h-10 bg-[#F3F4F6] cursor-pointer select-none"
-              >
-                INN <SortIcon col="inn" />
-              </th>
-              <th
-                onClick={() => handleSort("esiScore")}
-                className="text-left text-xs font-normal text-muted-foreground px-4 h-10 bg-[#F3F4F6] cursor-pointer select-none"
-              >
-                ESI Score <SortIcon col="esiScore" />
-              </th>
-              <th
                 onClick={() => handleSort("urnScore")}
                 className="text-left text-xs font-normal text-muted-foreground px-4 h-10 bg-[#F3F4F6] last:rounded-r-lg cursor-pointer select-none"
               >
-                URN <SortIcon col="urnScore" />
+                URN Score <SortIcon col="urnScore" />
               </th>
             </tr>
           </thead>
           <tbody>
-            {/* Spacer row for gap between header and grouped bg */}
+            {/* Spacer row for gap between header and body */}
             <tr>
-              <td colSpan={2} className="h-2" />
-              <td colSpan={5} className="h-2" />
-              <td className="h-2" />
+              <td colSpan={3} className="h-2" />
             </tr>
-            {filtered.map((ship, idx) => {
-              const isFirst = idx === 0;
-              const isLast = idx === filtered.length - 1;
-              return (
-                <tr
-                  key={ship.id}
-                  className="border-b border-[#f0f1f3] last:border-b-0 hover:bg-[#fafbfc] transition-colors"
-                >
-                  <td className="px-4 py-3.5">
-                    <Link href={`/esi/${ship.id}`} className="block">
-                      <p className="text-sm font-normal text-foreground">{ship.name}</p>
-                      <p className="text-xs text-muted-foreground mt-0.5">{ship.imo}</p>
-                    </Link>
-                  </td>
-                  <td className="px-4 py-3.5">
-                    <StatusBadge status={ship.status} />
-                  </td>
-                  <td className={cn("px-4 py-3.5 text-foreground bg-[#f9fafb]", isFirst && "rounded-tl-lg", isLast && "rounded-bl-lg")}>
-                    <span className="text-sm">{ship.ghg[0]}</span>
-                    <span className="text-[9px] text-muted-foreground"> /{ship.ghg[1]}</span>
-                  </td>
-                  <td className="px-4 py-3.5 text-foreground bg-[#f9fafb]">
-                    <span className="text-sm">{ship.sox[0]}</span>
-                    <span className="text-[9px] text-muted-foreground"> /{ship.sox[1]}</span>
-                  </td>
-                  <td className="px-4 py-3.5 text-foreground bg-[#f9fafb]">
-                    <span className="text-sm">{ship.nox[0]}</span>
-                    <span className="text-[9px] text-muted-foreground"> /{ship.nox[1]}</span>
-                  </td>
-                  <td className="px-4 py-3.5 text-foreground bg-[#f9fafb]">
-                    <span className="text-sm">{ship.inn[0]}</span>
-                    <span className="text-[9px] text-muted-foreground"> /{ship.inn[1]}</span>
-                  </td>
-                  <td className={cn("px-4 py-3.5 bg-[#f9fafb]", isFirst && "rounded-tr-lg", isLast && "rounded-br-lg")}>
-                    <ScorePill score={ship.esiScore} total={100} />
-                  </td>
-                  <td className="px-4 py-3.5">
-                    <ScorePill score={ship.urnScore} total={100} />
-                  </td>
-                </tr>
-              );
-            })}
+            {filtered.map((ship) => (
+              <tr
+                key={ship.id}
+                className="border-b border-[#f0f1f3] last:border-b-0 hover:bg-[#fafbfc] transition-colors"
+              >
+                <td className="px-4 py-3.5">
+                  <Link href={`/urn/${ship.id}`} className="block">
+                    <p className="text-sm font-normal text-foreground">{ship.name}</p>
+                    <p className="text-xs text-muted-foreground mt-0.5">{ship.imo}</p>
+                  </Link>
+                </td>
+                <td className="px-4 py-3.5">
+                  <StatusBadge status={ship.status} />
+                </td>
+                <td className="px-4 py-3.5">
+                  <ScorePill score={ship.urnScore} total={100} />
+                </td>
+              </tr>
+            ))}
           </tbody>
         </table>
       </div>
@@ -404,7 +338,7 @@ export default function EsiOverviewPage() {
       {/* Pagination */}
       <div className="flex items-center justify-between">
         <div className="flex items-center gap-2 text-sm text-muted-foreground">
-          Showing {filtered.length} of {esiData.length} Ships
+          Showing {filtered.length} of {urnData.length} Ships
           <div className="relative">
             <select className="h-8 pl-2 pr-8 rounded-lg border border-border bg-white text-sm appearance-none">
               <option>10</option>
@@ -454,15 +388,14 @@ export default function EsiOverviewPage() {
             {/* List */}
             <div className="flex-1 overflow-y-auto p-2">
               {[
-                { ship: "Arctic Navigator", action: "Improve Score - NOx levels above threshold", urgent: true },
-                { ship: "Caspian Trader", action: "Improve Score - SOx levels above threshold", urgent: true },
-                { ship: "Nordic Voyager", action: "Missing BDN - upload bunker delivery for March" },
-                { ship: "Pacific Explorer", action: "CII rating dropped to D - review fuel consumption" },
-                { ship: "Baltic Carrier", action: "Tier III hours incomplete - update engine records" },
-                { ship: "Coral Spirit", action: "ETS data gap - verify EU port calls for Q1" },
-                { ship: "Iron Meridian", action: "Shore power usage unrecorded - check port stays" },
-                { ship: "Jade Horizon", action: "Sulphur content missing - add BDN details" },
-              ].map((item, i, arr) => (
+                { ship: "Caspian Trader", action: "Noise level critical - broadband above 188 dB re 1uPa", urgent: true },
+                { ship: "Shadow", action: "Noise level critical - low-frequency output exceeds limit", urgent: true },
+                { ship: "Arctic Navigator", action: "Cavitation detected - propeller maintenance recommended" },
+                { ship: "Astral", action: "Measurement overdue - last URN assessment expired" },
+                { ship: "MV Mediterranean Pearl", action: "Speed reduction advisory - noise threshold at 14 kts" },
+                { ship: "Rosemary", action: "Hydrophone calibration - sensor drift detected" },
+                { ship: "MV Southern Cross", action: "Transit corridor noise - review routing plan" },
+              ].map((item, i) => (
                 <button
                   key={i}
                   className="w-full flex items-center justify-between px-3 py-3 rounded-lg hover:bg-[#f9fafb] transition-colors text-left"

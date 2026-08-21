@@ -9,6 +9,7 @@ import {
   BarChart3,
   Pen,
 } from "lucide-react";
+import { CircleFlag } from "react-circle-flags";
 
 
 /* ── Mock port call detail data ── */
@@ -198,7 +199,7 @@ export default function EpiShipDetailPage({ params }: { params: Promise<{ shipId
             </Link>
             <div className="flex items-center gap-2">
               <h1 className="text-[32px] font-medium text-foreground leading-[1.2] tracking-[-0.96px]">
-                {data.ship} — {data.port}
+                {data.port} - {data.ship}
               </h1>
               <span className="inline-flex items-center px-3 py-1.5 rounded-[36px] text-xs font-medium leading-[1.45] border bg-status-active-bg text-[#294215] border-status-active-border">
                 {data.status}
@@ -206,7 +207,8 @@ export default function EpiShipDetailPage({ params }: { params: Promise<{ shipId
             </div>
           </div>
           <div className="flex items-center gap-4 pl-12">
-            <span className="text-sm text-muted-foreground">
+            <span className="flex items-center gap-1.5 text-sm text-muted-foreground">
+              <CircleFlag countryCode={data.countryCode} width={16} height={16} />
               {data.country}
             </span>
             <span className="w-px h-3 bg-border" />
@@ -319,43 +321,135 @@ export default function EpiShipDetailPage({ params }: { params: Promise<{ shipId
           <div className="flex gap-5">
             <DataField label="Port/ Terminal" value={`${data.port} Container Terminal`} />
             <DataField label="Arrival Datetime" value={`${data.arrival} 08:30`} />
-            <DataField label="Total battery power usage [kWh]" value="1 250" />
+            <DataField label="Port ECA Status" value="Inside ECA" />
           </div>
           {/* Row 2 */}
           <div className="flex gap-5">
-            <DataField label="Port ECA Status" value="Inside ECA" />
             <DataField label="Departure Datetime" value={`${data.departure} 14:00`} />
-            <DataField label="Total solar / wind / fuel cell usage [kWh]" value="320" />
-          </div>
-          {/* Row 3 */}
-          <div className="flex gap-5">
+            <DataField label="Port ECA Status" value="Inside ECA" />
             <DataField label="Port OPS availability" value="Available" />
-            <DataField label="Total shore power (OPS) usage [kWh]" value="8 400" />
-            <DataField label="Comment" value="Routine cargo operations, no incidents." />
           </div>
+        </div>
+        {/* Comment */}
+        <div className="bg-[#f3f4f6] rounded-lg px-4 py-3">
+          <span className="text-xs text-muted-foreground leading-[1.45]">Comment</span>
+          <p className="text-sm text-foreground mt-0.5">Routine cargo operations, no incidents.</p>
         </div>
       </div>
 
-      {/* Engine Usage */}
+      {/* Electrification */}
       <ReadOnlyTableSection
-        title="Engine Usage"
-        description="Engine operating data including load, fuel consumption, and emissions per engine during the port call."
-        columns={["Engine ID", "Engine Type", "Average load [kW]", "Running hours [h]", "Power production [kWh]", "Fuel consumption [kg]", "Pilot fuel cons. [kg]", "Biofuel blend [%]", "Sulphur content [%]"]}
+        title="Electrification"
+        description="Alternative power sources used during the port call, excluding main engine and boiler consumption."
+        columns={["Total shore power (OPS) usage [kWh]", "Total battery power usage [kWh]", "Total solar power usage [kWh]", "Total fuel-cell power usage [kWh]"]}
         rows={[
-          ["M-1", "Main", "2 160", "48", "103 680", "18 420", "—", "0", "0.10"],
-          ["AE-1", "Auxiliary", "310", "48", "14 880", "3 720", "—", "0", "0.10"],
-          ["AE-2", "Auxiliary", "285", "36", "10 260", "2 565", "120", "5", "0.10"],
+          ["-", "-", "-", "-"],
         ]}
       />
+
+      {/* Engine Usage */}
+      <div className="bg-white rounded-[16px] p-4 flex flex-col gap-4">
+        <div className="flex items-center justify-between">
+          <div className="flex flex-col gap-1">
+            <h2 className="text-xl font-medium text-foreground tracking-[-0.6px]">Engine Usage</h2>
+            <p className="text-sm text-muted-foreground tracking-[-0.42px]">Engine operating data including load, fuel consumption, and emissions per engine during the port call.</p>
+          </div>
+          <Link
+            href="/fleet"
+            className="inline-flex items-center gap-2 px-3 py-1.5 rounded-lg border border-border bg-white text-xs font-normal text-foreground hover:bg-[#ebf3ff] hover:border-[#cce1ff] active:bg-[#cce1ff] active:border-[#afd0ff] transition-colors"
+          >
+            <Pen className="w-5 h-5" />
+            Edit in Data Hub
+          </Link>
+        </div>
+        <div className="border border-[#e5e7eb] rounded-lg overflow-hidden">
+          <table className="w-full text-sm">
+            <thead>
+              <tr>
+                <th className="text-left text-xs font-normal text-muted-foreground px-3 h-10 bg-[#F3F4F6]">Engine ID</th>
+                <th className="text-left text-xs font-normal text-muted-foreground px-3 h-10 bg-[#F3F4F6]">Engine Type</th>
+                <th className="text-left text-xs font-normal text-muted-foreground px-3 h-10 bg-[#F3F4F6]">Avg. load [kW]</th>
+                <th className="text-left text-xs font-normal text-muted-foreground px-3 h-10 bg-[#F3F4F6]">Running h</th>
+                <th className="text-left text-xs font-normal text-muted-foreground px-3 h-10 bg-[#F3F4F6]">Power production [kWh]</th>
+                <th className="text-left text-xs font-normal text-muted-foreground px-3 h-10 bg-[#F3F4F6]">Fuel type</th>
+                <th className="text-left text-xs font-normal text-muted-foreground px-3 h-10 bg-[#F3F4F6]">Fuel consumption [kg]</th>
+                <th className="text-left text-xs font-normal text-muted-foreground px-3 h-10 bg-[#F3F4F6]">Biofuel blend [%]</th>
+                <th className="text-left text-xs font-normal text-muted-foreground px-3 h-10 bg-[#F3F4F6]">Sulphur content [%]</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr className="border-b border-[#e5e7eb]">
+                <td className="px-3 py-3 text-sm text-foreground">M-1</td>
+                <td className="px-3 py-3 text-sm text-foreground">Main</td>
+                <td className="px-3 py-3 text-sm text-foreground">2 160</td>
+                <td className="px-3 py-3 text-sm text-foreground">48</td>
+                <td className="px-3 py-3 text-sm text-foreground">103 680</td>
+                <td className="px-3 py-3 text-sm text-foreground">VLSFO</td>
+                <td className="px-3 py-3 text-sm text-foreground">18 420</td>
+                <td className="px-3 py-3 text-sm text-foreground">0</td>
+                <td className="px-3 py-3 text-sm text-foreground">0.10</td>
+              </tr>
+              <tr className="border-b border-[#e5e7eb] bg-[#fafbfc]">
+                <td className="px-3 py-3 text-sm text-muted-foreground">
+                  <span className="inline-flex items-center gap-1">↳ Pilot fuel</span>
+                </td>
+                <td className="px-3 py-3 text-sm text-muted-foreground">-</td>
+                <td className="px-3 py-3 text-sm text-muted-foreground">-</td>
+                <td className="px-3 py-3 text-sm text-muted-foreground">-</td>
+                <td className="px-3 py-3 text-sm text-muted-foreground">-</td>
+                <td className="px-3 py-3 text-sm text-foreground">MGO</td>
+                <td className="px-3 py-3 text-sm text-foreground">120</td>
+                <td className="px-3 py-3 text-sm text-foreground">0</td>
+                <td className="px-3 py-3 text-sm text-foreground">0.08</td>
+              </tr>
+              <tr className="border-b border-[#e5e7eb]">
+                <td className="px-3 py-3 text-sm text-foreground">AE-1</td>
+                <td className="px-3 py-3 text-sm text-foreground">Auxiliary</td>
+                <td className="px-3 py-3 text-sm text-foreground">310</td>
+                <td className="px-3 py-3 text-sm text-foreground">48</td>
+                <td className="px-3 py-3 text-sm text-foreground">14 880</td>
+                <td className="px-3 py-3 text-sm text-foreground">VLSFO</td>
+                <td className="px-3 py-3 text-sm text-foreground">3 720</td>
+                <td className="px-3 py-3 text-sm text-foreground">0</td>
+                <td className="px-3 py-3 text-sm text-foreground">0.10</td>
+              </tr>
+              <tr className="border-b border-[#e5e7eb] bg-[#fafbfc]">
+                <td className="px-3 py-3 text-sm text-muted-foreground">
+                  <span className="inline-flex items-center gap-1">↳ Pilot fuel</span>
+                </td>
+                <td className="px-3 py-3 text-sm text-muted-foreground">-</td>
+                <td className="px-3 py-3 text-sm text-muted-foreground">-</td>
+                <td className="px-3 py-3 text-sm text-muted-foreground">-</td>
+                <td className="px-3 py-3 text-sm text-muted-foreground">-</td>
+                <td className="px-3 py-3 text-sm text-foreground">MGO</td>
+                <td className="px-3 py-3 text-sm text-foreground">120</td>
+                <td className="px-3 py-3 text-sm text-foreground">0</td>
+                <td className="px-3 py-3 text-sm text-foreground">0.08</td>
+              </tr>
+              <tr>
+                <td className="px-3 py-3 text-sm text-foreground">AE-2</td>
+                <td className="px-3 py-3 text-sm text-foreground">Auxiliary</td>
+                <td className="px-3 py-3 text-sm text-foreground">285</td>
+                <td className="px-3 py-3 text-sm text-foreground">36</td>
+                <td className="px-3 py-3 text-sm text-foreground">10 260</td>
+                <td className="px-3 py-3 text-sm text-foreground">VLSFO</td>
+                <td className="px-3 py-3 text-sm text-foreground">2 565</td>
+                <td className="px-3 py-3 text-sm text-foreground">5</td>
+                <td className="px-3 py-3 text-sm text-foreground">0.10</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
 
       {/* Boiler Usage */}
       <ReadOnlyTableSection
         title="Boiler Usage"
         description="Boiler operating data including fuel type, consumption, and heating values during the port call."
-        columns={["Boiler ID", "Running hours [h]", "Fuel type", "Fuel consumption [kg]", "Electrical consum. [kWh]", "Biofuel blend [%]", "Sulphur content [%]", "Lower Heating Value [MJ/kg]"]}
+        columns={["Boiler ID", "Running hours [h]", "Fuel type", "Fuel consumption [kg]", "Electrical consum. [kWh]", "Biofuel blend [%]", "Sulphur content [%]", "Fuel WTT Emission Factor"]}
         rows={[
-          ["B-1", "48", "VLSFO", "1 840", "—", "0", "0.47", "40.2"],
-          ["B-2", "24", "Electric", "—", "3 200", "—", "—", "—"],
+          ["B-1", "48", "VLSFO", "1 840", "-", "0", "0.47", "40.2"],
+          ["B-2", "24", "Electric", "-", "3 200", "-", "-", "-"],
         ]}
       />
 

@@ -274,7 +274,7 @@ export default function UsersPage() {
           </h3>
         </div>
         <p className="text-sm text-muted-foreground tracking-[-0.14px]">
-          Each role grants a fixed set of permissions. Assign roles to users above — permissions cannot be customized per user.
+          Each role grants a fixed set of permissions. Assign roles to users above - permissions cannot be customized per user.
         </p>
         <div className="border border-[#e5e7eb] rounded-lg overflow-hidden">
           <table className="w-full">
@@ -305,7 +305,7 @@ export default function UsersPage() {
                         "text-xs",
                         role.permissions.includes(perm.key) ? "text-[#294215]" : "text-[#d1d5dc]"
                       )}>
-                        {role.permissions.includes(perm.key) ? "✓" : "—"}
+                        {role.permissions.includes(perm.key) ? "✓" : "-"}
                       </span>
                     </td>
                   ))}

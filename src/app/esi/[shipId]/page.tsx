@@ -44,11 +44,12 @@ const technologies = [
   { id: "water-fuel-emulsion", label: "Water Fuel Emulsion", active: false },
   { id: "direct-water-injection", label: "Direct Water Injection", active: false },
   { id: "carbon-capture", label: "Carbon Capture", active: false },
+  { id: "onshore-power-supply", label: "Onshore Power Supply", active: true },
 ];
 
 const powerSources = [
-  { engineId: "M-1", type: "Diesel", mainAux: "Main", ratedPower: "4 320", rpm: "600", nox: "9,28", tierIII: true, eiapp: "GTB0/NTL/20160903I...", certDate: "01/01/2028" },
-  { engineId: "AE-1", type: "Diesel", mainAux: "Auxiliary", ratedPower: "620", rpm: "1 800", nox: "8,9", tierIII: false, eiapp: "GTB0/NTL/20160903I...", certDate: "01/01/2028" },
+  { engineId: "M-1", type: "Diesel", mainAux: "Main", ratedPower: "4 320", rpm: "600", nox: "9,28", noxTierIII: "2,4", tierIII: true, eiapp: "GTB0/NTL/20160903I...", certDate: "01/01/2028" },
+  { engineId: "AE-1", type: "Diesel", mainAux: "Auxiliary", ratedPower: "620", rpm: "1 800", nox: "8,9", noxTierIII: "-", tierIII: false, eiapp: "GTB0/NTL/20160903I...", certDate: "01/01/2028" },
 ];
 
 /* Mock ESI score data per ship */
@@ -461,6 +462,7 @@ export default function EsiShipDetailPage({
                       <th className="text-left text-xs font-normal text-muted-foreground px-4 h-10 bg-[#F3F4F6]">Rated Power (kW)</th>
                       <th className="text-left text-xs font-normal text-muted-foreground px-4 h-10 bg-[#F3F4F6]">RPM</th>
                       <th className="text-left text-xs font-normal text-muted-foreground px-4 h-10 bg-[#F3F4F6]">NOx (g/kWh)</th>
+                      <th className="text-left text-xs font-normal text-muted-foreground px-4 h-10 bg-[#F3F4F6]">NOx - Tier III (g/kWh)</th>
                       <th className="text-center text-xs font-normal text-muted-foreground px-4 h-10 bg-[#F3F4F6]">TIER III</th>
                       <th className="text-left text-xs font-normal text-muted-foreground px-4 h-10 bg-[#F3F4F6]">EIAPP Certificate</th>
                       <th className="text-left text-xs font-normal text-muted-foreground px-4 h-10 bg-[#F3F4F6] last:rounded-tr-lg">Cert. Issue Date</th>
@@ -475,6 +477,7 @@ export default function EsiShipDetailPage({
                         <td className="px-4 py-3 text-sm text-foreground">{ps.ratedPower}</td>
                         <td className="px-4 py-3 text-sm text-foreground">{ps.rpm}</td>
                         <td className="px-4 py-3 text-sm text-foreground">{ps.nox}</td>
+                        <td className="px-4 py-3 text-sm text-foreground">{ps.noxTierIII}</td>
                         <td className="px-4 py-3 text-center">
                           <span className="inline-flex justify-center">
                             {ps.tierIII ? (
@@ -488,6 +491,132 @@ export default function EsiShipDetailPage({
                         <td className="px-4 py-3 text-sm text-foreground">{ps.certDate}</td>
                       </tr>
                     ))}
+                  </tbody>
+                </table>
+              </div>
+            </section>
+
+            {/* Boilers */}
+            <section className="bg-white rounded-[16px] p-6">
+              <div className="flex items-center justify-between mb-5">
+                <div className="flex items-center gap-3">
+                  <h2 className="text-lg font-medium text-foreground">Boilers</h2>
+                  <span className="inline-flex items-center px-2 py-1 rounded-[36px] text-[11px] font-medium leading-[1.45] bg-epi-blue-light text-epi-blue border border-epi-blue-border">
+                    EPI
+                  </span>
+                </div>
+                <EditInDataHubButton shipId={ship.id} small />
+              </div>
+              <div className="border border-[#e5e7eb] rounded-lg overflow-hidden">
+                <table className="w-full">
+                  <thead>
+                    <tr>
+                      <th className="text-left text-xs font-normal text-muted-foreground px-4 h-10 bg-[#F3F4F6]">Boiler ID</th>
+                      <th className="text-left text-xs font-normal text-muted-foreground px-4 h-10 bg-[#F3F4F6]">Boiler model</th>
+                      <th className="text-left text-xs font-normal text-muted-foreground px-4 h-10 bg-[#F3F4F6]">Boiler installation year</th>
+                      <th className="text-left text-xs font-normal text-muted-foreground px-4 h-10 bg-[#F3F4F6]">Boiler type</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr className="border-t border-[#e5e7eb]">
+                      <td className="px-4 py-3 text-sm text-foreground">B-1</td>
+                      <td className="px-4 py-3 text-sm text-foreground">Aalborg OC-TCi</td>
+                      <td className="px-4 py-3 text-sm text-foreground">2020</td>
+                      <td className="px-4 py-3 text-sm text-foreground">Oil fired</td>
+                    </tr>
+                    <tr className="border-t border-[#e5e7eb]">
+                      <td className="px-4 py-3 text-sm text-foreground">B-2</td>
+                      <td className="px-4 py-3 text-sm text-foreground">Aalborg Mission™ OC</td>
+                      <td className="px-4 py-3 text-sm text-foreground">2020</td>
+                      <td className="px-4 py-3 text-sm text-foreground">Exhaust gas</td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+            </section>
+
+            {/* SOx Reduction */}
+            <section className="bg-white rounded-[16px] p-6">
+              <div className="flex items-center justify-between mb-5">
+                <div className="flex items-center gap-3">
+                  <h2 className="text-lg font-medium text-foreground">SOx Reduction</h2>
+                  <span className="inline-flex items-center px-2 py-1 rounded-[36px] text-[11px] font-medium leading-[1.45] bg-epi-blue-light text-epi-blue border border-epi-blue-border">
+                    EPI
+                  </span>
+                </div>
+                <EditInDataHubButton shipId={ship.id} small />
+              </div>
+              <div className="border border-[#e5e7eb] rounded-lg overflow-hidden">
+                <table className="w-full">
+                  <thead>
+                    <tr>
+                      <th className="text-left text-xs font-normal text-muted-foreground px-4 h-10 bg-[#F3F4F6]">Engine ID</th>
+                      <th className="text-left text-xs font-normal text-muted-foreground px-4 h-10 bg-[#F3F4F6]">Engine type / Boiler</th>
+                      <th className="text-left text-xs font-normal text-muted-foreground px-4 h-10 bg-[#F3F4F6]">Type of SOx reduction</th>
+                      <th className="text-right text-xs font-normal text-muted-foreground px-4 h-10 bg-[#F3F4F6]">Avg. SO₂/CO₂ ratio</th>
+                      <th className="text-right text-xs font-normal text-muted-foreground px-4 h-10 bg-[#F3F4F6]">Duration of scrubber usage (h)</th>
+                      <th className="text-right text-xs font-normal text-muted-foreground px-4 h-10 bg-[#F3F4F6]">Avg. discharge water flow (m³/h)</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr className="border-t border-[#e5e7eb]">
+                      <td className="px-4 py-3 text-sm text-foreground">M-1</td>
+                      <td className="px-4 py-3 text-sm text-foreground">Main engine</td>
+                      <td className="px-4 py-3 text-sm text-foreground">Open loop scrubber</td>
+                      <td className="px-4 py-3 text-sm text-foreground text-right">4,5</td>
+                      <td className="px-4 py-3 text-sm text-foreground text-right">1 200</td>
+                      <td className="px-4 py-3 text-sm text-foreground text-right">45</td>
+                    </tr>
+                    <tr className="border-t border-[#e5e7eb]">
+                      <td className="px-4 py-3 text-sm text-foreground">AE-1</td>
+                      <td className="px-4 py-3 text-sm text-foreground">Auxiliary engine</td>
+                      <td className="px-4 py-3 text-sm text-foreground">Low sulphur fuel</td>
+                      <td className="px-4 py-3 text-sm text-foreground text-right">-</td>
+                      <td className="px-4 py-3 text-sm text-foreground text-right">-</td>
+                      <td className="px-4 py-3 text-sm text-foreground text-right">-</td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+            </section>
+
+            {/* NOx Reduction */}
+            <section className="bg-white rounded-[16px] p-6">
+              <div className="flex items-center justify-between mb-5">
+                <div className="flex items-center gap-3">
+                  <h2 className="text-lg font-medium text-foreground">NOx Reduction</h2>
+                  <span className="inline-flex items-center px-2 py-1 rounded-[36px] text-[11px] font-medium leading-[1.45] bg-epi-blue-light text-epi-blue border border-epi-blue-border">
+                    EPI
+                  </span>
+                </div>
+                <EditInDataHubButton shipId={ship.id} small />
+              </div>
+              <div className="border border-[#e5e7eb] rounded-lg overflow-hidden">
+                <table className="w-full">
+                  <thead>
+                    <tr>
+                      <th className="text-left text-xs font-normal text-muted-foreground px-4 h-10 bg-[#F3F4F6]">Engine ID</th>
+                      <th className="text-left text-xs font-normal text-muted-foreground px-4 h-10 bg-[#F3F4F6]">Engine type / Boiler</th>
+                      <th className="text-left text-xs font-normal text-muted-foreground px-4 h-10 bg-[#F3F4F6]">Type of NOx reduction</th>
+                      <th className="text-right text-xs font-normal text-muted-foreground px-4 h-10 bg-[#F3F4F6]">Avg. effective NOx emission (g/kWh)</th>
+                      <th className="text-right text-xs font-normal text-muted-foreground px-4 h-10 bg-[#F3F4F6]">Share of time with tech active (%)</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr className="border-t border-[#e5e7eb]">
+                      <td className="px-4 py-3 text-sm text-foreground">M-1</td>
+                      <td className="px-4 py-3 text-sm text-foreground">Main engine</td>
+                      <td className="px-4 py-3 text-sm text-foreground">SCR</td>
+                      <td className="px-4 py-3 text-sm text-foreground text-right">2,1</td>
+                      <td className="px-4 py-3 text-sm text-foreground text-right">85</td>
+                    </tr>
+                    <tr className="border-t border-[#e5e7eb]">
+                      <td className="px-4 py-3 text-sm text-foreground">AE-1</td>
+                      <td className="px-4 py-3 text-sm text-foreground">Auxiliary engine</td>
+                      <td className="px-4 py-3 text-sm text-foreground">EGR</td>
+                      <td className="px-4 py-3 text-sm text-foreground text-right">3,8</td>
+                      <td className="px-4 py-3 text-sm text-foreground text-right">72</td>
+                    </tr>
                   </tbody>
                 </table>
               </div>

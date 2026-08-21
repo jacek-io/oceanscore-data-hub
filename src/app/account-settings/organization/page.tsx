@@ -145,7 +145,7 @@ export default function OrganizationGeneralPage() {
         <div className="text-sm text-muted-foreground">
           <p className="font-medium text-foreground">Set your organisation structure</p>
           <p className="mt-0.5">
-            You can be: Independent (no links), Sub-organisation (linked to a parent), or Parent organisation (with sub-orgs beneath you). Only one level of hierarchy is allowed — to change your type, remove existing links first.
+            You can be: Independent (no links), Sub-organisation (linked to a parent), or Parent organisation (with sub-orgs beneath you). Only one level of hierarchy is allowed - to change your type, remove existing links first.
           </p>
         </div>
       </div>

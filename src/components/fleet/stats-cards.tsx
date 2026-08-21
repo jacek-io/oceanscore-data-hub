@@ -66,6 +66,17 @@ export function StatsCards() {
                 </span>
               </p>
             </div>
+            <div className="flex-1 bg-[#F3F4F6] rounded-lg px-4 py-3">
+              <span className="text-xs font-medium text-muted-foreground">
+                URN
+              </span>
+              <p className="text-[40px] font-medium text-foreground leading-none mt-1">
+                {fleetStats.urnParticipation}
+                <span className="text-base text-muted-foreground font-normal ml-0.5">
+                  /{fleetStats.totalShips}
+                </span>
+              </p>
+            </div>
           </div>
         </div>
       </div>

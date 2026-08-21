@@ -13,10 +13,12 @@ import {
   ArrowUpDown,
   BarChart3,
   Anchor,
+  Plus,
   X,
 } from "lucide-react";
 
 import { cn } from "@/lib/utils";
+import { CircleFlag } from "react-circle-flags";
 
 /* ── Mock EPI port call data ── */
 const portCallData = [
@@ -146,13 +148,19 @@ export default function EpiPortCallsPage() {
             Per-port-call environmental reporting - read-only activity log
           </p>
         </div>
-        <Link
-          href="/fleet"
-          className="inline-flex items-center gap-2 h-10 px-3 py-2.5 rounded-lg bg-[#061e3a] text-sm font-normal text-white hover:bg-[#0c3c7a] active:bg-[#1157b2] transition-colors"
-        >
-          <Database className="w-4 h-4 text-[#5b9aff]" />
-          Open Data Hub
-        </Link>
+        <div className="flex items-center gap-3">
+          <button className="inline-flex items-center gap-2 h-10 px-3 py-2.5 rounded-lg border border-border bg-white text-sm font-normal text-foreground hover:bg-[#ebf3ff] hover:border-[#cce1ff] active:bg-[#cce1ff] active:border-[#afd0ff] transition-colors">
+            <Plus className="w-4 h-4 text-muted-foreground" />
+            Add port call
+          </button>
+          <Link
+            href="/fleet"
+            className="inline-flex items-center gap-2 h-10 px-3 py-2.5 rounded-lg bg-[#061e3a] text-sm font-normal text-white hover:bg-[#0c3c7a] active:bg-[#1157b2] transition-colors"
+          >
+            <Database className="w-4 h-4 text-[#5b9aff]" />
+            Open Data Hub
+          </Link>
+        </div>
       </div>
 
       {/* Stats Cards Row */}
@@ -297,7 +305,7 @@ export default function EpiPortCallsPage() {
               <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-muted-foreground" />
               <input
                 type="text"
-                placeholder="Search vessel or port..."
+                placeholder="Search ship or port..."
                 value={search}
                 onChange={(e) => setSearch(e.target.value)}
                 className="h-10 pl-10 pr-4 w-[240px] rounded-lg border border-border bg-white text-sm placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-primary"
@@ -377,6 +385,7 @@ export default function EpiPortCallsPage() {
                 </td>
                 <td className="px-4 py-3.5">
                   <div className="flex items-center gap-2">
+                    <CircleFlag countryCode={pc.countryCode} width={20} height={20} />
                     <div>
                       <p className="text-sm text-foreground">{pc.port}</p>
                       <p className="text-xs text-muted-foreground font-mono">{pc.country}</p>

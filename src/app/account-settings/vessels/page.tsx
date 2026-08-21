@@ -253,7 +253,7 @@ export default function VesselsPage() {
                         : "bg-[#f3f4f6] text-[#4a5565] border-[#e5e7eb]"
                     )}
                   >
-                    {vessel.epiEnrolled ? "Enrolled" : "—"}
+                    {vessel.epiEnrolled ? "Enrolled" : "-"}
                   </span>
                 </td>
                 <td className="px-4 py-3.5 text-right">
@@ -272,7 +272,7 @@ export default function VesselsPage() {
       </div>
 
       <p className="text-xs text-muted-foreground text-center">
-        Move vessel between sub-organizations — coming soon
+        Move vessel between sub-organizations - coming soon
       </p>
 
       {/* Add New Ship Dialog */}

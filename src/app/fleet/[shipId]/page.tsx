@@ -70,6 +70,7 @@ const technologies = [
   { id: "direct-water-injection", label: "Direct Water Injection", autoSelected: false, checked: false },
   { id: "carbon-capture", label: "Carbon Capture", autoSelected: false, checked: false },
   { id: "water-fuel-emulsion", label: "Water Fuel Emulsion", autoSelected: false, checked: false },
+  { id: "onshore-power-supply", label: "Onshore Power Supply", autoSelected: false, checked: true },
 ];
 
 export default function ShipDetailPage({
@@ -82,7 +83,8 @@ export default function ShipDetailPage({
   const [activeTab, setActiveTab] = useState("ship-data");
   const [esiMenuOpen, setEsiMenuOpen] = useState(false);
   const [epiMenuOpen, setEpiMenuOpen] = useState(false);
-  const [optOutScheme, setOptOutScheme] = useState<"ESI" | "EPI" | null>(null);
+  const [urnMenuOpen, setUrnMenuOpen] = useState(false);
+  const [optOutScheme, setOptOutScheme] = useState<"ESI" | "EPI" | "URN" | null>(null);
   const [optedOut, setOptedOut] = useState<Set<string>>(new Set());
   const [checkedTechs, setCheckedTechs] = useState<Set<string>>(
     new Set(technologies.filter((t) => t.checked).map((t) => t.id))
@@ -196,40 +198,40 @@ export default function ShipDetailPage({
               </button>
             </div>
           ) : (
-            <div className="flex items-center gap-4 flex-1 p-2 bg-white rounded-[16px]">
+            <div className="flex gap-3 flex-1 p-2 bg-white rounded-[16px]">
               <Image src="/esi-logo.svg" alt="ESI" width={86} height={86} className="rounded-xl" />
-              <div className="flex-1">
+              <div className="flex-1 flex flex-col justify-between py-1">
                 <div className="flex items-center gap-2">
-                  <span className="text-sm text-muted-foreground">
-                    Environmental Ship Index
-                  </span>
                   <span className="inline-flex items-center px-2 py-1 rounded-[36px] text-[11px] font-medium leading-[1.45] bg-status-active-bg text-status-active border border-status-active-border">
                     Enrolled
                   </span>
-                </div>
-              </div>
-              <div className="relative">
-                <button
-                  onClick={() => setEsiMenuOpen(!esiMenuOpen)}
-                  className="w-8 h-8 flex items-center justify-center rounded-lg text-muted-foreground hover:bg-[#ebf3ff] hover:border-[#cce1ff] active:bg-[#cce1ff] active:border-[#afd0ff] transition-colors"
-                >
-                  <MoreVertical className="w-5 h-5" />
-                </button>
-                {esiMenuOpen && (
-                  <div className="absolute right-0 top-10 bg-white rounded-xl shadow-lg border border-border py-2 px-1 z-10 w-48">
-                    <button
-                      onClick={() => { setOptOutScheme("ESI"); setEsiMenuOpen(false); }}
-                      className="flex items-center gap-2 w-full px-3 py-2 text-sm text-destructive hover:bg-[#f9fafb] rounded-lg transition-colors"
-                    >
-                      <PowerOff className="w-4 h-4" />
-                      Opt Out of ESI
-                    </button>
+                  <div className="flex items-center gap-0 ml-auto">
+                    <div className="relative">
+                      <button
+                        onClick={() => setEsiMenuOpen(!esiMenuOpen)}
+                        className="w-8 h-8 flex items-center justify-center rounded-lg text-muted-foreground hover:bg-[#ebf3ff] hover:border-[#cce1ff] active:bg-[#cce1ff] active:border-[#afd0ff] transition-colors"
+                      >
+                        <MoreVertical className="w-5 h-5" />
+                      </button>
+                      {esiMenuOpen && (
+                        <div className="absolute right-0 top-10 bg-white rounded-xl shadow-lg border border-border py-2 px-1 z-10 w-48">
+                          <button
+                            onClick={() => { setOptOutScheme("ESI"); setEsiMenuOpen(false); }}
+                            className="flex items-center gap-2 w-full px-3 py-2 text-sm text-destructive hover:bg-[#f9fafb] rounded-lg transition-colors"
+                          >
+                            <PowerOff className="w-4 h-4" />
+                            Opt Out of ESI
+                          </button>
+                        </div>
+                      )}
+                    </div>
+                    <Link href={`/esi/${shipId}`} className="w-8 h-8 flex items-center justify-center rounded-lg text-muted-foreground hover:bg-[#ebf3ff] hover:border-[#cce1ff] active:bg-[#cce1ff] active:border-[#afd0ff] transition-colors">
+                      <ChevronRight className="w-5 h-5" />
+                    </Link>
                   </div>
-                )}
+                </div>
+                <p className="text-sm text-muted-foreground">Environmental Ship Index</p>
               </div>
-              <Link href={`/esi/${shipId}`} className="w-8 h-8 flex items-center justify-center rounded-lg text-muted-foreground hover:bg-[#ebf3ff] hover:border-[#cce1ff] active:bg-[#cce1ff] active:border-[#afd0ff] transition-colors">
-                <ChevronRight className="w-5 h-5" />
-              </Link>
             </div>
           )
         )}
@@ -250,40 +252,94 @@ export default function ShipDetailPage({
               </button>
             </div>
           ) : (
-            <div className="flex items-center gap-4 flex-1 p-2 bg-white rounded-[16px]">
+            <div className="flex gap-3 flex-1 p-2 bg-white rounded-[16px]">
               <Image src="/epi-logo.svg" alt="EPI" width={86} height={86} className="rounded-xl" />
-              <div className="flex-1">
+              <div className="flex-1 flex flex-col justify-between py-1">
                 <div className="flex items-center gap-2">
-                  <span className="text-sm text-muted-foreground">
-                    Environmental Port Index
-                  </span>
                   <span className="inline-flex items-center px-2 py-1 rounded-[36px] text-[11px] font-medium leading-[1.45] bg-status-active-bg text-status-active border border-status-active-border">
                     Enrolled
                   </span>
-                </div>
-              </div>
-              <div className="relative">
-                <button
-                  onClick={() => setEpiMenuOpen(!epiMenuOpen)}
-                  className="w-8 h-8 flex items-center justify-center rounded-lg text-muted-foreground hover:bg-[#ebf3ff] hover:border-[#cce1ff] active:bg-[#cce1ff] active:border-[#afd0ff] transition-colors"
-                >
-                  <MoreVertical className="w-5 h-5" />
-                </button>
-                {epiMenuOpen && (
-                  <div className="absolute right-0 top-10 bg-white rounded-xl shadow-lg border border-border py-2 px-1 z-10 w-48">
-                    <button
-                      onClick={() => { setOptOutScheme("EPI"); setEpiMenuOpen(false); }}
-                      className="flex items-center gap-2 w-full px-3 py-2 text-sm text-destructive hover:bg-[#f9fafb] rounded-lg transition-colors"
-                    >
-                      <PowerOff className="w-4 h-4" />
-                      Opt Out of EPI
-                    </button>
+                  <div className="flex items-center gap-0 ml-auto">
+                    <div className="relative">
+                      <button
+                        onClick={() => setEpiMenuOpen(!epiMenuOpen)}
+                        className="w-8 h-8 flex items-center justify-center rounded-lg text-muted-foreground hover:bg-[#ebf3ff] hover:border-[#cce1ff] active:bg-[#cce1ff] active:border-[#afd0ff] transition-colors"
+                      >
+                        <MoreVertical className="w-5 h-5" />
+                      </button>
+                      {epiMenuOpen && (
+                        <div className="absolute right-0 top-10 bg-white rounded-xl shadow-lg border border-border py-2 px-1 z-10 w-48">
+                          <button
+                            onClick={() => { setOptOutScheme("EPI"); setEpiMenuOpen(false); }}
+                            className="flex items-center gap-2 w-full px-3 py-2 text-sm text-destructive hover:bg-[#f9fafb] rounded-lg transition-colors"
+                          >
+                            <PowerOff className="w-4 h-4" />
+                            Opt Out of EPI
+                          </button>
+                        </div>
+                      )}
+                    </div>
+                    <Link href={`/epi/ships/${shipId}`} className="w-8 h-8 flex items-center justify-center rounded-lg text-muted-foreground hover:bg-[#ebf3ff] hover:border-[#cce1ff] active:bg-[#cce1ff] active:border-[#afd0ff] transition-colors">
+                      <ChevronRight className="w-5 h-5" />
+                    </Link>
                   </div>
-                )}
+                </div>
+                <p className="text-sm text-muted-foreground">Environmental Port Index</p>
               </div>
-              <Link href={`/epi/ships/${shipId}`} className="w-8 h-8 flex items-center justify-center rounded-lg text-muted-foreground hover:bg-[#ebf3ff] hover:border-[#cce1ff] active:bg-[#cce1ff] active:border-[#afd0ff] transition-colors">
-                <ChevronRight className="w-5 h-5" />
-              </Link>
+            </div>
+          )
+        )}
+        {ship.schemes.includes("URN") && (
+          optedOut.has("URN") ? (
+            <div className="flex items-center gap-4 flex-1 pl-1 pr-4 py-1 bg-[#e5e7eb] border border-dashed border-[#d1d5dc] rounded-[16px]">
+              <Image src="/urn-logo-gray.svg" alt="URN" width={86} height={86} className="rounded-xl" />
+              <div className="flex-1 py-3 pr-3">
+                <p className="text-sm text-[#98a1ae]">Underwater Radiated Noise</p>
+                <p className="text-xl font-medium text-[#98a1ae] tracking-[-0.2px] mt-2">Not enrolled</p>
+              </div>
+              <button
+                onClick={() => { const next = new Set(optedOut); next.delete("URN"); setOptedOut(next); }}
+                className="h-10 pl-1.5 pr-3 flex items-center gap-1 rounded-lg border border-[#1157b2] bg-white text-sm text-[#1157b2] hover:bg-[#ebf3ff] hover:border-[#cce1ff] active:bg-[#cce1ff] active:border-[#afd0ff] transition-colors"
+              >
+                <Plus className="w-5 h-5" />
+                Enroll
+              </button>
+            </div>
+          ) : (
+            <div className="flex gap-3 flex-1 p-2 bg-white rounded-[16px]">
+              <Image src="/urn-logo.svg" alt="URN" width={86} height={86} className="rounded-xl" />
+              <div className="flex-1 flex flex-col justify-between py-1">
+                <div className="flex items-center gap-2">
+                  <span className="inline-flex items-center px-2 py-1 rounded-[36px] text-[11px] font-medium leading-[1.45] bg-status-active-bg text-status-active border border-status-active-border">
+                    Enrolled
+                  </span>
+                  <div className="flex items-center gap-0 ml-auto">
+                    <div className="relative">
+                      <button
+                        onClick={() => setUrnMenuOpen(!urnMenuOpen)}
+                        className="w-8 h-8 flex items-center justify-center rounded-lg text-muted-foreground hover:bg-[#ebf3ff] hover:border-[#cce1ff] active:bg-[#cce1ff] active:border-[#afd0ff] transition-colors"
+                      >
+                        <MoreVertical className="w-5 h-5" />
+                      </button>
+                      {urnMenuOpen && (
+                        <div className="absolute right-0 top-10 bg-white rounded-xl shadow-lg border border-border py-2 px-1 z-10 w-48">
+                          <button
+                            onClick={() => { setOptOutScheme("URN"); setUrnMenuOpen(false); }}
+                            className="flex items-center gap-2 w-full px-3 py-2 text-sm text-destructive hover:bg-[#f9fafb] rounded-lg transition-colors"
+                          >
+                            <PowerOff className="w-4 h-4" />
+                            Opt Out of URN
+                          </button>
+                        </div>
+                      )}
+                    </div>
+                    <Link href={`/urn/${shipId}`} className="w-8 h-8 flex items-center justify-center rounded-lg text-muted-foreground hover:bg-[#ebf3ff] hover:border-[#cce1ff] active:bg-[#cce1ff] active:border-[#afd0ff] transition-colors">
+                      <ChevronRight className="w-5 h-5" />
+                    </Link>
+                  </div>
+                </div>
+                <p className="text-sm text-muted-foreground">Underwater Radiated Noise</p>
+              </div>
             </div>
           )
         )}
@@ -317,8 +373,8 @@ export default function ShipDetailPage({
           <>
         {/* General Information */}
         <section className="bg-white rounded-[16px] p-6">
-          <div className="flex items-center gap-3 mb-5">
-            <h2 className="text-lg font-medium text-foreground">
+          <div className="flex items-center gap-1.5 mb-5">
+            <h2 className="text-lg font-medium text-foreground mr-1.5">
               General Information
             </h2>
             {ship.schemes.map((s) => (
@@ -328,6 +384,8 @@ export default function ShipDetailPage({
                   "inline-flex items-center justify-center px-2 py-1 rounded-[36px] text-[11px] font-medium leading-[1.45] border",
                   s === "ESI"
                     ? "bg-status-active-bg text-status-active border-status-active-border"
+                    : s === "URN"
+                    ? "bg-urn-purple-light text-urn-purple border-urn-purple-border"
                     : "bg-epi-blue-light text-epi-blue border-epi-blue-border"
                 )}
               >
@@ -382,8 +440,8 @@ export default function ShipDetailPage({
 
         {/* IAPP Certificate */}
         <section className="bg-white rounded-[16px] p-6">
-          <div className="flex items-center gap-3 mb-5">
-            <h2 className="text-lg font-medium text-foreground">
+          <div className="flex items-center gap-1.5 mb-5">
+            <h2 className="text-lg font-medium text-foreground mr-1.5">
               IAPP Certificate
             </h2>
             <span className="inline-flex items-center justify-center px-2 py-1 rounded-[36px] text-[11px] font-medium leading-[1.45] bg-status-active-bg text-status-active border border-status-active-border">
@@ -414,12 +472,15 @@ export default function ShipDetailPage({
 
         {/* Technologies */}
         <section className="bg-white rounded-[16px] p-4">
-          <div className="flex items-center gap-2 mb-6">
-            <h2 className="text-xl font-medium text-foreground">
+          <div className="flex items-center gap-1.5 mb-6">
+            <h2 className="text-xl font-medium text-foreground mr-0.5">
               Technologies
             </h2>
             <span className="inline-flex items-center justify-center px-2 py-1 rounded-[36px] text-[11px] font-medium leading-[1.45] bg-status-active-bg text-status-active border border-status-active-border">
               ESI
+            </span>
+            <span className="inline-flex items-center justify-center px-2 py-1 rounded-[36px] text-[11px] font-medium leading-[1.45] bg-epi-blue-light text-epi-blue border border-epi-blue-border">
+              EPI
             </span>
           </div>
           <div className="grid grid-cols-2 gap-4">
@@ -539,8 +600,8 @@ export default function ShipDetailPage({
         {/* Power Sources */}
         <section className="bg-white rounded-[16px] p-4">
           <div className="flex items-center justify-between mb-5">
-            <div className="flex items-center gap-2">
-              <h2 className="text-xl font-medium text-foreground">
+            <div className="flex items-center gap-1.5">
+              <h2 className="text-xl font-medium text-foreground mr-0.5">
                 Power Sources
               </h2>
               <span className="inline-flex items-center justify-center px-2 py-1 rounded-[36px] text-[11px] font-medium leading-[1.45] bg-status-active-bg text-status-active border border-status-active-border">
@@ -564,6 +625,7 @@ export default function ShipDetailPage({
                   <th className="text-right text-xs font-normal text-muted-foreground px-2 h-10 bg-[#F3F4F6] w-[124px]">Rated Power <span className="text-[10px]">(kW)</span></th>
                   <th className="text-right text-xs font-normal text-muted-foreground px-2 h-10 bg-[#F3F4F6] w-[124px]">RPM</th>
                   <th className="text-right text-xs font-normal text-muted-foreground px-2 h-10 bg-[#F3F4F6] w-[124px]">NOx (g/kWh)</th>
+                  <th className="text-right text-xs font-normal text-muted-foreground px-2 h-10 bg-[#F3F4F6] w-[140px]">NOx - Tier III <span className="text-[10px]">(g/kWh)</span></th>
                   <th className="text-center text-xs font-normal text-muted-foreground px-2 h-10 bg-[#F3F4F6] w-14">TIER III</th>
                   <th className="text-left text-xs font-normal text-muted-foreground px-2 h-10 bg-[#F3F4F6]">EIAPP Certificate</th>
                   <th className="text-left text-xs font-normal text-muted-foreground px-2 h-10 bg-[#F3F4F6]">Cert. Issue Date</th>
@@ -601,6 +663,9 @@ export default function ShipDetailPage({
                   </td>
                   <td className="py-4 px-2 w-[124px]">
                     <Input defaultValue="9,28" className="h-10 rounded-lg text-right" />
+                  </td>
+                  <td className="py-4 px-2 w-[140px]">
+                    <Input defaultValue="2,4" className="h-10 rounded-lg text-right" />
                   </td>
                   <td className="py-4 px-2 w-14 text-center">
                     <Checkbox defaultChecked />
@@ -648,6 +713,9 @@ export default function ShipDetailPage({
                   <td className="py-4 px-2 w-[124px]">
                     <Input defaultValue="8,9" className="h-10 rounded-lg text-right" />
                   </td>
+                  <td className="py-4 px-2 w-[140px]">
+                    <Input defaultValue="" placeholder="-" className="h-10 rounded-lg text-right" />
+                  </td>
                   <td className="py-4 px-2 w-14 text-center">
                     <Checkbox />
                   </td>
@@ -667,6 +735,313 @@ export default function ShipDetailPage({
             </table>
           </div>
         </section>
+
+        {/* Boilers */}
+        <section className="bg-white rounded-[16px] p-4">
+          <div className="flex items-center justify-between mb-5">
+            <div className="flex items-center gap-1.5">
+              <h2 className="text-xl font-medium text-foreground mr-0.5">
+                Boilers
+              </h2>
+              <span className="inline-flex items-center justify-center px-2 py-1 rounded-[36px] text-[11px] font-medium leading-[1.45] bg-epi-blue-light text-epi-blue border border-epi-blue-border">
+                EPI
+              </span>
+            </div>
+            <button className="inline-flex items-center gap-1 px-2 py-1.5 rounded-lg border border-border bg-white text-xs font-normal text-foreground hover:bg-[#ebf3ff] hover:border-[#cce1ff] active:bg-[#cce1ff] active:border-[#afd0ff] transition-colors">
+              Add +
+            </button>
+          </div>
+          <div className="border border-[#e5e7eb] rounded-lg overflow-hidden">
+            <table className="w-full text-sm">
+              <thead>
+                <tr>
+                  <th className="text-left text-xs font-normal text-muted-foreground pl-4 pr-2 h-10 bg-[#F3F4F6] w-[120px]">Boiler ID</th>
+                  <th className="text-left text-xs font-normal text-muted-foreground px-2 h-10 bg-[#F3F4F6]">Boiler model</th>
+                  <th className="text-left text-xs font-normal text-muted-foreground px-2 h-10 bg-[#F3F4F6] w-[160px]">Boiler installation year</th>
+                  <th className="text-left text-xs font-normal text-muted-foreground px-2 h-10 bg-[#F3F4F6]">Boiler type</th>
+                  <th className="w-10 h-10 bg-[#F3F4F6]" />
+                </tr>
+              </thead>
+              <tbody>
+                <tr className="border-b border-[#e5e7eb]">
+                  <td className="py-4 pl-4 pr-2">
+                    <Input defaultValue="B-1" className="h-10 rounded-lg" />
+                  </td>
+                  <td className="py-4 px-2">
+                    <Input defaultValue="Aalborg OC-TCi" className="h-10 rounded-lg" />
+                  </td>
+                  <td className="py-4 px-2">
+                    <Input defaultValue="2020" className="h-10 rounded-lg" />
+                  </td>
+                  <td className="py-4 px-2">
+                    <div className="relative">
+                      <select className="h-10 pl-4 pr-10 w-full rounded-lg border border-border bg-white text-sm appearance-none">
+                        <option>Oil fired</option>
+                        <option>Exhaust gas</option>
+                        <option>Composite</option>
+                      </select>
+                      <ChevronDown className="absolute right-3 top-1/2 -translate-y-1/2 w-5 h-5 text-muted-foreground pointer-events-none" />
+                    </div>
+                  </td>
+                  <td className="py-4 pl-2 pr-4">
+                    <button className="text-muted-foreground hover:text-destructive transition-colors">
+                      <Trash className="w-5 h-5" />
+                    </button>
+                  </td>
+                </tr>
+                <tr>
+                  <td className="py-4 pl-4 pr-2">
+                    <Input defaultValue="B-2" className="h-10 rounded-lg" />
+                  </td>
+                  <td className="py-4 px-2">
+                    <Input defaultValue="Aalborg Mission™ OC" className="h-10 rounded-lg" />
+                  </td>
+                  <td className="py-4 px-2">
+                    <Input defaultValue="2020" className="h-10 rounded-lg" />
+                  </td>
+                  <td className="py-4 px-2">
+                    <div className="relative">
+                      <select className="h-10 pl-4 pr-10 w-full rounded-lg border border-border bg-white text-sm appearance-none">
+                        <option>Exhaust gas</option>
+                        <option>Oil fired</option>
+                        <option>Composite</option>
+                      </select>
+                      <ChevronDown className="absolute right-3 top-1/2 -translate-y-1/2 w-5 h-5 text-muted-foreground pointer-events-none" />
+                    </div>
+                  </td>
+                  <td className="py-4 pl-2 pr-4">
+                    <button className="text-muted-foreground hover:text-destructive transition-colors">
+                      <Trash className="w-5 h-5" />
+                    </button>
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </section>
+
+        {/* SOx Reduction */}
+        <section className="bg-white rounded-[16px] p-4">
+          <div className="flex items-center justify-between mb-5">
+            <div className="flex items-center gap-1.5">
+              <h2 className="text-xl font-medium text-foreground mr-0.5">
+                SOx Reduction
+              </h2>
+              <span className="inline-flex items-center justify-center px-2 py-1 rounded-[36px] text-[11px] font-medium leading-[1.45] bg-epi-blue-light text-epi-blue border border-epi-blue-border">
+                EPI
+              </span>
+            </div>
+            <button className="inline-flex items-center gap-1 px-2 py-1.5 rounded-lg border border-border bg-white text-xs font-normal text-foreground hover:bg-[#ebf3ff] hover:border-[#cce1ff] active:bg-[#cce1ff] active:border-[#afd0ff] transition-colors">
+              Add +
+            </button>
+          </div>
+          <div className="border border-[#e5e7eb] rounded-lg overflow-hidden">
+            <table className="w-full text-sm">
+              <thead>
+                <tr>
+                  <th className="text-left text-xs font-normal text-muted-foreground pl-4 pr-2 h-10 bg-[#F3F4F6] w-[100px]">Engine ID</th>
+                  <th className="text-left text-xs font-normal text-muted-foreground px-2 h-10 bg-[#F3F4F6]">Engine type / Boiler</th>
+                  <th className="text-left text-xs font-normal text-muted-foreground px-2 h-10 bg-[#F3F4F6]">Type of SOx reduction</th>
+                  <th className="text-right text-xs font-normal text-muted-foreground px-2 h-10 bg-[#F3F4F6] w-[140px]">Avg. SO₂/CO₂ ratio</th>
+                  <th className="text-right text-xs font-normal text-muted-foreground px-2 h-10 bg-[#F3F4F6] w-[180px]">Duration of scrubber usage <span className="text-[10px]">(h)</span></th>
+                  <th className="text-right text-xs font-normal text-muted-foreground px-2 h-10 bg-[#F3F4F6] w-[200px]">Avg. discharge water flow <span className="text-[10px]">(m³/h)</span></th>
+                  <th className="w-10 h-10 bg-[#F3F4F6]" />
+                </tr>
+              </thead>
+              <tbody>
+                <tr className="border-b border-[#e5e7eb]">
+                  <td className="py-4 pl-4 pr-2">
+                    <Input defaultValue="M-1" className="h-10 rounded-lg" />
+                  </td>
+                  <td className="py-4 px-2">
+                    <div className="relative">
+                      <select className="h-10 pl-4 pr-10 w-full rounded-lg border border-border bg-white text-sm appearance-none">
+                        <option>Main engine</option>
+                        <option>Auxiliary engine</option>
+                        <option>Boiler</option>
+                      </select>
+                      <ChevronDown className="absolute right-3 top-1/2 -translate-y-1/2 w-5 h-5 text-muted-foreground pointer-events-none" />
+                    </div>
+                  </td>
+                  <td className="py-4 px-2">
+                    <div className="relative">
+                      <select className="h-10 pl-4 pr-10 w-full rounded-lg border border-border bg-white text-sm appearance-none">
+                        <option>Open loop scrubber</option>
+                        <option>Closed loop scrubber</option>
+                        <option>Hybrid scrubber</option>
+                        <option>Low sulphur fuel</option>
+                      </select>
+                      <ChevronDown className="absolute right-3 top-1/2 -translate-y-1/2 w-5 h-5 text-muted-foreground pointer-events-none" />
+                    </div>
+                  </td>
+                  <td className="py-4 px-2">
+                    <Input defaultValue="4,5" className="h-10 rounded-lg text-right" />
+                  </td>
+                  <td className="py-4 px-2">
+                    <Input defaultValue="1 200" className="h-10 rounded-lg text-right" />
+                  </td>
+                  <td className="py-4 px-2">
+                    <Input defaultValue="45" className="h-10 rounded-lg text-right" />
+                  </td>
+                  <td className="py-4 pl-2 pr-4">
+                    <button className="text-muted-foreground hover:text-destructive transition-colors">
+                      <Trash className="w-5 h-5" />
+                    </button>
+                  </td>
+                </tr>
+                <tr>
+                  <td className="py-4 pl-4 pr-2">
+                    <Input defaultValue="AE-1" className="h-10 rounded-lg" />
+                  </td>
+                  <td className="py-4 px-2">
+                    <div className="relative">
+                      <select className="h-10 pl-4 pr-10 w-full rounded-lg border border-border bg-white text-sm appearance-none">
+                        <option>Auxiliary engine</option>
+                        <option>Main engine</option>
+                        <option>Boiler</option>
+                      </select>
+                      <ChevronDown className="absolute right-3 top-1/2 -translate-y-1/2 w-5 h-5 text-muted-foreground pointer-events-none" />
+                    </div>
+                  </td>
+                  <td className="py-4 px-2">
+                    <div className="relative">
+                      <select className="h-10 pl-4 pr-10 w-full rounded-lg border border-border bg-white text-sm appearance-none">
+                        <option>Low sulphur fuel</option>
+                        <option>Open loop scrubber</option>
+                        <option>Closed loop scrubber</option>
+                        <option>Hybrid scrubber</option>
+                      </select>
+                      <ChevronDown className="absolute right-3 top-1/2 -translate-y-1/2 w-5 h-5 text-muted-foreground pointer-events-none" />
+                    </div>
+                  </td>
+                  <td className="py-4 px-2">
+                    <Input defaultValue="" placeholder="-" className="h-10 rounded-lg text-right" />
+                  </td>
+                  <td className="py-4 px-2">
+                    <Input defaultValue="" placeholder="-" className="h-10 rounded-lg text-right" />
+                  </td>
+                  <td className="py-4 px-2">
+                    <Input defaultValue="" placeholder="-" className="h-10 rounded-lg text-right" />
+                  </td>
+                  <td className="py-4 pl-2 pr-4">
+                    <button className="text-muted-foreground hover:text-destructive transition-colors">
+                      <Trash className="w-5 h-5" />
+                    </button>
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </section>
+
+        {/* NOx Reduction */}
+        <section className="bg-white rounded-[16px] p-4">
+          <div className="flex items-center justify-between mb-5">
+            <div className="flex items-center gap-1.5">
+              <h2 className="text-xl font-medium text-foreground mr-0.5">
+                NOx Reduction
+              </h2>
+              <span className="inline-flex items-center justify-center px-2 py-1 rounded-[36px] text-[11px] font-medium leading-[1.45] bg-epi-blue-light text-epi-blue border border-epi-blue-border">
+                EPI
+              </span>
+            </div>
+            <button className="inline-flex items-center gap-1 px-2 py-1.5 rounded-lg border border-border bg-white text-xs font-normal text-foreground hover:bg-[#ebf3ff] hover:border-[#cce1ff] active:bg-[#cce1ff] active:border-[#afd0ff] transition-colors">
+              Add +
+            </button>
+          </div>
+          <div className="border border-[#e5e7eb] rounded-lg overflow-hidden">
+            <table className="w-full text-sm">
+              <thead>
+                <tr>
+                  <th className="text-left text-xs font-normal text-muted-foreground pl-4 pr-2 h-10 bg-[#F3F4F6] w-[100px]">Engine ID</th>
+                  <th className="text-left text-xs font-normal text-muted-foreground px-2 h-10 bg-[#F3F4F6]">Engine type / Boiler</th>
+                  <th className="text-left text-xs font-normal text-muted-foreground px-2 h-10 bg-[#F3F4F6]">Type of NOx reduction</th>
+                  <th className="text-right text-xs font-normal text-muted-foreground px-2 h-10 bg-[#F3F4F6] w-[200px]">Avg. effective NOx emission <span className="text-[10px]">(g/kWh)</span></th>
+                  <th className="text-right text-xs font-normal text-muted-foreground px-2 h-10 bg-[#F3F4F6] w-[200px]">Share of time with tech active <span className="text-[10px]">(%)</span></th>
+                  <th className="w-10 h-10 bg-[#F3F4F6]" />
+                </tr>
+              </thead>
+              <tbody>
+                <tr className="border-b border-[#e5e7eb]">
+                  <td className="py-4 pl-4 pr-2">
+                    <Input defaultValue="M-1" className="h-10 rounded-lg" />
+                  </td>
+                  <td className="py-4 px-2">
+                    <div className="relative">
+                      <select className="h-10 pl-4 pr-10 w-full rounded-lg border border-border bg-white text-sm appearance-none">
+                        <option>Main engine</option>
+                        <option>Auxiliary engine</option>
+                        <option>Boiler</option>
+                      </select>
+                      <ChevronDown className="absolute right-3 top-1/2 -translate-y-1/2 w-5 h-5 text-muted-foreground pointer-events-none" />
+                    </div>
+                  </td>
+                  <td className="py-4 px-2">
+                    <div className="relative">
+                      <select className="h-10 pl-4 pr-10 w-full rounded-lg border border-border bg-white text-sm appearance-none">
+                        <option>SCR</option>
+                        <option>EGR</option>
+                        <option>Direct water injection</option>
+                        <option>Humid air motor</option>
+                        <option>LNG</option>
+                      </select>
+                      <ChevronDown className="absolute right-3 top-1/2 -translate-y-1/2 w-5 h-5 text-muted-foreground pointer-events-none" />
+                    </div>
+                  </td>
+                  <td className="py-4 px-2">
+                    <Input defaultValue="2,1" className="h-10 rounded-lg text-right" />
+                  </td>
+                  <td className="py-4 px-2">
+                    <Input defaultValue="85" className="h-10 rounded-lg text-right" />
+                  </td>
+                  <td className="py-4 pl-2 pr-4">
+                    <button className="text-muted-foreground hover:text-destructive transition-colors">
+                      <Trash className="w-5 h-5" />
+                    </button>
+                  </td>
+                </tr>
+                <tr>
+                  <td className="py-4 pl-4 pr-2">
+                    <Input defaultValue="AE-1" className="h-10 rounded-lg" />
+                  </td>
+                  <td className="py-4 px-2">
+                    <div className="relative">
+                      <select className="h-10 pl-4 pr-10 w-full rounded-lg border border-border bg-white text-sm appearance-none">
+                        <option>Auxiliary engine</option>
+                        <option>Main engine</option>
+                        <option>Boiler</option>
+                      </select>
+                      <ChevronDown className="absolute right-3 top-1/2 -translate-y-1/2 w-5 h-5 text-muted-foreground pointer-events-none" />
+                    </div>
+                  </td>
+                  <td className="py-4 px-2">
+                    <div className="relative">
+                      <select className="h-10 pl-4 pr-10 w-full rounded-lg border border-border bg-white text-sm appearance-none">
+                        <option>EGR</option>
+                        <option>SCR</option>
+                        <option>Direct water injection</option>
+                        <option>Humid air motor</option>
+                        <option>LNG</option>
+                      </select>
+                      <ChevronDown className="absolute right-3 top-1/2 -translate-y-1/2 w-5 h-5 text-muted-foreground pointer-events-none" />
+                    </div>
+                  </td>
+                  <td className="py-4 px-2">
+                    <Input defaultValue="3,8" className="h-10 rounded-lg text-right" />
+                  </td>
+                  <td className="py-4 px-2">
+                    <Input defaultValue="72" className="h-10 rounded-lg text-right" />
+                  </td>
+                  <td className="py-4 pl-2 pr-4">
+                    <button className="text-muted-foreground hover:text-destructive transition-colors">
+                      <Trash className="w-5 h-5" />
+                    </button>
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </section>
           </>
         )}
 
@@ -674,8 +1049,8 @@ export default function ShipDetailPage({
           <section className="bg-white rounded-[16px] p-4">
             <div className="flex items-center justify-between mb-6">
               <div className="flex flex-col gap-2">
-                <div className="flex items-center gap-2">
-                  <h2 className="text-xl font-medium text-foreground tracking-[-0.6px]">
+                <div className="flex items-center gap-1.5">
+                  <h2 className="text-xl font-medium text-foreground tracking-[-0.6px] mr-0.5">
                     Engine Specific Tier III Hours and Emissions
                   </h2>
                   <span className="inline-flex items-center justify-center px-2 py-1 rounded-[36px] text-[11px] font-medium leading-[1.45] bg-status-active-bg text-status-active border border-status-active-border">
@@ -738,8 +1113,8 @@ export default function ShipDetailPage({
           <section className="bg-white rounded-[16px] p-4">
             <div className="flex flex-col gap-6">
               <div className="flex flex-col gap-2">
-                <div className="flex items-center gap-2">
-                  <h2 className="text-xl font-medium text-foreground tracking-[-0.6px]">
+                <div className="flex items-center gap-1.5">
+                  <h2 className="text-xl font-medium text-foreground tracking-[-0.6px] mr-0.5">
                     Bunker Delivery Notes
                   </h2>
                   <span className="inline-flex items-center justify-center px-2 py-1 rounded-[36px] text-[11px] font-medium leading-[1.45] bg-status-active-bg text-status-active border border-status-active-border">
@@ -813,7 +1188,7 @@ export default function ShipDetailPage({
                           fuelWtt: bdnForm.fuelWtt || "0",
                           mass: bdnForm.mass || "0",
                           sulphur: bdnForm.sulphur || "0",
-                          bunkerPort: bdnForm.bunkerPort || "—",
+                          bunkerPort: bdnForm.bunkerPort || "-",
                           isNew: true,
                         };
                         setBdnRows(prev => [newRow, ...prev]);
@@ -943,8 +1318,8 @@ export default function ShipDetailPage({
           <section className="bg-white rounded-[16px] p-4">
             <div className="flex flex-col gap-6">
               <div className="flex flex-col gap-2">
-                <div className="flex items-center gap-2">
-                  <h2 className="text-xl font-medium text-foreground tracking-[-0.6px]">
+                <div className="flex items-center gap-1.5">
+                  <h2 className="text-xl font-medium text-foreground tracking-[-0.6px] mr-0.5">
                     Onshore Power & Solar Delivery
                   </h2>
                   <span className="inline-flex items-center justify-center px-2 py-1 rounded-[36px] text-[11px] font-medium leading-[1.45] bg-status-active-bg text-status-active border border-status-active-border">
@@ -1110,12 +1485,12 @@ export default function ShipDetailPage({
           <section className="bg-white rounded-[16px]">
             {/* Top section */}
             <div className="pt-4 pb-6 px-4 flex flex-col gap-6">
-              <div className="flex items-center gap-2">
-                <h2 className="text-xl font-medium text-foreground tracking-[-0.6px]">
+              <div className="flex items-center gap-1.5">
+                <h2 className="text-xl font-medium text-foreground tracking-[-0.6px] mr-0.5">
                   Underwater Radiated Noise
                 </h2>
-                <span className="inline-flex items-center justify-center px-2 py-1 rounded-[36px] text-[11px] font-medium leading-[1.45] bg-status-active-bg text-status-active border border-status-active-border">
-                  ESI
+                <span className="inline-flex items-center justify-center px-2 py-1 rounded-[36px] text-[11px] font-medium leading-[1.45] bg-urn-purple-light text-urn-purple border border-urn-purple-border">
+                  URN
                 </span>
               </div>
 
@@ -1287,7 +1662,7 @@ export default function ShipDetailPage({
             {/* Body */}
             <div className="p-6">
               <p className="text-sm text-foreground">
-                Are you sure you want to opt out of the {optOutScheme === "ESI" ? "Environmental Ship Index" : "Environmental Port Index"}? This will remove your current score and all associated data. You can re-enroll at any time.
+                Are you sure you want to opt out of the {optOutScheme === "ESI" ? "Environmental Ship Index" : optOutScheme === "EPI" ? "Environmental Port Index" : "Underwater Radiated Noise"}? This will remove your current score and all associated data. You can re-enroll at any time.
               </p>
             </div>
             {/* Footer */}

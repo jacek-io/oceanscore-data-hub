@@ -1,5 +1,5 @@
 export type ShipStatus = "Active" | "Inactive" | "Revoked";
-export type Scheme = "ESI" | "EPI";
+export type Scheme = "ESI" | "EPI" | "URN";
 
 export interface Ship {
   id: string;
@@ -12,16 +12,16 @@ export interface Ship {
 }
 
 export const ships: Ship[] = [
-  { id: "1", name: "Arctic Navigator", imo: "912345678", schemes: ["ESI", "EPI"], status: "Active", shipType: "Container Ship", lastUpdated: "01/01/2026" },
-  { id: "2", name: "Astral", imo: "912345679", schemes: ["ESI"], status: "Active", shipType: "Bulk Carrier", lastUpdated: "01/01/2026" },
-  { id: "3", name: "Caspian Trader", imo: "912345680", schemes: ["ESI"], status: "Active", shipType: "Tanker", lastUpdated: "01/01/2026" },
+  { id: "1", name: "Arctic Navigator", imo: "912345678", schemes: ["ESI", "EPI", "URN"], status: "Active", shipType: "Container Ship", lastUpdated: "01/01/2026" },
+  { id: "2", name: "Astral", imo: "912345679", schemes: ["ESI", "URN"], status: "Active", shipType: "Bulk Carrier", lastUpdated: "01/01/2026" },
+  { id: "3", name: "Caspian Trader", imo: "912345680", schemes: ["ESI", "URN"], status: "Active", shipType: "Tanker", lastUpdated: "01/01/2026" },
   { id: "4", name: "Shadow", imo: "912345681", schemes: ["EPI"], status: "Active", shipType: "Container Ship", lastUpdated: "01/01/2026" },
-  { id: "5", name: "MV Mediterranean Pearl", imo: "912345682", schemes: ["ESI", "EPI"], status: "Active", shipType: "Cruise Ship", lastUpdated: "01/01/2026" },
-  { id: "6", name: "Shadow", imo: "912345683", schemes: ["ESI", "EPI"], status: "Revoked", shipType: "Tanker", lastUpdated: "01/01/2026" },
+  { id: "5", name: "MV Mediterranean Pearl", imo: "912345682", schemes: ["ESI", "EPI", "URN"], status: "Active", shipType: "Cruise Ship", lastUpdated: "01/01/2026" },
+  { id: "6", name: "Shadow", imo: "912345683", schemes: ["ESI", "EPI", "URN"], status: "Revoked", shipType: "Tanker", lastUpdated: "01/01/2026" },
   { id: "7", name: "Shadow", imo: "912345684", schemes: ["ESI", "EPI"], status: "Inactive", shipType: "Bulk Carrier", lastUpdated: "01/01/2026" },
-  { id: "8", name: "Rosemary", imo: "912345685", schemes: ["ESI"], status: "Active", shipType: "Container Ship", lastUpdated: "01/01/2026" },
+  { id: "8", name: "Rosemary", imo: "912345685", schemes: ["ESI", "URN"], status: "Active", shipType: "Container Ship", lastUpdated: "01/01/2026" },
   { id: "9", name: "Shadow", imo: "912345686", schemes: ["ESI"], status: "Inactive", shipType: "Tanker", lastUpdated: "01/01/2026" },
-  { id: "10", name: "MV Southern Cross", imo: "912345687", schemes: ["ESI", "EPI"], status: "Active", shipType: "Container Ship", lastUpdated: "01/01/2026" },
+  { id: "10", name: "MV Southern Cross", imo: "912345687", schemes: ["ESI", "EPI", "URN"], status: "Active", shipType: "Container Ship", lastUpdated: "01/01/2026" },
 ];
 
 export interface Port {
@@ -55,6 +55,7 @@ export const fleetStats = {
   revoked: 1,
   esiParticipation: 9,
   epiParticipation: 6,
+  urnParticipation: 3,
   dataSources: 3,
   dataSourcesList: ["DNV", "Lloyds Register"],
 };
