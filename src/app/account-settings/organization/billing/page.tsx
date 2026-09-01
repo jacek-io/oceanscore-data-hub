@@ -84,7 +84,7 @@ export default function BillingPreferencesPage() {
   const [showDebtorDialog, setShowDebtorDialog] = useState(false);
   const [editingDebtor, setEditingDebtor] = useState<Debtor | null>(null);
   const [debtorForm, setDebtorForm] = useState<Omit<Debtor, "id">>(emptyDebtor);
-  const [deleteConfirmId, setDeleteConfirmId] = useState<string | null>(null);
+  const [deleteDebtor_, setDeleteDebtor] = useState<Debtor | null>(null);
 
   /* Vessel billing state */
   const [vesselBilling, setVesselBilling] = useState<VesselBilling[]>(mockVesselBilling);
@@ -118,13 +118,14 @@ export default function BillingPreferencesPage() {
     setShowDebtorDialog(false);
   };
 
-  const deleteDebtor = (id: string) => {
+  const confirmDeleteDebtor = () => {
+    if (!deleteDebtor_) return;
+    const id = deleteDebtor_.id;
     setDebtors((prev) => prev.filter((d) => d.id !== id));
-    // Unassign from vessels
     setVesselBilling((prev) =>
       prev.map((v) => (v.debtorId === id ? { ...v, debtorId: null } : v))
     );
-    setDeleteConfirmId(null);
+    setDeleteDebtor(null);
   };
 
   /* ─── Vessel sort/filter ─── */
@@ -403,30 +404,13 @@ export default function BillingPreferencesPage() {
                           >
                             <Pen className="w-3.5 h-3.5 text-muted-foreground" />
                           </button>
-                          {deleteConfirmId === debtor.id ? (
-                            <div className="inline-flex items-center gap-1">
-                              <button
-                                onClick={() => deleteDebtor(debtor.id)}
-                                className="h-7 px-2 rounded-md text-xs text-white bg-[#9e2028] hover:bg-[#8a1b22] transition-colors"
-                              >
-                                Delete
-                              </button>
-                              <button
-                                onClick={() => setDeleteConfirmId(null)}
-                                className="w-7 h-7 rounded-md inline-flex items-center justify-center hover:bg-[#f3f4f6] transition-colors"
-                              >
-                                <X className="w-3.5 h-3.5 text-muted-foreground" />
-                              </button>
-                            </div>
-                          ) : (
-                            <button
-                              onClick={() => setDeleteConfirmId(debtor.id)}
-                              className="w-7 h-7 rounded-md inline-flex items-center justify-center hover:bg-[#fef2f2] active:bg-[#fde8e8] transition-colors"
-                              title="Delete debtor"
-                            >
-                              <Trash2 className="w-3.5 h-3.5 text-muted-foreground" />
-                            </button>
-                          )}
+                          <button
+                            onClick={() => setDeleteDebtor(debtor)}
+                            className="w-7 h-7 rounded-md inline-flex items-center justify-center hover:bg-[#fef2f2] active:bg-[#fde8e8] transition-colors"
+                            title="Delete debtor"
+                          >
+                            <Trash2 className="w-3.5 h-3.5 text-muted-foreground" />
+                          </button>
                         </div>
                       </td>
                     </tr>
@@ -631,6 +615,43 @@ export default function BillingPreferencesPage() {
                 className="h-9 px-4 rounded-lg bg-[#061e3a] text-sm text-white hover:bg-[#0c3c7a] active:bg-[#1157b2] transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
               >
                 {editingDebtor ? "Save changes" : "Create debtor"}
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* ─── Delete Debtor Confirmation Dialog ─── */}
+      {deleteDebtor_ && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center">
+          <div className="absolute inset-0 bg-black/40" onClick={() => setDeleteDebtor(null)} />
+          <div className="relative bg-white rounded-[16px] w-[440px] flex flex-col shadow-xl">
+            <div className="flex items-center justify-between p-5 pb-0">
+              <h3 className="text-lg font-medium text-foreground tracking-[-0.54px]">Delete debtor</h3>
+              <button onClick={() => setDeleteDebtor(null)} className="w-8 h-8 rounded-lg flex items-center justify-center hover:bg-[#ebf3ff] active:bg-[#cce1ff]">
+                <X className="w-4 h-4 text-muted-foreground" />
+              </button>
+            </div>
+            <div className="p-5">
+              <p className="text-sm text-muted-foreground">
+                Are you sure you want to delete <strong className="text-foreground">{deleteDebtor_.name}</strong>?
+                {vesselBilling.filter((v) => v.debtorId === deleteDebtor_.id).length > 0
+                  ? ` This debtor is currently assigned to ${vesselBilling.filter((v) => v.debtorId === deleteDebtor_.id).length} vessel(s). They will be unassigned.`
+                  : " This action cannot be undone."}
+              </p>
+            </div>
+            <div className="flex items-center justify-end gap-2 p-5 pt-2">
+              <button
+                onClick={() => setDeleteDebtor(null)}
+                className="h-9 px-4 rounded-lg border border-border text-sm text-foreground hover:bg-[#ebf3ff] hover:border-[#cce1ff] active:bg-[#cce1ff] active:border-[#afd0ff] transition-colors"
+              >
+                Cancel
+              </button>
+              <button
+                onClick={confirmDeleteDebtor}
+                className="h-9 px-4 rounded-lg bg-[#dc2626] text-sm text-white hover:bg-[#b91c1c] transition-colors"
+              >
+                Delete
               </button>
             </div>
           </div>
