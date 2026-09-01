@@ -58,11 +58,17 @@ export default function AccountSettingsLayout({
     },
   ];
 
+  const allHrefs = sections.flatMap((s) => s.items.map((i) => i.href));
+
   const isItemActive = (href: string) => {
-    if (href === "/account-settings") {
-      return pathname === "/account-settings";
+    if (pathname === href) return true;
+    // Only use startsWith if no other nav item is a more specific match
+    if (pathname.startsWith(href + "/")) {
+      return !allHrefs.some(
+        (other) => other !== href && other.startsWith(href + "/") && pathname.startsWith(other)
+      );
     }
-    return pathname === href || pathname.startsWith(href + "/");
+    return false;
   };
 
   return (
