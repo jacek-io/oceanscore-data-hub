@@ -428,29 +428,22 @@ export default function EsiShipDetailPage({
                   <div
                     key={tech.id}
                     className={cn(
-                      "rounded-lg flex flex-col gap-2 pl-4 pr-3.5",
-                      tech.active && tech.values ? "py-3 bg-[#ebf3ff]" : "h-10 justify-center bg-[#f9fafb]",
-                      tech.active && !tech.values && "bg-[#ebf3ff]"
+                      "h-10 rounded-lg flex items-center gap-2 pl-4 pr-3.5",
+                      tech.active ? "bg-[#ebf3ff]" : "bg-[#f9fafb]"
                     )}
                   >
-                    <div className="flex items-center gap-2">
-                      {tech.active ? (
-                        <CheckCircle2 className="w-4 h-4 text-[#1157b2] shrink-0" />
-                      ) : (
-                        <XCircle className="w-4 h-4 text-[#98a1ae] shrink-0" />
-                      )}
-                      <span className={cn("text-sm", tech.active ? "text-foreground" : "text-muted-foreground")}>
-                        {tech.label}
-                      </span>
-                    </div>
+                    {tech.active ? (
+                      <CheckCircle2 className="w-4 h-4 text-[#1157b2] shrink-0" />
+                    ) : (
+                      <XCircle className="w-4 h-4 text-[#98a1ae] shrink-0" />
+                    )}
+                    <span className={cn("text-sm", tech.active ? "text-foreground" : "text-muted-foreground")}>
+                      {tech.label}
+                    </span>
                     {tech.active && tech.values && (
-                      <div className="flex items-center gap-4 pl-6">
-                        {tech.values.map((v) => (
-                          <span key={v.label} className="text-xs text-[#697282]">
-                            {v.label}: <span className="text-foreground font-medium">{v.value}</span> {v.unit}
-                          </span>
-                        ))}
-                      </div>
+                      <span className="text-xs text-[#697282] ml-auto whitespace-nowrap">
+                        {tech.values.map((v) => `${v.label}: ${v.value} ${v.unit}`).join(" · ")}
+                      </span>
                     )}
                   </div>
                 ))}
