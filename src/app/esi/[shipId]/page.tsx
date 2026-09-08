@@ -33,12 +33,11 @@ const tabs = [
   { id: "urn", label: "URN", icon: Volume2 },
 ];
 
-const technologies = [
+const technologies: { id: string; label: string; active: boolean; values?: { label: string; value: string; unit: string }[] }[] = [
   { id: "fuel-cells", label: "Fuel Cells", active: false },
   { id: "solar-panels", label: "Solar Panels", active: false },
-  { id: "wind-propulsion", label: "Wind Propulsion", active: true },
-  { id: "batteries", label: "Batteries", active: false },
-  { id: "batteries-2", label: "Batteries", active: false },
+  { id: "wind-propulsion", label: "Wind Propulsion", active: true, values: [{ label: "P_me", value: "1 200", unit: "kW" }, { label: "P_eff", value: "340", unit: "kW" }] },
+  { id: "batteries", label: "Batteries", active: false, values: [{ label: "Capacity", value: "850", unit: "kWh" }] },
   { id: "air-lubrication", label: "Air Lubrication", active: true },
   { id: "particulate-filters", label: "Particulate Filters", active: true },
   { id: "water-fuel-emulsion", label: "Water Fuel Emulsion", active: false },
@@ -429,18 +428,30 @@ export default function EsiShipDetailPage({
                   <div
                     key={tech.id}
                     className={cn(
-                      "h-10 rounded-lg flex items-center gap-2 pl-4 pr-3.5",
-                      tech.active ? "bg-[#ebf3ff]" : "bg-[#f9fafb]"
+                      "rounded-lg flex flex-col gap-2 pl-4 pr-3.5",
+                      tech.active && tech.values ? "py-3 bg-[#ebf3ff]" : "h-10 justify-center bg-[#f9fafb]",
+                      tech.active && !tech.values && "bg-[#ebf3ff]"
                     )}
                   >
-                    {tech.active ? (
-                      <CheckCircle2 className="w-4 h-4 text-[#1157b2] shrink-0" />
-                    ) : (
-                      <XCircle className="w-4 h-4 text-[#98a1ae] shrink-0" />
+                    <div className="flex items-center gap-2">
+                      {tech.active ? (
+                        <CheckCircle2 className="w-4 h-4 text-[#1157b2] shrink-0" />
+                      ) : (
+                        <XCircle className="w-4 h-4 text-[#98a1ae] shrink-0" />
+                      )}
+                      <span className={cn("text-sm", tech.active ? "text-foreground" : "text-muted-foreground")}>
+                        {tech.label}
+                      </span>
+                    </div>
+                    {tech.active && tech.values && (
+                      <div className="flex items-center gap-4 pl-6">
+                        {tech.values.map((v) => (
+                          <span key={v.label} className="text-xs text-[#697282]">
+                            {v.label}: <span className="text-foreground font-medium">{v.value}</span> {v.unit}
+                          </span>
+                        ))}
+                      </div>
                     )}
-                    <span className={cn("text-sm", tech.active ? "text-foreground" : "text-muted-foreground")}>
-                      {tech.label}
-                    </span>
                   </div>
                 ))}
               </div>

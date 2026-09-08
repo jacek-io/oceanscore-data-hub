@@ -395,12 +395,12 @@ export default function ShipDetailPage({
           </div>
           <div className="grid grid-cols-3 gap-4">
             <div>
-              <label className="text-sm text-muted-foreground">Ship name</label>
+              <label className="text-sm text-muted-foreground">Ship name <span className="text-[#dc2626]">*</span></label>
               <Input defaultValue={ship.name} className="mt-1 rounded-lg" />
             </div>
             <div>
               <label className="text-sm text-muted-foreground">
-                IMO Number
+                IMO number <span className="text-[#dc2626]">*</span>
               </label>
               <Input
                 defaultValue={ship.imo}
@@ -409,7 +409,7 @@ export default function ShipDetailPage({
               />
             </div>
             <div>
-              <label className="text-sm text-muted-foreground">Ship type</label>
+              <label className="text-sm text-muted-foreground">Ship type <span className="text-[#dc2626]">*</span></label>
               <div className="relative">
                 <select className="mt-1 w-full h-10 pl-4 pr-10 rounded-lg border border-border bg-white text-sm appearance-none focus:outline-none focus:ring-2 focus:ring-primary">
                   <option>{ship.shipType}</option>
@@ -419,19 +419,19 @@ export default function ShipDetailPage({
             </div>
             <div>
               <label className="text-sm text-muted-foreground">
-                Keel laid year
+                Keel laid year <span className="text-[#dc2626]">*</span>
               </label>
               <Input defaultValue="2020" className="mt-1 rounded-lg" />
             </div>
             <div>
               <label className="text-sm text-muted-foreground">
-                Gross Tonnage
+                Gross Tonnage <span className="text-[#dc2626]">*</span>
               </label>
               <Input defaultValue="68 000" className="mt-1 rounded-lg" />
             </div>
             <div>
               <label className="text-sm text-muted-foreground">
-                Deadweight Tonnage
+                Deadweight Tonnage <span className="text-[#dc2626]">*</span>
               </label>
               <Input defaultValue="72 000" className="mt-1 rounded-lg" />
             </div>
@@ -450,16 +450,16 @@ export default function ShipDetailPage({
           </div>
           <div className="grid grid-cols-3 gap-4">
             <div>
-              <label className="text-sm text-muted-foreground">City</label>
+              <label className="text-sm text-muted-foreground">City <span className="text-[#dc2626]">*</span></label>
               <Input defaultValue="Hamburg" className="mt-1 rounded-lg" />
             </div>
             <div>
-              <label className="text-sm text-muted-foreground">Authority</label>
+              <label className="text-sm text-muted-foreground">Authority <span className="text-[#dc2626]">*</span></label>
               <Input defaultValue="DNV" className="mt-1 rounded-lg" />
             </div>
             <div>
               <label className="text-sm text-muted-foreground">
-                Valid until
+                Valid until <span className="text-[#dc2626]">*</span>
               </label>
               <Input
                 type="text"
