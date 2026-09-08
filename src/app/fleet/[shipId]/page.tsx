@@ -67,9 +67,7 @@ const technologies = [
   { id: "batteries", label: "Batteries", autoSelected: false, checked: true, expanded: true },
   { id: "air-lubrication", label: "Air Lubrication", autoSelected: false, checked: true },
   { id: "particulate-filters", label: "Particulate Filters", autoSelected: false, checked: false },
-  { id: "direct-water-injection", label: "Direct Water Injection", autoSelected: false, checked: false },
   { id: "carbon-capture", label: "Carbon Capture", autoSelected: false, checked: false },
-  { id: "water-fuel-emulsion", label: "Water Fuel Emulsion", autoSelected: false, checked: false },
   { id: "onshore-power-supply", label: "Onshore Power Supply", autoSelected: false, checked: true },
 ];
 

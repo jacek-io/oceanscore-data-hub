@@ -40,8 +40,6 @@ const technologies: { id: string; label: string; active: boolean; values?: { lab
   { id: "batteries", label: "Batteries", active: false, values: [{ label: "Capacity", value: "850", unit: "kWh" }] },
   { id: "air-lubrication", label: "Air Lubrication", active: true },
   { id: "particulate-filters", label: "Particulate Filters", active: true },
-  { id: "water-fuel-emulsion", label: "Water Fuel Emulsion", active: false },
-  { id: "direct-water-injection", label: "Direct Water Injection", active: false },
   { id: "carbon-capture", label: "Carbon Capture", active: false },
   { id: "onshore-power-supply", label: "Onshore Power Supply", active: true },
 ];
