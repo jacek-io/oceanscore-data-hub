@@ -423,7 +423,7 @@ export default function EsiShipDetailPage({
                 <h2 className="text-lg font-medium text-foreground">Technologies</h2>
                 <EditInDataHubButton shipId={ship.id} small />
               </div>
-              <div className="grid grid-cols-4 gap-4">
+              <div className="grid grid-cols-2 gap-4">
                 {technologies.map((tech) => (
                   <div
                     key={tech.id}
