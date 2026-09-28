@@ -1,7 +1,8 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState, useEffect, Suspense } from "react";
 import Link from "next/link";
+import { useSearchParams } from "next/navigation";
 import Image from "next/image";
 import {
   CloudUpload,
@@ -1486,9 +1487,13 @@ function StepValidation({
   );
 }
 
-export default function CustomImportPage() {
-  const [currentStep, setCurrentStep] = useState(1);
-  const [selectedType, setSelectedType] = useState<string | null>(null);
+function CustomImportPageInner() {
+  const searchParams = useSearchParams();
+  const typeParam = searchParams.get("type");
+  const validType = dataTypes.some((dt) => dt.id === typeParam) ? typeParam : null;
+
+  const [currentStep, setCurrentStep] = useState(validType ? 2 : 1);
+  const [selectedType, setSelectedType] = useState<string | null>(validType);
   const [uploadedFilename, setUploadedFilename] = useState<string | null>(null);
 
   const selectedLabel = dataTypes.find((dt) => dt.id === selectedType);
@@ -1569,5 +1574,13 @@ export default function CustomImportPage() {
         </div>
       </div>
     </div>
+  );
+}
+
+export default function CustomImportPage() {
+  return (
+    <Suspense>
+      <CustomImportPageInner />
+    </Suspense>
   );
 }
